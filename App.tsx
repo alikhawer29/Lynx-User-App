@@ -5,10 +5,9 @@
  * @format
  */
 
-import { NewAppScreen } from '@react-native/new-app-screen';
 import { useEffect } from 'react';
 import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
-import Bootsplash from "react-native-bootsplash"
+import Bootsplash from "react-native-bootsplash";
 
 function App() {
 
@@ -21,7 +20,6 @@ function App() {
   return (
     <View style={styles.container}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <NewAppScreen templateFileName="App.tsx" />
     </View>
   );
 }
