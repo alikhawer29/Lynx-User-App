@@ -1,4 +1,4 @@
-package com.lynx
+package com.blitzapp.lynx
 
 import android.app.Application
 import com.facebook.react.PackageList

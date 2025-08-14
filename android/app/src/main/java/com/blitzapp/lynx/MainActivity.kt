@@ -1,4 +1,4 @@
-package com.lynx
+package com.blitzapp.lynx
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
