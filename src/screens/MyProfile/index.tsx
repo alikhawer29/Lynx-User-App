@@ -1,8 +1,9 @@
-import { View } from "react-native"
+import { ImageBackground, View } from "react-native"
+import images from "../../assets/images"
 import Button from "../../components/Button"
+import Icon from "../../components/Icon"
 import Row from "../../components/Row"
 import Text from "../../components/Text"
-import Wrapper from "../../components/Wrapper"
 import colors from "../../utils/colors"
 import styles from "./styles"
 import useMyProfileController from "./useMyProfileController"
@@ -21,70 +22,83 @@ const MyProfile = () => {
     } = useMyProfileController()
 
     return (
-        <Wrapper>
-            <View>
-                <Row style={styles.row}>
-                    <View style={styles.item}>
-                        <Text size={16} weight="semibold">
-                            First Name
-                        </Text>
-                        <Text color={colors.dark_gray}>{user?.first_name}</Text>
-                    </View>
-                    <View style={styles.item}>
-                        <Text size={16} weight="semibold">
-                            Last Name
-                        </Text>
-                        <Text color={colors.dark_gray}>{user?.last_name}</Text>
-                    </View>
-                </Row>
-                <Row style={styles.row}>
-                    <View style={styles.item}>
-                        <Text size={16} weight="semibold">
-                            Email Address
-                        </Text>
-                        <Text color={colors.dark_gray} lines={1}>
-                            {user?.email}
-                        </Text>
-                    </View>
-                    <View style={styles.item}>
-                        <Text size={16} weight="semibold">
-                            Phone Number
-                        </Text>
-                        <Text color={colors.dark_gray}>
-                            ({user?.dialing_code}) {user?.phone}
-                        </Text>
-                    </View>
-                </Row>
-                <Row style={styles.row}>
-                    <View style={styles.item}>
-                        <Text size={16} weight="semibold">
-                            Language
-                        </Text>
-                        <Text color={colors.dark_gray}>{user?.language || "-"}</Text>
-                    </View>
-                </Row>
-                <View style={styles.actions_container}>
-                    <Row justify="space-between" style={styles.actions_row}>
-                        <Button
-                            text="Edit Profile"
-                            style={styles.button}
-                            onPress={onEditProfile}
-                        />
-                        <Button
-                            text="Delete Account"
-                            type="custom"
-                            style={[styles.button, styles.delete_button]}
-                            onPress={onDeleteAccount}
-                        />
+        <ImageBackground
+            source={images.cover_photo}
+            style={styles.background}
+            imageStyle={styles.background_image}
+        >
+            <View style={styles.container}>
+                <View style={styles.profile_icon_wrapper}>
+                    <Icon source={images.profile} size={110} />
+                </View>
+
+                <View style={styles.content}>
+                    <Row style={styles.row}>
+                        <View style={styles.left_item}>
+                            <Text size={16} weight="semibold">
+                                First Name
+                            </Text>
+                            <Text color={colors.dark_gray}>{user?.first_name}</Text>
+                        </View>
+                        <View style={styles.right_item}>
+                            <Text size={16} weight="semibold">
+                                Last Name
+                            </Text>
+                            <Text color={colors.dark_gray}>{user?.last_name}</Text>
+                        </View>
                     </Row>
-                    <Button
-                        text="Change Password"
-                        type="secondary"
-                        onPress={onChangePassword}
-                    />
+
+                    <Row style={styles.row}>
+                        <View style={styles.left_item}>
+                            <Text size={16} weight="semibold">
+                                Email Address
+                            </Text>
+                            <Text color={colors.dark_gray} lines={1}>
+                                {user?.email}
+                            </Text>
+                        </View>
+                        <View style={styles.right_item}>
+                            <Text size={16} weight="semibold">
+                                Phone Number
+                            </Text>
+                            <Text color={colors.dark_gray}>
+                                ({user?.dialing_code}) {user?.phone}
+                            </Text>
+                        </View>
+                    </Row>
+
+                    <Row style={styles.row}>
+                        <View style={styles.left_item}>
+                            <Text size={16} weight="semibold">
+                                Language
+                            </Text>
+                            <Text color={colors.dark_gray}>{user?.language || "-"}</Text>
+                        </View>
+                    </Row>
+
+                    <View style={styles.actions_container}>
+                        <Row justify="space-between" style={styles.actions_row}>
+                            <Button
+                                text="Edit Profile"
+                                style={styles.button}
+                                onPress={onEditProfile}
+                            />
+                            <Button
+                                text="Delete Account"
+                                type="custom"
+                                style={[styles.button, styles.delete_button]}
+                                onPress={onDeleteAccount}
+                            />
+                        </Row>
+                        <Button
+                            text="Change Password"
+                            type="secondary"
+                            onPress={onChangePassword}
+                        />
+                    </View>
                 </View>
             </View>
-        </Wrapper>
+        </ImageBackground>
     )
 }
 

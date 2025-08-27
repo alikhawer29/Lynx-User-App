@@ -30,7 +30,6 @@ const useMyProfileController = () => {
     }, [])
 
     const onEditProfile = useCallback(() => {
-        navigate(ROUTES.CHANGE_PASSWORD)
     }, [])
 
     return {
