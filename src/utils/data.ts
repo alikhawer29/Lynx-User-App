@@ -8,7 +8,8 @@ export const USER = {
     password_confirmation: "Pass@1234",
     dialing_code: "+971",
     country_code: "AE",
-    phone: "501234567"
+    phone: "501234567",
+    language: "english"
 }
 
 export const AUTH_TYPES = [
