@@ -1,8 +1,8 @@
 import { createStackNavigator } from '@react-navigation/stack';
+import UnderDevelopment from '../../components/UnderDevelopment';
 import { useAppSelector } from '../../hooks';
 import { ChatStackParamList } from '../../interfaces';
 import { selectLoggedIn } from '../../redux/Slices/AuthSlice';
-import Chat from '../../screens/Chat';
 import { ROUTES } from '../../utils/routes';
 import Options from '../Options';
 
@@ -14,7 +14,7 @@ const ChatStackNavigator = () => {
 
     return (
         <Stack.Navigator screenOptions={props => Options(props, authorized)}>
-            <Stack.Screen name={ROUTES.CHAT} component={Chat} />
+            <Stack.Screen name={ROUTES.CHAT} component={UnderDevelopment} />
         </Stack.Navigator>
     );
 }
