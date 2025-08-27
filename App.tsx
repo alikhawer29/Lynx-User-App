@@ -1,8 +1,10 @@
 import { NavigationContainer } from '@react-navigation/native';
-import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
+import { StatusBar, StyleSheet, View } from 'react-native';
 import Bootsplash from 'react-native-bootsplash';
+import ErrorBoundary from 'react-native-error-boundary';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
+import ErrorFallback from './src/components/ErrorFallback';
 import { ModalProvider } from './src/contexts/ModalContext';
 import AppStackNavigator from './src/navigation/AppStackNavigator';
 import { persistor, store } from './src/redux/Store';
@@ -10,8 +12,6 @@ import colors from './src/utils/colors';
 import { navigationRef } from './src/utils/navigation';
 
 function App() {
-  const isDarkMode = useColorScheme() === 'dark';
-
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
@@ -20,14 +20,16 @@ function App() {
             barStyle={'dark-content'}
             backgroundColor={colors.light_primary}
           />
-          <ModalProvider>
-            <NavigationContainer
-              ref={navigationRef}
-              onReady={() => Bootsplash.hide({ fade: true })}
-            >
-              <AppStackNavigator />
-            </NavigationContainer>
-          </ModalProvider>
+          <ErrorBoundary FallbackComponent={ErrorFallback}>
+            <ModalProvider>
+              <NavigationContainer
+                ref={navigationRef}
+                onReady={() => Bootsplash.hide({ fade: true })}
+              >
+                <AppStackNavigator />
+              </NavigationContainer>
+            </ModalProvider>
+          </ErrorBoundary>
         </View>
       </PersistGate>
     </Provider>
