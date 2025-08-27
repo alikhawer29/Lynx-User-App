@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     },
     container: {
         height: "65%",
-        backgroundColor: colors.white,
+        backgroundColor: colors.light_primary,
         borderTopLeftRadius: widthPixel(25),
         borderTopRightRadius: widthPixel(25),
         paddingHorizontal: GLOBAL_HORIZONTAL_PADDING,
