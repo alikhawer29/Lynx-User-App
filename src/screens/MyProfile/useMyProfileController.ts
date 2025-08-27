@@ -30,6 +30,7 @@ const useMyProfileController = () => {
     }, [])
 
     const onEditProfile = useCallback(() => {
+        navigate(ROUTES.EDIT_PROFILE)
     }, [])
 
     return {
