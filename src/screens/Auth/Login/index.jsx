@@ -1,6 +1,6 @@
 import { Formik } from "formik"
 import { useCallback, useState } from "react"
-import { Switch, View } from "react-native"
+import { Platform, Switch, View } from "react-native"
 import AuthWrapper from "../../../components/AuthWrapper"
 import Button from "../../../components/Button"
 import Icon from "../../../components/Icon"
@@ -67,7 +67,7 @@ const Login = () => {
                             error={touched?.password ? errors?.password : ""}
                         />
                         <Row justify="space-between" align="center" style={styles.row_space_between}>
-                            <Row gap={2} align="center">
+                            <Row gap={Platform.OS === "android" ? 2 : 6} align="center">
                                 <Switch value={remember} onValueChange={setRemember} trackColor={{ false: colors.light_gray, true: colors.light_gray }} thumbColor={colors.secondary} />
                                 <Text>Remember Me</Text>
                             </Row>

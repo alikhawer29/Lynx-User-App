@@ -1,6 +1,6 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
-import Bootsplash from "react-native-bootsplash";
+import Bootsplash from 'react-native-bootsplash';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { ModalProvider } from './src/contexts/ModalContext';
@@ -10,16 +10,21 @@ import colors from './src/utils/colors';
 import { navigationRef } from './src/utils/navigation';
 
 function App() {
-
   const isDarkMode = useColorScheme() === 'dark';
 
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <View style={styles.container}>
-          <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
+          <StatusBar
+            barStyle={'dark-content'}
+            backgroundColor={colors.light_primary}
+          />
           <ModalProvider>
-            <NavigationContainer ref={navigationRef} onReady={() => Bootsplash.hide({ fade: true })}>
+            <NavigationContainer
+              ref={navigationRef}
+              onReady={() => Bootsplash.hide({ fade: true })}
+            >
               <AppStackNavigator />
             </NavigationContainer>
           </ModalProvider>
@@ -32,7 +37,7 @@ function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.light_primary
+    backgroundColor: colors.light_primary,
   },
 });
 
