@@ -1,7 +1,9 @@
 import { FC, memo } from "react"
 import { View } from "react-native"
+import { useSelector } from "react-redux"
 import images from "../../../assets/images"
 import { IServiceCard } from "../../../interfaces"
+import { selectLoggedIn } from "../../../redux/Slices/AuthSlice"
 import colors from "../../../utils/colors"
 import Button from "../../Button"
 import Icon from "../../Icon"
@@ -22,6 +24,8 @@ const FeaturedServiceCard: FC<IServiceCard> = ({ data, onPress }) => {
         is_favorite,
     } = data
 
+    const authorized = useSelector(selectLoggedIn)
+
     return (
         <View style={styles.container}>
             <View style={styles.image_wrapper}>
@@ -35,14 +39,17 @@ const FeaturedServiceCard: FC<IServiceCard> = ({ data, onPress }) => {
                 <View style={styles.text_content_wrapper}>
                     <Row align="center" justify="space-between">
                         <Text size={15} weight="bold">{title}</Text>
-                        <Icon
-                            source={images.heart}
-                            size={20}
-                            rounded
-                            border={colors.medium_gray}
-                            less_padding
-                            tint_color={is_favorite ? colors.danger : colors.medium_gray}
-                        />
+                        {
+                            authorized &&
+                            <Icon
+                                source={is_favorite ? images.filled_heart : images.heart}
+                                size={20}
+                                rounded
+                                border={colors.light_gray}
+                                less_padding
+                                tint_color={is_favorite ? colors.danger : colors.dark_gray}
+                            />
+                        }
                     </Row>
                     <Ratings rating={rating} review_count={review_count} />
                     <Text weight="bold">${normal_price}</Text>

@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
     },
     text_content_wrapper: {
-        paddingTop: heightPixel(10)
+        paddingTop: heightPixel(5)
     }
 })
 

@@ -1,16 +1,18 @@
 import { FC, memo } from "react"
 import { View } from "react-native"
+import { useSelector } from "react-redux"
 import images from "../../../assets/images"
 import { IServiceCard } from "../../../interfaces"
+import { selectLoggedIn } from "../../../redux/Slices/AuthSlice"
 import colors from "../../../utils/colors"
+import Badge from "../../Badge"
 import Icon from "../../Icon"
 import Image from "../../Image"
 import Ratings from "../../Ratings"
 import Row from "../../Row"
 import Text from "../../Text"
-import styles from "./styles"
 import Touchable from "../../Touchable"
-import Badge from "../../Badge"
+import styles from "./styles"
 
 const ServiceCard: FC<IServiceCard> = ({ data, onPress }) => {
 
@@ -25,6 +27,8 @@ const ServiceCard: FC<IServiceCard> = ({ data, onPress }) => {
         image,
         is_favorite,
     } = data
+
+    const authorized = useSelector(selectLoggedIn)
 
     return (
         <Touchable onPress={onPress} style={styles.container}>
@@ -41,14 +45,17 @@ const ServiceCard: FC<IServiceCard> = ({ data, onPress }) => {
                         <Text size={20} weight="bold" line_height={22}>{title}</Text>
                         <Badge text={`Category Type: ${category}`} />
                     </Row>
-                    <Icon
-                        source={images.heart}
-                        size={25}
-                        rounded
-                        border={colors.medium_gray}
-                        less_padding
-                        tint_color={is_favorite ? colors.danger : colors.medium_gray}
-                    />
+                    {
+                        authorized &&
+                        <Icon
+                            source={is_favorite ? images.filled_heart : images.heart}
+                            size={25}
+                            rounded
+                            border={colors.light_gray}
+                            less_padding
+                            tint_color={is_favorite ? colors.danger : colors.dark_gray}
+                        />
+                    }
                 </Row>
                 <Text size={12.5} color={colors.dark_gray} lines={3}>
                     {description}

@@ -7,7 +7,8 @@ const styles = StyleSheet.create({
         height: heightPixel(95),
         width: "100%",
         paddingHorizontal: GLOBAL_HORIZONTAL_PADDING,
-        marginVertical: heightPixel(10)
+        marginVertical: heightPixel(10),
+        paddingVertical: heightPixel(10)
     },
     bg_transparent: {
         backgroundColor: colors.transparent
@@ -16,13 +17,13 @@ const styles = StyleSheet.create({
         backgroundColor: colors.primary_opacity
     },
     icon_wrapper: {
-        flex: 0.2
+        flex: 0.16
     },
     content: {
-        flex: 0.8,
+        flex: 0.84,
         height: "100%",
         justifyContent: "space-between",
-        paddingVertical: heightPixel(12)
+        paddingVertical: heightPixel(6)
     },
     flex_wrapper: {
         flex: 1

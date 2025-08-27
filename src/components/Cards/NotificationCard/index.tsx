@@ -14,19 +14,19 @@ const NotificationCard: FC<INotificationCard> = ({ data }) => {
     return (
         <Row style={[styles.container, read ? styles.bg_transparent : styles.bg_primary_opacity]}>
             <View style={styles.icon_wrapper}>
-                <Icon source={image} rounded size={50} no_padding />
+                <Icon source={image} rounded size={48} no_padding />
             </View>
             <View style={styles.content}>
-                <Text>{message}</Text>
+                <Text size={13} color={colors.pure_black}>{message}</Text>
                 <Row justify="space-between">
                     <View style={styles.flex_wrapper}>
-                        <Text>{date}</Text>
+                        <Text size={13} color={colors.pure_black}>{date}</Text>
                     </View>
                     <View style={styles.flex_wrapper}>
-                        <Text position="center">{time}</Text>
+                        <Text size={13} position="center" color={colors.pure_black}>{time}</Text>
                     </View>
                     <View style={styles.flex_wrapper}>
-                        <Text color={colors.primary} underline position="right">
+                        <Text size={13} color={colors.primary} underline position="right">
                             Mark as {read ? "Unread" : "Read"}
                         </Text>
                     </View>
