@@ -2,6 +2,8 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { useSelector } from 'react-redux';
 import DrawerBar from '../../components/DrawerBar';
 import { selectLoggedIn } from '../../redux/Slices/AuthSlice';
+import ChangePassword from '../../screens/ChangePassword';
+import EditProfile from '../../screens/EditProfile';
 import ServiceDetails from '../../screens/ServiceDetails';
 import colors from '../../utils/colors';
 import { NAVIGATORS, ROUTES } from '../../utils/routes';
@@ -20,6 +22,8 @@ const DrawerNavigator = () => {
             <Drawer.Screen name={NAVIGATORS.BOTTOM} component={BottomTabNavigator} />
             <Drawer.Screen name={NAVIGATORS.NOTIFICATION_STACK} component={NotificationStackNavigator} />
             <Drawer.Screen name={ROUTES.SERVICE_DETAILS} component={ServiceDetails} options={(props) => Options(props, authorized)} />
+            <Drawer.Screen name={ROUTES.CHANGE_PASSWORD} component={ChangePassword} options={(props) => Options(props, authorized)} />
+            <Drawer.Screen name={ROUTES.EDIT_PROFILE} component={EditProfile} options={(props) => Options(props, authorized)} />
         </Drawer.Navigator>
     );
 }
