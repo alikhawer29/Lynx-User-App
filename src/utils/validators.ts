@@ -57,11 +57,20 @@ export const SET_PASSWORD_SCHEMA = Yup.object().shape({
 
 export const CHANGE_PASSWORD_SCHEMA = Yup.object().shape({
     old_password: Yup.string()
-        .required('Current Password is required'),
+        .required('Old Password is required'),
     password: Yup.string()
         .min(8, 'Password must be at least 8 characters')
         .required('New Password is required'),
     password_confirmation: Yup.string()
         .oneOf([Yup.ref('password')], 'Passwords must match')
         .required('Confirm Password is required'),
+});
+
+export const EDIT_PROFILE_SCHEMA = Yup.object().shape({
+    first_name: Yup.string().required('First Name is required'),
+    last_name: Yup.string().required('Last Name is required'),
+    dialing_code: Yup.string(),
+    country_code: Yup.string(),
+    phone: Yup.string().required('Phone Number is required'),
+    language: Yup.string().required('Language is required'),
 });
