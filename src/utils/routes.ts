@@ -29,6 +29,7 @@ const ROUTES = {
     PROGRESS_TRACKING: "ProgressTracking",
     CHAT: "Chat",
     MY_PROFILE: "MyProfile",
+    EDIT_PROFILE: "EditProfile",
     CHANGE_PASSWORD: "ChangePassword",
     MUSIC_AUTH: "MusicAuth",
     PLAYLIST_DETAILS: "PlaylistDetails",
@@ -80,7 +81,16 @@ const ROUTES_OPTIONS = [
         left: "drawer",
         right: "notifications",
         profile: false,
-        title: "My Profile"
+        title: "My Profile",
+        transparent: true
+    },
+    {
+        route_name: ROUTES.EDIT_PROFILE,
+        left: "back",
+        right: null,
+        profile: false,
+        title: "Edit Profile",
+        bottom_tab: false
     },
     {
         route_name: ROUTES.CHANGE_PASSWORD,
