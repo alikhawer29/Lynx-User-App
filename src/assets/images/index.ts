@@ -27,6 +27,7 @@ const images = {
     upload: require('./upload.png'),
     filters: require('./filters.png'),
     search: require('./search.png'),
+    cover_photo: require('./cover_photo.png'),
     service: {
         one: require('./service_one.png'),
     },
