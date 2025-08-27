@@ -4,6 +4,7 @@ import Input from "../../components/Input"
 import Wrapper from "../../components/Wrapper"
 import styles from "./styles"
 import useChangePasswordController from "./useChangePasswordController"
+import KeyboardAvoidingWrapper from "../../components/KeyboardAvoidingWrapper"
 
 const ChangePassword = () => {
 
@@ -30,7 +31,7 @@ const ChangePassword = () => {
                 onSubmit={onSubmit}
             >
                 {({ values: data, handleSubmit, handleChange, errors, touched }) => (
-                    <>
+                    <KeyboardAvoidingWrapper>
                         <Input
                             label="Old Password"
                             required
@@ -59,7 +60,7 @@ const ChangePassword = () => {
                             error={touched?.password_confirmation ? errors?.password_confirmation : ""}
                         />
                         <Button text="Update" style={styles.button} onPress={handleSubmit} loading={isLoading} />
-                    </>
+                    </KeyboardAvoidingWrapper>
                 )}
             </Formik>
         </Wrapper>

@@ -3,7 +3,8 @@ import { heightPixel } from "../../utils/helper";
 
 const styles = StyleSheet.create({
     button: {
-        marginVertical: heightPixel(40)
+        marginVertical: heightPixel(40),
+        width: "100%"
     }
 })
 
