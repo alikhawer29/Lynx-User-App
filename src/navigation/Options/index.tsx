@@ -121,7 +121,7 @@ const Options = (
       );
     } else if ((loggedIn || !currentRoute?.auth) && currentRoute?.title) {
       return (
-        <Text weight="bold" size={23} line_height={28}>
+        <Text weight="bold" size={23} line_height={30}>
           {currentRoute?.title}
         </Text>
       );
