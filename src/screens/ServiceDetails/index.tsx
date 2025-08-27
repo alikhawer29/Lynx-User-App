@@ -1,5 +1,6 @@
 import { useCallback } from "react"
 import { ScrollView, View } from "react-native"
+import { useSelector } from "react-redux"
 import Badge from "../../components/Badge"
 import Button from "../../components/Button"
 import Image from "../../components/Image"
@@ -9,6 +10,7 @@ import Text from "../../components/Text"
 import Wrapper from "../../components/Wrapper"
 import { useModal } from "../../contexts/ModalContext"
 import { ServiceData } from "../../interfaces"
+import { selectLoggedIn } from "../../redux/Slices/AuthSlice"
 import colors from "../../utils/colors"
 import { SERVICES } from "../../utils/data"
 import styles from "./styles"
@@ -18,14 +20,18 @@ const ServiceDetails = ({ route }) => {
     const { id } = route.params
     const { showOkModal } = useModal()
 
+    const authorize = useSelector(selectLoggedIn)
+
     const service: ServiceData = SERVICES.find(item => item.id === id) || SERVICES[0]
 
     const onBookAppointment = useCallback(() => {
-        showOkModal({
-            type: "success",
-            title: "Login",
-            message: "You have to login first"
-        })
+        if (!authorize) {
+            showOkModal({
+                type: "success",
+                title: "Login",
+                message: "You have to login first"
+            })
+        }
     }, [])
 
     return (
