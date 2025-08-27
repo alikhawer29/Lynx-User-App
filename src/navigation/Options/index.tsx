@@ -1,9 +1,10 @@
 import { StackNavigationOptions } from '@react-navigation/stack';
 import React from 'react';
+import { View } from 'react-native';
 import images from '../../assets/images';
 import Button from '../../components/Button';
 import Icon from '../../components/Icon';
-import Image from '../../components/Image';
+import ProfileViewer from '../../components/ProfileViewer';
 import Row from '../../components/Row';
 import Text from '../../components/Text';
 import Touchable from '../../components/Touchable';
@@ -15,8 +16,6 @@ import {
   navigateAndSimpleReset,
 } from '../../utils/navigation';
 import { NAVIGATORS, ROUTES, ROUTES_OPTIONS } from '../../utils/routes';
-import ProfileViewer from '../../components/ProfileViewer';
-import { View } from 'react-native';
 
 type OptionsProps = {
   route: { name: string };
@@ -51,11 +50,12 @@ const Options = (
       >
         <Icon
           source={iconSource}
-          border={colors.medium_gray}
+          border={currentRoute?.transparent ? colors.white : colors.medium_gray}
           size={40}
           rounded
           less_rounded
           less_padding
+          tint_color={currentRoute?.transparent && colors.white}
         />
       </Touchable>
     );
@@ -102,11 +102,12 @@ const Options = (
       <Touchable style={{ marginRight: widthPixel(20) }} onPress={onPress}>
         <Icon
           source={iconSource}
-          border={colors.medium_gray}
+          border={currentRoute?.transparent ? colors.white : colors.medium_gray}
           size={40}
           rounded
           less_rounded
           less_padding
+          tint_color={currentRoute?.transparent && colors.white}
         />
       </Touchable>
     );
@@ -121,7 +122,7 @@ const Options = (
       );
     } else if ((loggedIn || !currentRoute?.auth) && currentRoute?.title) {
       return (
-        <Text weight="bold" size={23} line_height={30}>
+        <Text weight="bold" size={23} line_height={30} color={currentRoute?.transparent ? colors.white : colors.black}>
           {currentRoute?.title}
         </Text>
       );
@@ -136,8 +137,9 @@ const Options = (
 
   return {
     headerShown: true,
+    headerTransparent: currentRoute?.transparent,
     headerStyle: {
-      backgroundColor: colors.light_primary,
+      backgroundColor: currentRoute?.transparent ? colors.transparent : colors.light_primary,
       elevation: 0,
       shadowOpacity: 0,
     },
