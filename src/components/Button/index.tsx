@@ -7,7 +7,7 @@ import Row from "../Row"
 import Text from "../Text"
 import styles from "./styles"
 
-const Button: FC<IButton> = ({ text, style, onPress, type = "primary", font_size = 16, icon = null, loading = false, height = 55 }) => {
+const Button: FC<IButton> = ({ text, style, onPress, type = "primary", font_size = 15, icon = null, loading = false, height = 55 }) => {
 
     const button_default_style = {
         ...(type === "outlined" ? { backgroundColor: colors.light_primary } : type === "secondary" ? { backgroundColor: colors.secondary, borderColor: colors.secondary } : {}),
