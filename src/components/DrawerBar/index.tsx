@@ -47,19 +47,19 @@ const DRAWER_ROUTES = [
         key: "faqs",
         title: "FAQ’s",
         icon: images.drawer_icons.faqs,
-        route: NAVIGATORS.HELP_DESK_STACK,
+        route: NAVIGATORS.BOTTOM,
     },
     {
         key: "about",
         title: "About Us",
         icon: images.drawer_icons.about,
-        route: NAVIGATORS.HELP_DESK_STACK,
+        route: NAVIGATORS.BOTTOM,
     },
     {
         key: "contact",
         title: "Contact Us",
         icon: images.drawer_icons.contact,
-        route: NAVIGATORS.HELP_DESK_STACK,
+        route: NAVIGATORS.BOTTOM,
     },
 ]
 
