@@ -5,6 +5,7 @@ const images = {
     eye: require('./eye.png'),
     star: require('./star.png'),
     heart: require('./heart.png'),
+    filled_heart: require('./filled_heart.png'),
     email: require('./email.png'),
     phone: require('./phone.png'),
     cross: require('./cross.png'),
@@ -22,8 +23,17 @@ const images = {
     tab_services: require('./tab_services.png'),
     tab_profile: require('./tab_profile.png'),
     tab_chat: require('./tab_chat.png'),
+    profile: require('./profile.png'),
+    upload: require('./upload.png'),
+    filters: require('./filters.png'),
+    search: require('./search.png'),
     service: {
         one: require('./service_one.png'),
+    },
+    profile_images: {
+        one: require('./profile_one.png'),
+        two: require('./profile_two.png'),
+        three: require('./profile_three.png'),
     },
     drawer_icons: {
         home: require('./drawer/home.png'),
