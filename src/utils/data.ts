@@ -1,85 +1,111 @@
 import images from "../assets/images";
 
+export const USER = {
+    first_name: "John",
+    last_name: "Doe",
+    email: "johndoe@example.com",
+    password: "Pass@1234",
+    password_confirmation: "Pass@1234",
+    dialing_code: "+971",
+    country_code: "AE",
+    phone: "501234567"
+}
+
+export const AUTH_TYPES = [
+    {
+        value: "email",
+        image: images.email,
+        title: "Send Via Email",
+        description: "Receive Verification Code via Email"
+    },
+    {
+        value: "phone",
+        image: images.phone,
+        title: "Send Via SMS",
+        description: "Receive Verification Code via Phone Number"
+    },
+]
+
 export const NOTIFICATIONS = [
     {
         id: 1,
         message: "You receive a payment of $780.1",
-        date: "2025-08-18",
+        date: "08/27/2025",
         time: "09:01 am",
         read: false,
-        image: images.service.one
+        image: images.profile_images.one
     },
     {
         id: 2,
         message: "You receive a payment of $120.5",
-        date: "2025-08-18",
+        date: "08/27/2025",
         time: "10:15 am",
         read: true,
-        image: images.service.one
+        image: images.profile_images.two
     },
     {
         id: 3,
         message: "You receive a payment of $450.75",
-        date: "2025-08-17",
+        date: "08/26/2025",
         time: "03:40 pm",
         read: false,
-        image: images.service.one
+        image: images.profile_images.one
     },
     {
         id: 4,
         message: "You receive a payment of $999.99",
-        date: "2025-08-17",
+        date: "08/26/2025",
         time: "11:20 am",
         read: true,
-        image: images.service.one
+        image: images.profile_images.three
     },
     {
         id: 5,
         message: "You receive a payment of $50.00",
-        date: "2025-08-16",
+        date: "08/26/2025",
         time: "07:55 am",
         read: false,
-        image: images.service.one
+        image: images.profile_images.two
     },
     {
         id: 6,
         message: "You receive a payment of $310.25",
-        date: "2025-08-16",
+        date: "08/26/2025",
         time: "08:10 pm",
         read: true,
-        image: images.service.one
+        image: images.profile_images.one
     },
     {
         id: 7,
         message: "You receive a payment of $875.60",
-        date: "2025-08-15",
+        date: "08/26/2025",
         time: "04:45 pm",
         read: false,
-        image: images.service.one
+        image: images.profile_images.three
     },
     {
         id: 8,
         message: "You receive a payment of $215.00",
-        date: "2025-08-14",
+        date: "08/26/2025",
         time: "12:30 pm",
         read: true,
-        image: images.service.one
+        image: images.profile_images.one
     },
     {
         id: 9,
         message: "You receive a payment of $1500.00",
-        date: "2025-08-13",
+        date: "08/26/2025",
         time: "06:05 am",
         read: false,
-        image: images.service.one
+        image: images.profile_images.one
     },
     {
         id: 10,
         message: "You receive a payment of $640.80",
-        date: "2025-08-12",
+        date: "08/26/2025",
         time: "09:50 pm",
         read: true,
-        image: images.service.one
+        image: images.profile_images.two
     }
 ]
 
@@ -164,3 +190,13 @@ export const SERVICES = [
     }
 ]
 
+export const LANGUAGES = [
+    {
+        label: "English",
+        value: "english"
+    },
+    {
+        label: "French",
+        value: "french"
+    }
+]
