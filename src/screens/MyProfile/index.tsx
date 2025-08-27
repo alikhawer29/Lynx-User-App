@@ -31,7 +31,6 @@ const MyProfile = () => {
                 <View style={styles.profile_icon_wrapper}>
                     <Icon source={images.profile} size={110} />
                 </View>
-
                 <View style={styles.content}>
                     <Row style={styles.row}>
                         <View style={styles.left_item}>
@@ -72,7 +71,7 @@ const MyProfile = () => {
                             <Text size={16} weight="semibold">
                                 Language
                             </Text>
-                            <Text color={colors.dark_gray}>{user?.language || "-"}</Text>
+                            <Text color={colors.dark_gray} capitalize>{user?.language || "-"}</Text>
                         </View>
                     </Row>
 
