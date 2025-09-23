@@ -1,14 +1,13 @@
 import React, { FC, memo, useCallback, useRef, useState } from "react"
 import { FlatList, NativeScrollEvent, NativeSyntheticEvent, View } from "react-native"
 import { ServiceData } from "../../interfaces"
-import { SERVICES } from "../../utils/data"
 import { chunkArray, vw } from "../../utils/helper"
 import { navigate } from "../../utils/navigation"
 import { ROUTES } from "../../utils/routes"
 import FeaturedServiceCard from "../Cards/FeaturedServiceCard"
 import styles from "./styles"
 
-const HomeCarousel: FC = () => {
+const HomeCarousel: FC = ({ data, onFavorite }) => {
 
     const [page, setPage] = useState<number>(0)
     const flatListRef = useRef<FlatList<ServiceData[]> | null>(null)
@@ -23,11 +22,11 @@ const HomeCarousel: FC = () => {
         setPage(currentPage)
     }
 
-    const pages = chunkArray<ServiceData>(SERVICES, 2)
+    const pages = chunkArray<ServiceData>(data, 2)
 
     const renderPage = ({ item }: { item: ServiceData[] }) => (
         <View style={styles.page}>
-            {item.map((service) => <FeaturedServiceCard key={service.id} data={service} onPress={() => onPressDetail(service.id)} />)}
+            {item.map((service) => <FeaturedServiceCard key={service._id} data={service} onPress={() => onPressDetail(service._id)} onFavorite={() => onFavorite(service?._id)} />)}
         </View>
     )
 
