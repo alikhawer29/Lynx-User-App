@@ -55,12 +55,12 @@ const VerifyCode = () => {
                                 textInputStyle={styles.otp_input}
                                 containerStyle={styles.otp_container}
                                 tintColor={colors.primary}
-                                handleTextChange={handleChange("token")}
+                                handleTextChange={handleChange("otp")}
                             />
                             {
-                                touched?.token && errors?.token &&
+                                touched?.otp && errors?.otp &&
                                 <Text size={12} color={colors.danger} style={styles.error}>
-                                    {errors?.token}
+                                    {errors?.otp}
                                 </Text>
                             }
                         </View>
