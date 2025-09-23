@@ -1,7 +1,9 @@
 const NAVIGATORS = {
     AUTH_STACK: "AuthStackNavigator",
     SERVICE_STACK: "ServiceStackNavigator",
+    WISHLIST_STACK: "WishlistStackNavigator",
     NOTIFICATION_STACK: "NotificationStackNavigator",
+    CONTACT_STACK: "ContactStackNavigator",
     BOTTOM: "BottomTabNavigator",
     DRAWER: "DrawerNavigator",
     HOME_STACK: "HomeStackNavigator",
@@ -26,6 +28,9 @@ const ROUTES = {
     SERVICES: "Services",
     SERVICE_DETAILS: "ServiceDetails",
     NOTIFICATIONS: "Notifications",
+    CONTACTUS: "ContactUs",
+    WISHLIST: "Wishlist",
+    // old
     PROGRESS_TRACKING: "ProgressTracking",
     CHAT: "Chat",
     MY_PROFILE: "MyProfile",
@@ -63,6 +68,13 @@ const ROUTES_OPTIONS = [
         title: "Service Details"
     },
     {
+        route_name: ROUTES.WISHLIST,
+        left: "drawer",
+        right: null,
+        profile: false,
+        title: "Wishlist"
+    },
+    {
         route_name: ROUTES.NOTIFICATIONS,
         left: "back",
         right: null,
@@ -98,6 +110,14 @@ const ROUTES_OPTIONS = [
         right: null,
         profile: false,
         title: "Change Password",
+        bottom_tab: false
+    },
+    {
+        route_name: ROUTES.CONTACTUS,
+        left: "drawer",
+        right: null,
+        profile: false,
+        title: null,
         bottom_tab: false
     },
 ] as const
