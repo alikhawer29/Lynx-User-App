@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 export const userApi = createApi({
     reducerPath: 'userApi',
     baseQuery: fetchBaseQuery({
-        baseUrl: 'https://custom-dev.onlinetestingserver.com/yalla-backend/api/user/',
+        baseUrl: 'http://109.1.1.33:5000/lynx/v1/api/user/',
         prepareHeaders: (headers, { getState }) => {
 
             let token = getState()?.auth?.token
@@ -25,6 +25,20 @@ export const userApi = createApi({
                 method: "POST",
                 body
             }),
+        }),
+        editProfile: builder.mutation({
+            query: (body) => ({
+                url: `update`,
+                method: "PUT",
+                body
+            }),
+        }),
+        getFavoriteServices: builder.query({
+            query: () => ({
+                url: `favorites`,
+                method: "GET",
+            }),
+            keepUnusedDataFor: 0
         }),
         getSubscriptionPlans: builder.query({
             query: () => ({
@@ -58,6 +72,8 @@ export const userApi = createApi({
 
 export const {
     useChangePasswordMutation,
+    useEditProfileMutation,
+    useGetFavoriteServicesQuery,
     useGetSubscriptionPlansQuery,
     useGetSubscriptionLogsQuery,
     useSubscribeMutation,

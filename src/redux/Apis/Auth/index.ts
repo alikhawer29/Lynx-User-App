@@ -1,11 +1,11 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const authApi = createApi({
     reducerPath: 'authApi',
     baseQuery: fetchBaseQuery({
-        baseUrl: 'https://custom-dev.onlinetestingserver.com/yalla-backend/api/user/',
+        baseUrl: `http://109.1.1.33:5000/lynx/v1/api/auth`,
         prepareHeaders: (headers, { }) => {
-            headers.set('Accept', `application/json`)
+            // headers.set('Accept', `application/json`)
             return headers
         }
     }),
@@ -14,11 +14,7 @@ export const authApi = createApi({
             query: (body) => ({
                 url: `signup`,
                 method: "POST",
-                body,
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    'Accept': 'application/json'
-                }
+                body
             }),
 
         }),
@@ -31,26 +27,25 @@ export const authApi = createApi({
         }),
         forgotPassword: builder.mutation({
             query: (body) => ({
-                url: `reset/password`,
+                url: `forget-password`,
                 method: "POST",
                 body
             }),
             transformResponse: (response: any, meta: any) => {
                 meta.show_success = true
-                meta.message = "Verification code has been sent to your email."
                 return response;
             }
         }),
         verify: builder.mutation({
             query: (body) => ({
-                url: `verify/code`,
+                url: `verify-otp`,
                 method: "POST",
                 body
             }),
         }),
         setPassword: builder.mutation({
             query: (body) => ({
-                url: `set/password`,
+                url: `reset-password`,
                 method: "POST",
                 body
             }),
