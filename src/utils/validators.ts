@@ -43,7 +43,7 @@ export const FORGOT_PASSWORD_SCHEMA = Yup.object().shape({
 });
 
 export const VERIFY_CODE_SCHEMA = Yup.object().shape({
-    token: Yup.string().required('Verification Code is required').length(4, "Verification Code must be 4 digit")
+    otp: Yup.string().required('Verification Code is required').length(4, "Verification Code must be 4 digit")
 });
 
 export const SET_PASSWORD_SCHEMA = Yup.object().shape({
@@ -56,13 +56,13 @@ export const SET_PASSWORD_SCHEMA = Yup.object().shape({
 });
 
 export const CHANGE_PASSWORD_SCHEMA = Yup.object().shape({
-    old_password: Yup.string()
+    current_password: Yup.string()
         .required('Old Password is required'),
-    password: Yup.string()
+    new_password: Yup.string()
         .min(8, 'Password must be at least 8 characters')
         .required('New Password is required'),
     password_confirmation: Yup.string()
-        .oneOf([Yup.ref('password')], 'Passwords must match')
+        .oneOf([Yup.ref('new_password')], 'Passwords must match')
         .required('Confirm Password is required'),
 });
 
@@ -73,4 +73,11 @@ export const EDIT_PROFILE_SCHEMA = Yup.object().shape({
     country_code: Yup.string(),
     phone: Yup.string().required('Phone Number is required'),
     language: Yup.string().required('Language is required'),
+});
+
+export const CONTACT_SCHEMA = Yup.object().shape({
+    name: Yup.string().required('Name is required'),
+    email: Yup.string().email('Invalid email').required('Email is required'),
+    subject: Yup.string().required('Subject is required'),
+    message: Yup.string().required('Message is required'),
 });
