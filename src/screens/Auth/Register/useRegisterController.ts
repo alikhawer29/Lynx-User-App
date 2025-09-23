@@ -1,9 +1,11 @@
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useModal } from "../../../contexts/ModalContext";
+import { useSignupMutation } from "../../../redux/Apis/Auth";
+import { LANGUAGES } from "../../../utils/data";
+import { formHandler } from "../../../utils/helper";
 import { navigateAndSimpleReset } from "../../../utils/navigation";
 import { ROUTES } from "../../../utils/routes";
 import { SIGNUP_SCHEMA } from "../../../utils/validators";
-import { LANGUAGES } from "../../../utils/data";
 
 const initial = {
     first_name: "",
@@ -22,25 +24,21 @@ const useRegisterController = () => {
     const formik_ref = useRef(null)
     const { showOkModal } = useModal()
 
-    // const [submit, { isSuccess, isLoading }] = useSetPasswordMutation()
+    const [submit, { isSuccess, isLoading }] = useSignupMutation()
 
-    // useEffect(() => {
-    //     if (isSuccess) {
-    //         showOkModal({
-    //             type: "success",
-    //             title: "Successfully",
-    //             message: "Password has been updated successfully."
-    //         }, () => navigateAndSimpleReset(ROUTES.LOGIN))
-    //     }
-    // }, [isSuccess])
+    useEffect(() => {
+        if (isSuccess) {
+            showOkModal({
+                type: "success",
+                title: "Successfully",
+                message: "Account registered successfully."
+            }, () => navigateAndSimpleReset(ROUTES.LOGIN))
+        }
+    }, [isSuccess])
 
     const onSubmit = useCallback((data: any) => {
-        // submit({ ...data, ...params }) 
-        showOkModal({
-            type: "success",
-            title: "Successfully",
-            message: "Account registered successfully."
-        }, () => navigateAndSimpleReset(ROUTES.LOGIN))
+        let payload = formHandler(data)
+        submit(payload)
     }, [])
 
     const onPressLogin = useCallback(() => {
@@ -54,7 +52,7 @@ const useRegisterController = () => {
         schema: SIGNUP_SCHEMA,
         values: {
             initial,
-            isLoading: false,
+            isLoading,
             languages: LANGUAGES
         },
         functions: {

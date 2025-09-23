@@ -1,11 +1,11 @@
-import { RouteProp, useRoute } from "@react-navigation/native";
-import { useCallback, useRef } from "react";
-import { useModal } from "../../../contexts/ModalContext";
-import { AuthStackParamList } from "../../../interfaces";
-import { navigateAndSimpleReset } from "../../../utils/navigation";
-import { ROUTES } from "../../../utils/routes";
-import { SET_PASSWORD_SCHEMA } from "../../../utils/validators";
-// import { useModal } from "../../../contexts/ModalContext";
+import { RouteProp, useRoute } from "@react-navigation/native"
+import { useCallback, useEffect, useRef } from "react"
+import { useModal } from "../../../contexts/ModalContext"
+import { AuthStackParamList } from "../../../interfaces"
+import { useSetPasswordMutation } from "../../../redux/Apis/Auth"
+import { navigateAndSimpleReset } from "../../../utils/navigation"
+import { ROUTES } from "../../../utils/routes"
+import { SET_PASSWORD_SCHEMA } from "../../../utils/validators"
 
 type SetPasswordRouteProp = RouteProp<AuthStackParamList, 'SetPassword'>
 
@@ -21,25 +21,20 @@ const useSetPasswordController = () => {
 
     const { showOkModal } = useModal()
 
-    // const [submit, { isSuccess, isLoading }] = useSetPasswordMutation()
+    const [submit, { isSuccess, isLoading }] = useSetPasswordMutation()
 
-    // useEffect(() => {
-    //     if (isSuccess) {
-    //         showOkModal({
-    //             type: "success",
-    //             title: "Successfully",
-    //             message: "Password has been updated successfully."
-    //         }, () => navigateAndSimpleReset(ROUTES.LOGIN))
-    //     }
-    // }, [isSuccess])
+    useEffect(() => {
+        if (isSuccess) {
+            showOkModal({
+                type: "success",
+                title: "Successfully",
+                message: "Password has been updated successfully."
+            }, () => navigateAndSimpleReset(ROUTES.LOGIN))
+        }
+    }, [isSuccess])
 
     const onSubmit = useCallback((data: any) => {
-        showOkModal({
-            type: "success",
-            title: "Successfully",
-            message: "Password has been updated."
-        }, () => navigateAndSimpleReset(ROUTES.LOGIN))
-        // submit({ ...data, ...params }) 
+        submit({ ...data, ...params })
     }, [])
 
     const onPressBackToLogin = useCallback(() => {
@@ -53,7 +48,7 @@ const useSetPasswordController = () => {
         schema: SET_PASSWORD_SCHEMA,
         values: {
             initial,
-            isLoading: false,
+            isLoading,
         },
         functions: {
             onSubmit,

@@ -1,7 +1,7 @@
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { useCallback, useEffect, useRef } from "react";
 import { AuthStackParamList } from "../../../interfaces";
-// import { useForgotPasswordMutation } from "../../../redux/Apis/Auth";
+import { useForgotPasswordMutation } from "../../../redux/Apis/Auth";
 import { navigate, navigateAndSimpleReset } from "../../../utils/navigation";
 import { ROUTES } from "../../../utils/routes";
 import { FORGOT_PASSWORD_SCHEMA } from "../../../utils/validators";
@@ -13,7 +13,7 @@ const useForgotPasswordController = () => {
     const { params } = useRoute<ForgotPasswordRouteProp>()
     const formik_ref = useRef(null)
 
-    // const [submit, { data, isSuccess, isLoading }] = useForgotPasswordMutation()
+    const [submit, { data, isSuccess, isLoading }] = useForgotPasswordMutation()
 
     const initial = {
         via: params?.type,
@@ -22,15 +22,15 @@ const useForgotPasswordController = () => {
         calling_code: "+971"
     }
 
-    // useEffect(() => {
-    //     if (isSuccess) {
-    //         navigate(ROUTES.VERIFY_CODE, { ...data?.data })
-    //     }
-    // }, [isSuccess])
+    useEffect(() => {
+        if (isSuccess) {
+            console.log("Forgot Password Response: ", data);
+            navigate(ROUTES.VERIFY_CODE, { ...data?.data })
+        }
+    }, [isSuccess, data])
 
     const onSubmit = useCallback((data: any) => {
-        navigate(ROUTES.VERIFY_CODE)
-        // submit(data)
+        submit(data)
     }, [])
 
     const onPressBackToLogin = useCallback(() => {
@@ -44,7 +44,7 @@ const useForgotPasswordController = () => {
         schema: FORGOT_PASSWORD_SCHEMA,
         values: {
             initial,
-            isLoading: false,
+            isLoading,
             is_email: params?.type === "email"
         },
         functions: {

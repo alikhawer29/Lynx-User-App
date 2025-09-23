@@ -1,7 +1,6 @@
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import images from "../../../assets/images";
-import { useAppDispatch } from "../../../hooks";
-import { login } from "../../../redux/Slices/AuthSlice";
+import { useLoginMutation } from "../../../redux/Apis/Auth";
 import { navigateAndSimpleReset } from "../../../utils/navigation";
 import { NAVIGATORS, ROUTES } from "../../../utils/routes";
 import { LOGIN_SCHEMA } from "../../../utils/validators";
@@ -25,20 +24,17 @@ const initial = {
 
 const useLoginController = () => {
 
-    const dispatch = useAppDispatch()
     const formik_ref = useRef(null)
 
-    // const [submit, { isSuccess, isLoading }] = useSetPasswordMutation()
+    const [submit, { isSuccess, isLoading }] = useLoginMutation()
 
-    // useEffect(() => {
-    //     if (isSuccess) {
-    //        
-    //     }
-    // }, [isSuccess])
+    useEffect(() => {
+        if (isSuccess) {
+        }
+    }, [isSuccess])
 
     const onSubmit = useCallback((data: any) => {
-        // submit({ ...data, ...params }) 
-        dispatch(login())
+        submit(data)
     }, [])
 
     const onPressRegister = useCallback(() => {
@@ -56,7 +52,7 @@ const useLoginController = () => {
         schema: LOGIN_SCHEMA,
         values: {
             initial,
-            isLoading: false,
+            isLoading,
             SOCIAL_LOGINS
         },
         functions: {
