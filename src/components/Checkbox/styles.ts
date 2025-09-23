@@ -1,17 +1,20 @@
 import { StyleSheet } from "react-native";
-import { heightPixel } from "../../utils/helper";
 import colors from "../../utils/colors";
+import { heightPixel } from "../../utils/helper";
 
 const styles = StyleSheet.create({
     container: {
-        height: heightPixel(16),
-        width: heightPixel(16),
-        borderWidth: heightPixel(1.5),
-        borderColor: colors.white,
-        borderRadius: heightPixel(2),
+        height: heightPixel(20),
+        width: heightPixel(20),
+        borderWidth: heightPixel(2),
+        borderColor: colors.primary,
+        borderRadius: heightPixel(6),
         backgroundColor: colors.transparent,
         justifyContent: "center",
         alignItems: "center",
+    },
+    selected_container: {
+        backgroundColor: colors.light_primary,
     }
 })
 
