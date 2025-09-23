@@ -8,7 +8,6 @@ const styles = StyleSheet.create({
     icon: {
         height: "100%",
         width: "100%",
-        resizeMode: "contain"
     }
 })
 
