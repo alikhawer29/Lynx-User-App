@@ -1,10 +1,15 @@
-import { StyleSheet } from "react-native";
-import { heightPixel } from "../../utils/helper";
+import { StyleSheet } from "react-native"
+import { heightPixel } from "../../utils/helper"
 
 const styles = StyleSheet.create({
+    container: {
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
     loader: {
-        width: heightPixel(30),
-        height: heightPixel(30),
+    },
+    text: {
+        marginTop: heightPixel(10)
     }
 })
 
