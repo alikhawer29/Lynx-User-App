@@ -34,9 +34,17 @@ export type MyProfileStackParamList = {
     MyProfile: undefined;
 }
 
+export type ContactUsStackParamList = {
+    ContactUs: undefined;
+}
+
 export type ServiceStackParamList = {
     Services: undefined;
-    ServiceDetails: undefined;
+    ServiceDetails: { id?: string | number };
+}
+
+export type WishlistStackParamList = {
+    Wishlist: undefined;
 }
 
 export type RootStackParamList = {
@@ -162,7 +170,8 @@ export interface IIcon {
     less_padding?: boolean
     less_rounded?: boolean
     no_padding?: boolean
-    rotate?: boolean
+    rotate?: boolean,
+    resize?: 'cover' | 'contain'
 }
 
 export interface IProgressBar {
@@ -240,6 +249,7 @@ export interface IUpload {
 
 export interface ICheckbox {
     checked?: boolean
+    label?: string
     onPress?: () => void
 }
 
@@ -264,7 +274,10 @@ export interface ISongCard {
 
 export interface ILoader {
     color?: string
-    type?: IndicatorName
+    type?: IndicatorName,
+    vertical?: number,
+    size?: number
+    text?: string
 }
 
 export interface IHelpDeskCard {
@@ -310,16 +323,22 @@ interface NotificationData {
     image: any
 }
 
+interface CategoryData {
+    name: string
+    price: {
+        normal: string | number
+        premium: string | number
+    }
+}
+
 export interface ServiceData {
-    id: string | number
-    title: string
-    category: string
+    _id: string | number
+    name: string
+    category: CategoryData
     description: string
-    normal_price: string | number
-    premium_price: string | number
     rating: number
     review_count?: number
-    image?: any
+    image_url?: any
     is_favorite?: boolean
 }
 
@@ -335,7 +354,8 @@ export interface IRatings {
 
 export interface IServiceCard {
     data: ServiceData,
-    onPress?: () => void
+    onPress?: () => void,
+    onFavorite?: () => void,
 }
 
 export interface IBadge {
@@ -345,4 +365,8 @@ export interface IBadge {
 
 export interface IKeyboardAvoidingWrapper {
     children: ReactNode
+}
+
+export interface IEmpty {
+    label?: string
 }
