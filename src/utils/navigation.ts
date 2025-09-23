@@ -13,7 +13,6 @@ export const navigate = <RouteName extends keyof CombinedParamList>(
         : CombinedParamList[RouteName]
 ) => {
     if (navigationRef.isReady()) {
-        console.log("Name Params", name, params)
         navigationRef.navigate(name, params);
     }
 };
