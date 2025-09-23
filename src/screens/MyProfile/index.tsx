@@ -29,7 +29,7 @@ const MyProfile = () => {
         >
             <View style={styles.container}>
                 <View style={styles.profile_icon_wrapper}>
-                    <Icon source={images.profile} size={110} />
+                    <Icon source={{ uri: user?.image_url }} size={110} rounded no_padding resize="cover" />
                 </View>
                 <View style={styles.content}>
                     <Row style={styles.row}>
@@ -61,7 +61,7 @@ const MyProfile = () => {
                                 Phone Number
                             </Text>
                             <Text color={colors.dark_gray}>
-                                ({user?.dialing_code}) {user?.phone}
+                                (+{user?.dialing_code}) {user?.phone}
                             </Text>
                         </View>
                     </Row>
