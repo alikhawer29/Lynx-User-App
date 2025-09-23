@@ -4,10 +4,13 @@ import { persistReducer, persistStore } from 'redux-persist';
 import errorLogger from '../../middlewares/apierror.middleware';
 import successLogger from '../../middlewares/apisuccess.middleware';
 import { authApi } from '../Apis/Auth';
+import { chatbotApi } from '../Apis/Chatbot';
+import { feedbackApi } from '../Apis/Feedback';
+import { generalApi } from '../Apis/General';
+import { serviceApi } from '../Apis/Service';
 import { userApi } from '../Apis/User';
 import authReducer from '../Slices/AuthSlice';
 import spotifyReducer from '../Slices/SpotifySlice';
-import { chatbotApi } from '../Apis/Chatbot';
 
 const persistConfig = {
     key: 'lynx',
@@ -21,6 +24,9 @@ const rootReducer = combineReducers({
     [authApi.reducerPath]: authApi.reducer,
     [userApi.reducerPath]: userApi.reducer,
     [chatbotApi.reducerPath]: chatbotApi.reducer,
+    [serviceApi.reducerPath]: serviceApi.reducer,
+    [feedbackApi.reducerPath]: feedbackApi.reducer,
+    [generalApi.reducerPath]: generalApi.reducer,
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
@@ -34,6 +40,9 @@ export const store = configureStore({
             .concat(authApi.middleware)
             .concat(userApi.middleware)
             .concat(chatbotApi.middleware)
+            .concat(serviceApi.middleware)
+            .concat(feedbackApi.middleware)
+            .concat(generalApi.middleware)
             .concat(errorLogger)
             .concat(successLogger)
 });
