@@ -37,18 +37,18 @@ const ChangePassword = () => {
                             required
                             type="password"
                             placeholder="Enter Old Password"
-                            value={data?.old_password}
-                            onChangeText={handleChange("old_password")}
-                            error={touched?.old_password ? errors?.old_password : ""}
+                            value={data?.current_password}
+                            onChangeText={handleChange("current_password")}
+                            error={touched?.current_password ? errors?.current_password : ""}
                         />
                         <Input
                             label="New Password"
                             required
                             type="password"
                             placeholder="Enter New Password"
-                            value={data?.password}
-                            onChangeText={handleChange("password")}
-                            error={touched?.password ? errors?.password : ""}
+                            value={data?.new_password}
+                            onChangeText={handleChange("new_password")}
+                            error={touched?.new_password ? errors?.new_password : ""}
                         />
                         <Input
                             label="Confirm Password"
