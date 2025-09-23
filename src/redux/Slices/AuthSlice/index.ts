@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { authApi } from '../../Apis/Auth'
 import { RootState } from '../../Store'
-import { USER } from '../../../utils/data'
+import { userApi } from '../../Apis/User'
 
 interface AuthState {
     user: any | null
@@ -11,7 +11,7 @@ interface AuthState {
 
 interface LoginResponse {
     token: string
-    user: any
+    data: any
 }
 
 const initialState: AuthState = {
@@ -24,10 +24,6 @@ export const auth = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-        login: (state) => {
-            state.isLoggedIn = true
-            state.user = USER
-        },
         logout: (state) => {
             state.isLoggedIn = false
             state.user = null
@@ -40,13 +36,19 @@ export const auth = createSlice({
             (state, action: PayloadAction<LoginResponse>) => {
                 state.isLoggedIn = true
                 state.token = action?.payload?.token
-                state.user = action?.payload?.user
+                state.user = action?.payload?.data
+            },
+        )
+        builder.addMatcher(
+            userApi.endpoints.editProfile.matchFulfilled,
+            (state, action: PayloadAction<LoginResponse>) => {
+                state.user = action?.payload?.data
             },
         )
     }
 })
 
-export const { logout, login } = auth.actions
+export const { logout } = auth.actions
 
 export const selectUser = (state: RootState): any | null => state.auth.user
 export const selectLoggedIn = (state: RootState): boolean => state.auth.isLoggedIn
