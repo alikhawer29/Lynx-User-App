@@ -1,12 +1,12 @@
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { useModal } from "../../contexts/ModalContext";
+import { useEditProfileMutation } from "../../redux/Apis/User";
 import { selectUser } from "../../redux/Slices/AuthSlice";
 import { LANGUAGES } from "../../utils/data";
 import { goBack, navigateAndSimpleReset } from "../../utils/navigation";
 import { ROUTES } from "../../utils/routes";
 import { EDIT_PROFILE_SCHEMA } from "../../utils/validators";
-
 
 const useEditProfileController = () => {
 
@@ -23,25 +23,20 @@ const useEditProfileController = () => {
         language: user?.language
     }
 
-    // const [submit, { isSuccess, isLoading }] = useSetPasswordMutation()
+    const [submit, { isSuccess, isLoading }] = useEditProfileMutation()
 
-    // useEffect(() => {
-    //     if (isSuccess) {
-    //         showOkModal({
-    //             type: "success",
-    //             title: "Successfully",
-    //             message: "Password has been updated successfully."
-    //         }, () => navigateAndSimpleReset(ROUTES.LOGIN))
-    //     }
-    // }, [isSuccess])
+    useEffect(() => {
+        if (isSuccess) {
+            showOkModal({
+                type: "success",
+                title: "Successfully",
+                message: "User Profile Has Been Updated Successfully"
+            }, () => goBack(), () => goBack())
+        }
+    }, [isSuccess])
 
     const onSubmit = useCallback((data: any) => {
-        // submit({ ...data, ...params }) 
-        showOkModal({
-            type: "success",
-            title: "Successfully",
-            message: "User Profile Has Been Updated Successfully"
-        }, () => goBack(), () => goBack())
+        submit(data)
     }, [])
 
     const onPressLogin = useCallback(() => {
@@ -55,7 +50,7 @@ const useEditProfileController = () => {
         schema: EDIT_PROFILE_SCHEMA,
         values: {
             initial,
-            isLoading: false,
+            isLoading,
             languages: LANGUAGES
         },
         functions: {
