@@ -1,4 +1,5 @@
-import { useCallback } from 'react';
+import { useIsFocused } from '@react-navigation/native';
+import { useCallback, useEffect, useState } from 'react';
 import { ImageBackground, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import images from '../../assets/images';
@@ -6,15 +7,62 @@ import HomeCarousel from '../../components/HomeCarousel';
 import Row from '../../components/Row';
 import Text from '../../components/Text';
 import Wrapper from '../../components/Wrapper';
+import { ServiceData } from '../../interfaces';
+import { useGetServicesQuery, useHandleFavoriteMutation } from '../../redux/Apis/Service';
 import colors from '../../utils/colors';
 import { navigate } from '../../utils/navigation';
 import { NAVIGATORS, ROUTES } from '../../utils/routes';
 import styles from './styles';
 
 const Home = () => {
+
+  const isFocused = useIsFocused()
+
+  const { data, isFetching: isLoading, refetch, isSuccess } = useGetServicesQuery({})
+  const [favorite, { isSuccess: isFavoriteSuccess }] = useHandleFavoriteMutation({})
+
+  const [services, setServices] = useState<ServiceData[]>([])
+
+  useEffect(() => {
+    if (isSuccess && data?.data && !isLoading) {
+      setServices(data?.data || [])
+    }
+  }, [isSuccess, data, isLoading])
+
+  useEffect(() => {
+    if (isFocused) {
+      refetch()
+    }
+  }, [isFocused])
+
+  useEffect(() => {
+    if (isFavoriteSuccess) {
+      refetch()
+    }
+  }, [isFavoriteSuccess])
+
   const onPressViewAll = useCallback(() => {
     navigate(NAVIGATORS.SERVICE_STACK, { screen: ROUTES.SERVICES });
   }, []);
+
+  const onFavorite = useCallback((id: number) => {
+
+    favorite(id)
+
+    let updated_services = services.map((item: any) => {
+      if (item._id === id) {
+        return {
+          ...item,
+          is_favorite: !item.is_favorite
+        }
+      } else {
+        return item
+      }
+    })
+
+    setServices(updated_services)
+
+  }, [services])
 
   return (
     <Wrapper scroll>
@@ -57,7 +105,7 @@ const Home = () => {
             View All
           </Text>
         </Row>
-        <HomeCarousel />
+        <HomeCarousel data={services} onFavorite={onFavorite} />
       </View>
       <View style={styles.section}>
         <Text size={23} line_height={32} weight="bold">
