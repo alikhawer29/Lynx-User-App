@@ -13,14 +13,14 @@ import Row from "../../Row"
 import Text from "../../Text"
 import styles from "./styles"
 
-const FeaturedServiceCard: FC<IServiceCard> = ({ data, onPress }) => {
+const FeaturedServiceCard: FC<IServiceCard> = ({ data, onPress, onFavorite }) => {
 
     const {
-        title,
-        normal_price,
+        name,
+        category,
         rating,
         review_count,
-        image,
+        image_url,
         is_favorite,
     } = data
 
@@ -30,7 +30,7 @@ const FeaturedServiceCard: FC<IServiceCard> = ({ data, onPress }) => {
         <View style={styles.container}>
             <View style={styles.image_wrapper}>
                 <Image
-                    source={image || images.service.one}
+                    source={{ uri: image_url }}
                     style={styles.image}
                     resize="cover"
                 />
@@ -38,7 +38,7 @@ const FeaturedServiceCard: FC<IServiceCard> = ({ data, onPress }) => {
             <View style={styles.content}>
                 <View style={styles.text_content_wrapper}>
                     <Row align="center" justify="space-between">
-                        <Text size={15} weight="bold">{title}</Text>
+                        <Text size={15} weight="bold">{name}</Text>
                         {
                             authorized &&
                             <Icon
@@ -48,11 +48,12 @@ const FeaturedServiceCard: FC<IServiceCard> = ({ data, onPress }) => {
                                 border={colors.light_gray}
                                 less_padding
                                 tint_color={is_favorite ? colors.danger : colors.dark_gray}
+                                onPress={onFavorite}
                             />
                         }
                     </Row>
                     <Ratings rating={rating} review_count={review_count} />
-                    <Text weight="bold">${normal_price}</Text>
+                    <Text weight="bold">${category?.price?.normal}</Text>
                 </View>
                 <Button text="View Details" font_size={12} onPress={onPress} height={35} />
             </View>

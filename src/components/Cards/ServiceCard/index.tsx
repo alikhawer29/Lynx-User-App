@@ -14,17 +14,15 @@ import Text from "../../Text"
 import Touchable from "../../Touchable"
 import styles from "./styles"
 
-const ServiceCard: FC<IServiceCard> = ({ data, onPress }) => {
+const ServiceCard: FC<IServiceCard> = ({ data, onPress, onFavorite }) => {
 
     const {
-        title,
+        name,
         category,
         description,
-        normal_price,
-        premium_price,
         rating,
         review_count,
-        image,
+        image_url,
         is_favorite,
     } = data
 
@@ -34,7 +32,7 @@ const ServiceCard: FC<IServiceCard> = ({ data, onPress }) => {
         <Touchable onPress={onPress} style={styles.container}>
             <View style={styles.image_wrapper}>
                 <Image
-                    source={image || images.service.one}
+                    source={{ uri: image_url }}
                     style={styles.image}
                     resize="cover"
                 />
@@ -42,8 +40,8 @@ const ServiceCard: FC<IServiceCard> = ({ data, onPress }) => {
             <View style={styles.content}>
                 <Row align="center" justify="space-between">
                     <Row align="center" gap={8}>
-                        <Text size={20} weight="bold" line_height={22}>{title}</Text>
-                        <Badge text={`Category Type: ${category}`} />
+                        <Text size={20} weight="bold" line_height={22}>{name}</Text>
+                        <Badge text={`Category Type: ${category.name}`} />
                     </Row>
                     {
                         authorized &&
@@ -54,6 +52,7 @@ const ServiceCard: FC<IServiceCard> = ({ data, onPress }) => {
                             border={colors.light_gray}
                             less_padding
                             tint_color={is_favorite ? colors.danger : colors.dark_gray}
+                            onPress={onFavorite}
                         />
                     }
                 </Row>
@@ -63,10 +62,10 @@ const ServiceCard: FC<IServiceCard> = ({ data, onPress }) => {
                 <Row align="center" justify="space-between">
                     <Row gap={15} align="center">
                         <Text size={16} weight="bold" color={colors.primary}>
-                            Normal: ${normal_price}
+                            Normal: ${category.price.normal}
                         </Text>
                         <Text size={16} weight="bold" color={colors.primary}>
-                            Premium: ${premium_price}
+                            Premium: ${category.price.premium}
                         </Text>
                     </Row>
                     <Ratings review_count={review_count} rating={rating} />
