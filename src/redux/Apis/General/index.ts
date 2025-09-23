@@ -1,9 +1,10 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { BASE_URL } from '../../../utils/data'
 
 export const generalApi = createApi({
     reducerPath: 'generalApi',
     baseQuery: fetchBaseQuery({
-        baseUrl: 'http://109.1.1.33:5000/lynx/v1/api/general/',
+        baseUrl: `${BASE_URL}/general/`
     }),
     endpoints: (builder) => ({
         getData: builder.query({

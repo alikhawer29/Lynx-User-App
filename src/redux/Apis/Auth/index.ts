@@ -1,13 +1,10 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { BASE_URL } from '../../../utils/data';
 
 export const authApi = createApi({
     reducerPath: 'authApi',
     baseQuery: fetchBaseQuery({
-        baseUrl: `http://109.1.1.33:5000/lynx/v1/api/auth`,
-        prepareHeaders: (headers, { }) => {
-            // headers.set('Accept', `application/json`)
-            return headers
-        }
+        baseUrl: `${BASE_URL}/auth/`
     }),
     endpoints: (builder) => ({
         signup: builder.mutation({

@@ -1,9 +1,10 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { BASE_URL } from '../../../utils/data'
 
 export const serviceApi = createApi({
     reducerPath: 'serviceApi',
     baseQuery: fetchBaseQuery({
-        baseUrl: 'http://109.1.1.33:5000/lynx/v1/api/service/',
+        baseUrl: `${BASE_URL}/service/`,
         prepareHeaders: (headers, { getState }) => {
 
             let token = getState()?.auth?.token
