@@ -2,6 +2,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar, StyleSheet, View } from 'react-native';
 import Bootsplash from 'react-native-bootsplash';
 import ErrorBoundary from 'react-native-error-boundary';
+import Toast from 'react-native-toast-message';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import ErrorFallback from './src/components/ErrorFallback';
@@ -27,6 +28,7 @@ function App() {
                 onReady={() => Bootsplash.hide({ fade: true })}
               >
                 <AppStackNavigator />
+                <Toast />
               </NavigationContainer>
             </ModalProvider>
           </ErrorBoundary>
@@ -39,7 +41,7 @@ function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.light_primary,
+    backgroundColor: colors.light_primary
   },
 });
 
