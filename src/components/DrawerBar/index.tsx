@@ -41,7 +41,7 @@ const DRAWER_ROUTES = [
         key: "wishlist",
         title: "Wishlist",
         icon: images.drawer_icons.wishlist,
-        route: NAVIGATORS.BOTTOM,
+        route: NAVIGATORS.WISHLIST_STACK,
     },
     {
         key: "faqs",
@@ -59,7 +59,7 @@ const DRAWER_ROUTES = [
         key: "contact",
         title: "Contact Us",
         icon: images.drawer_icons.contact,
-        route: NAVIGATORS.BOTTOM,
+        route: NAVIGATORS.CONTACT_STACK,
     },
 ]
 
