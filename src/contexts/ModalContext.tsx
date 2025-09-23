@@ -247,10 +247,6 @@ export const ModalProvider = ({ children }: ModalProviderProps) => {
     );
 };
 
-//
-// ---------- Styles ----------
-//
-
 const styles = StyleSheet.create({
     modalContainer: {
         flex: 1,
