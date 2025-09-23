@@ -370,3 +370,10 @@ export interface IKeyboardAvoidingWrapper {
 export interface IEmpty {
     label?: string
 }
+
+export interface IFilterModal {
+    open: boolean
+    handleClose: () => void
+    filters: number[]
+    onApply: (selected: number[]) => void
+}
