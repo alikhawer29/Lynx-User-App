@@ -1,0 +1,19 @@
+diff --git a/lib/index.js b/lib/index.js
+index b89c388c13e94ba600d28a3eb1d5f367654269c8..3a208b8c7e9b8c0de3fad34c02bb0c7cbdd48a09 100644
+--- a/lib/index.js
++++ b/lib/index.js
+@@ -30,6 +30,14 @@ export default class PhoneInput extends PureComponent {
+     };
+   }
+ 
++  componentDidUpdate(prevProps) {
++    if (prevProps.value !== this.props.value) {
++      this.setState({
++        number: this.props.value || "",
++      });
++    }
++  }
++
+   static getDerivedStateFromProps(nextProps, prevState) {
+     if (nextProps.disabled !== prevState.disabled) {
+       if ((nextProps.value || nextProps.value === "") && nextProps.value !== prevState.number) {
