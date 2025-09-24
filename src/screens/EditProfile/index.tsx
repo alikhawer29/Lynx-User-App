@@ -1,15 +1,15 @@
+import { Formik } from "formik"
 import { View } from "react-native"
+import images from "../../assets/images"
+import Button from "../../components/Button"
+import Dropdown from "../../components/Dropdown"
+import Icon from "../../components/Icon"
 import Input from "../../components/Input"
 import Row from "../../components/Row"
 import Wrapper from "../../components/Wrapper"
-import useEditProfileController from "./useEditProfileController"
-import Button from "../../components/Button"
-import { heightPixel } from "../../utils/helper"
-import Dropdown from "../../components/Dropdown"
-import { Formik } from "formik"
-import Icon from "../../components/Icon"
-import images from "../../assets/images"
 import colors from "../../utils/colors"
+import { heightPixel } from "../../utils/helper"
+import useEditProfileController from "./useEditProfileController"
 
 const EditProfile = () => {
 
@@ -21,10 +21,13 @@ const EditProfile = () => {
         values: {
             initial,
             isLoading,
-            languages
+            languages,
+            image,
+            user_image
         },
         functions: {
-            onSubmit
+            onSubmit,
+            onPressUpload
         }
     } = useEditProfileController()
 
@@ -40,9 +43,9 @@ const EditProfile = () => {
                     <>
                         <View style={{ marginVertical: heightPixel(20), alignItems: "center" }}>
                             <View>
-                                <Icon size={110} source={images.profile} />
+                                <Icon size={110} source={image ? image : { uri: user_image }} rounded no_padding border={colors.light_gray} />
                                 <View style={{ position: "absolute", right: 2, bottom: 0 }}>
-                                    <Icon source={images.camera} color={colors.white} border={colors.primary} rounded less_padding size={30} />
+                                    <Icon source={images.camera} color={colors.white} border={colors.primary} rounded less_padding size={30} onPress={onPressUpload} />
                                 </View>
                             </View>
                         </View>
@@ -82,7 +85,6 @@ const EditProfile = () => {
                                 setFieldValue("dialing_code", e?.callingCode?.[0])
                             }}
                         />
-                        {console.log("hello", data?.language)}
                         <Dropdown
                             required
                             label="Language"
