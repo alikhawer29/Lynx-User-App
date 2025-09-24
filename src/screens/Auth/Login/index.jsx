@@ -1,5 +1,4 @@
 import { Formik } from "formik"
-import { useCallback, useState } from "react"
 import { Platform, Switch, View } from "react-native"
 import AuthWrapper from "../../../components/AuthWrapper"
 import Button from "../../../components/Button"
@@ -8,8 +7,6 @@ import Input from "../../../components/Input"
 import Row from "../../../components/Row"
 import Text from "../../../components/Text"
 import colors from "../../../utils/colors"
-import { navigate } from "../../../utils/navigation"
-import { ROUTES } from "../../../utils/routes"
 import styles from "./styles"
 import useLoginController from "./useLoginController"
 
@@ -23,20 +20,17 @@ const Login = () => {
         values: {
             initial,
             isLoading,
+            remember,
             SOCIAL_LOGINS
         },
         functions: {
             onPressRegister,
             onPressGuest,
-            onSubmit
+            onSubmit,
+            onPressForgotPassword,
+            setRemember
         }
     } = useLoginController()
-
-    const onPressForgotPassword = useCallback(() => {
-        navigate(ROUTES.AUTH_TYPE)
-    })
-
-    const [remember, setRemember] = useState(false)
 
     return (
         <AuthWrapper title='Login'>
