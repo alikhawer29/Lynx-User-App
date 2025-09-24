@@ -2,14 +2,14 @@ import { Formik } from "formik"
 import { View } from "react-native"
 import AuthWrapper from "../../../components/AuthWrapper"
 import Button from "../../../components/Button"
+import Dropdown from "../../../components/Dropdown"
 import Input from "../../../components/Input"
 import Row from "../../../components/Row"
 import Text from "../../../components/Text"
-import colors from "../../../utils/colors"
-import { heightPixel } from "../../../utils/helper"
-import useRegisterController from "./useRegisterController"
 import Upload from "../../../components/Upload"
-import Dropdown from "../../../components/Dropdown"
+import colors from "../../../utils/colors"
+import styles from "./styles"
+import useRegisterController from "./useRegisterController"
 
 const Register = () => {
 
@@ -21,11 +21,13 @@ const Register = () => {
         values: {
             initial,
             isLoading,
-            languages
+            languages,
+            image
         },
         functions: {
             onPressLogin,
-            onSubmit
+            onSubmit,
+            onPressUpload
         }
     } = useRegisterController()
 
@@ -110,8 +112,8 @@ const Register = () => {
                             onChangeText={handleChange("password_confirmation")}
                             error={touched?.password_confirmation ? errors?.password_confirmation : ""}
                         />
-                        <Upload text="Upload Profile Image" required style={{ marginVertical: heightPixel(7.5) }} />
-                        <Button text="Register" style={{ marginVertical: heightPixel(40) }} onPress={handleSubmit} loading={isLoading} />
+                        <Upload text={image ? image?.name : "Upload Profile Image"} style={styles.upload} onPress={onPressUpload} />
+                        <Button text="Register" style={styles.button} onPress={handleSubmit} loading={isLoading} />
                         <Text position="center" color={colors.dark_gray} onPress={onPressLogin}>Already have an account? <Text underline weight="semibold" position="center" color={colors.secondary}>Login</Text></Text>
                     </>
                 )}

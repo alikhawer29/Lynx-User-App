@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef } from "react";
 import { useModal } from "../../../contexts/ModalContext";
+import useImage from "../../../hooks/useImage";
 import { useSignupMutation } from "../../../redux/Apis/Auth";
 import { LANGUAGES } from "../../../utils/data";
 import { formHandler } from "../../../utils/helper";
@@ -23,6 +24,7 @@ const useRegisterController = () => {
 
     const formik_ref = useRef(null)
     const { showOkModal } = useModal()
+    const { image, openGallery } = useImage()
 
     const [submit, { isSuccess, isLoading }] = useSignupMutation()
 
@@ -37,12 +39,24 @@ const useRegisterController = () => {
     }, [isSuccess])
 
     const onSubmit = useCallback((data: any) => {
-        let payload = formHandler(data)
+
+        let payload = { ...data }
+
+        if (image) {
+            payload.image = image
+        }
+
+        payload = formHandler(payload)
         submit(payload)
-    }, [])
+
+    }, [image])
 
     const onPressLogin = useCallback(() => {
         navigateAndSimpleReset(ROUTES.LOGIN)
+    }, [])
+
+    const onPressUpload = useCallback(() => {
+        openGallery()
     }, [])
 
     return {
@@ -53,11 +67,13 @@ const useRegisterController = () => {
         values: {
             initial,
             isLoading,
-            languages: LANGUAGES
+            languages: LANGUAGES,
+            image
         },
         functions: {
             onSubmit,
-            onPressLogin
+            onPressLogin,
+            onPressUpload
         }
     }
 
