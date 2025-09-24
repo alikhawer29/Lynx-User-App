@@ -24,14 +24,16 @@ const Services = () => {
       isLoading,
       authorized,
       filter_modal_open,
-      selected_filters
+      selected_filters,
+      search
     },
     functions: {
       onReload,
       onFavorite,
       onPressCard,
       toggleFilterModal,
-      onApplyFilters
+      onApplyFilters,
+      onChangeSearch
     }
   } = useServicesController()
 
@@ -54,6 +56,8 @@ const Services = () => {
             placeholder="Search service ..."
             icon={images.search}
             height={42}
+            value={search}
+            onChangeText={onChangeSearch}
           />
         </View>
         <View style={styles.filter_container}>

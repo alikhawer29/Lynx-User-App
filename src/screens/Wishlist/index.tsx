@@ -22,7 +22,8 @@ const Wishlist = () => {
       data,
       isLoading,
       filter_modal_open,
-      selected_filters
+      selected_filters,
+      search
     },
     functions: {
       onReload,
@@ -30,6 +31,7 @@ const Wishlist = () => {
       onPressCard,
       toggleFilterModal,
       onApplyFilters,
+      onChangeSearch
     }
   } = useWishlistController()
 
@@ -45,9 +47,15 @@ const Wishlist = () => {
             placeholder="Search service ..."
             icon={images.search}
             height={42}
+            value={search}
+            onChangeText={onChangeSearch}
           />
         </View>
         <View style={styles.filter_container}>
+          {
+            selected_filters.length > 0 &&
+            <View style={styles.red_dot} />
+          }
           <Icon
             source={images.filters}
             border={colors.medium_gray}

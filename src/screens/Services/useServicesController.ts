@@ -1,6 +1,7 @@
 import { useIsFocused } from "@react-navigation/native"
 import { useCallback, useEffect, useState } from "react"
 import { useAppSelector } from "../../hooks"
+import useSearch from "../../hooks/useSearch"
 import useToggle from "../../hooks/useToggle"
 import { ServiceData } from "../../interfaces"
 import { useGetServicesQuery, useHandleFavoriteMutation } from "../../redux/Apis/Service"
@@ -14,11 +15,12 @@ const useServicesController = () => {
     const authorized = useAppSelector(selectLoggedIn)
 
     const [toggleFilterModal, filter_modal_open] = useToggle()
+    const { search, debouncedSearch, onChange: onChangeSearch } = useSearch()
 
     const [services, setServices] = useState<ServiceData[]>([])
     const [selectedFilters, setSelectedFilters] = useState<string[]>([])
 
-    const { data, isFetching: isLoading, refetch, isSuccess } = useGetServicesQuery({ categories: selectedFilters })
+    const { data, isFetching: isLoading, refetch, isSuccess } = useGetServicesQuery({ search: debouncedSearch, categories: selectedFilters })
     const [favorite] = useHandleFavoriteMutation({})
 
     useEffect(() => {
@@ -73,14 +75,16 @@ const useServicesController = () => {
             isLoading,
             authorized: !!authorized,
             filter_modal_open,
-            selected_filters: selectedFilters
+            selected_filters: selectedFilters,
+            search
         },
         functions: {
             onReload: refetch,
             onFavorite,
             onPressCard,
             toggleFilterModal,
-            onApplyFilters
+            onApplyFilters,
+            onChangeSearch
         }
     }
 

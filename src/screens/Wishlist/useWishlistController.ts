@@ -1,5 +1,6 @@
 import { useIsFocused } from "@react-navigation/native"
 import { useCallback, useEffect, useState } from "react"
+import useSearch from "../../hooks/useSearch"
 import useToggle from "../../hooks/useToggle"
 import { useHandleFavoriteMutation } from "../../redux/Apis/Service"
 import { useGetFavoriteServicesQuery } from "../../redux/Apis/User"
@@ -10,11 +11,12 @@ const useWishlistController = () => {
 
     const is_focused = useIsFocused()
     const [toggleFilterModal, filter_modal_open] = useToggle()
+    const { search, debouncedSearch, onChange: onChangeSearch } = useSearch()
 
     const [services, setServices] = useState([])
     const [selectedFilters, setSelectedFilters] = useState<string[]>([])
 
-    const { data, isFetching: isLoading, refetch, isSuccess } = useGetFavoriteServicesQuery({ categories: selectedFilters })
+    const { data, isFetching: isLoading, refetch, isSuccess } = useGetFavoriteServicesQuery({ search: debouncedSearch, categories: selectedFilters })
     const [favorite] = useHandleFavoriteMutation({})
 
     useEffect(() => {
@@ -58,14 +60,16 @@ const useWishlistController = () => {
             data: services,
             isLoading,
             filter_modal_open,
-            selected_filters: selectedFilters
+            selected_filters: selectedFilters,
+            search
         },
         functions: {
             onReload: refetch,
             onFavorite,
             onPressCard,
             toggleFilterModal,
-            onApplyFilters
+            onApplyFilters,
+            onChangeSearch
         }
     }
 
