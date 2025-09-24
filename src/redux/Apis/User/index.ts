@@ -35,9 +35,10 @@ export const userApi = createApi({
             }),
         }),
         getFavoriteServices: builder.query({
-            query: () => ({
+            query: (params) => ({
                 url: `favorites`,
                 method: "GET",
+                params
             }),
             keepUnusedDataFor: 0
         }),
