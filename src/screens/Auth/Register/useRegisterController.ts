@@ -34,7 +34,7 @@ const useRegisterController = () => {
                 type: "success",
                 title: "Successfully",
                 message: "Account registered successfully."
-            }, () => navigateAndSimpleReset(ROUTES.LOGIN))
+            }, () => navigateAndSimpleReset(ROUTES.LOGIN), () => navigateAndSimpleReset(ROUTES.LOGIN))
         }
     }, [isSuccess])
 
