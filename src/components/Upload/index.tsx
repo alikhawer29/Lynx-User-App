@@ -6,11 +6,11 @@ import Icon from "../Icon";
 import Row from "../Row";
 import Text from "../Text";
 
-const Upload: FC<IUpload> = ({ text = "Upload", required = false, style }) => {
+const Upload: FC<IUpload> = ({ text = "Upload", required = false, style, onPress }) => {
     return (
-        <Row align="center" gap={10} style={style}>
+        <Row align="center" gap={10} style={style} onPress={onPress}>
             <Icon source={images.upload} size={24} />
-            <Text size={16} weight="semibold">{text} {required && <Text size={12} color={colors.danger}>*</Text>}</Text>
+            <Text size={16} weight="semibold" lines={1}>{text} {required && <Text size={12} color={colors.danger}>*</Text>}</Text>
         </Row>
     )
 }
