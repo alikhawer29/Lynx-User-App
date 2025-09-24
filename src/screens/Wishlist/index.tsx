@@ -2,6 +2,7 @@ import { FlatList, View } from 'react-native';
 import images from '../../assets/images';
 import ServiceCard from '../../components/Cards/ServiceCard';
 import Empty from '../../components/Empty';
+import FilterModal from '../../components/FilterModal';
 import Icon from '../../components/Icon';
 import Input from '../../components/Input';
 import Loader from '../../components/Loader';
@@ -20,11 +21,15 @@ const Wishlist = () => {
     values: {
       data,
       isLoading,
+      filter_modal_open,
+      selected_filters
     },
     functions: {
       onReload,
       onFavorite,
-      onPressCard
+      onPressCard,
+      toggleFilterModal,
+      onApplyFilters,
     }
   } = useWishlistController()
 
@@ -49,6 +54,7 @@ const Wishlist = () => {
             size={42}
             rounded
             less_rounded
+            onPress={toggleFilterModal}
           />
         </View>
       </Row>
@@ -65,6 +71,7 @@ const Wishlist = () => {
             ListEmptyComponent={() => <Empty label='No Services in Wishlist' />}
           />
       }
+      <FilterModal open={filter_modal_open} handleClose={toggleFilterModal} onApply={onApplyFilters} filters={selected_filters} />
     </Wrapper>
   );
 };
