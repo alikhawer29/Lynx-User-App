@@ -62,7 +62,7 @@ const Login = () => {
                         />
                         <Row justify="space-between" align="center" style={styles.row_space_between}>
                             <Row gap={Platform.OS === "android" ? 2 : 6} align="center">
-                                <Switch value={remember} onValueChange={setRemember} trackColor={{ false: colors.light_gray, true: colors.light_gray }} thumbColor={colors.secondary} />
+                                <Switch value={remember} onValueChange={setRemember} trackColor={{ false: colors.light_gray, true: colors.light_gray }} thumbColor={remember ? colors.secondary : colors.icon_gray} />
                                 <Text>Remember Me</Text>
                             </Row>
                             <Text underline weight="semibold" onPress={onPressForgotPassword} color={colors.secondary}>Forgot Password?</Text>
