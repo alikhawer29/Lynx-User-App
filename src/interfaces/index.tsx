@@ -245,6 +245,7 @@ export interface IUpload {
     text?: string
     required?: boolean
     style?: StyleProp<ViewStyle>
+    onPress?: () => void
 }
 
 export interface ICheckbox {
