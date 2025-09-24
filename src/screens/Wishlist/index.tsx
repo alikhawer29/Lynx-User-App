@@ -76,7 +76,7 @@ const Wishlist = () => {
             ItemSeparatorComponent={() => <Seperator />}
             onRefresh={onReload}
             refreshing={isLoading}
-            ListEmptyComponent={() => <Empty label='No Services in Wishlist' />}
+            ListEmptyComponent={() => <Empty label='No Services Found' />}
           />
       }
       <FilterModal open={filter_modal_open} handleClose={toggleFilterModal} onApply={onApplyFilters} filters={selected_filters} />
