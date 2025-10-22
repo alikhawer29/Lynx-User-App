@@ -65,7 +65,7 @@ const OfflineContent = () => {
           <FlatList
             keyExtractor={(item: ServiceData) => item._id.toString()}
             data={data}
-            renderItem={({ item }: { item: ServiceData }) => <ContentCard type={selected} data={item} onPress={() => onPressCard(item._id, item.type)} />}
+            renderItem={({ item }: { item: ServiceData }) => <ContentCard type={selected} data={item} onPress={() => onPressCard(item)} />}
             showsVerticalScrollIndicator={false}
             ItemSeparatorComponent={() => <Seperator />}
             refreshing={isLoading}
