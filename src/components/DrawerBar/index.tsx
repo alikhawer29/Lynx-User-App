@@ -29,13 +29,13 @@ const DRAWER_ROUTES = [
         key: "educational",
         title: "Educational Content",
         icon: images.drawer_icons.educational,
-        route: NAVIGATORS.BOTTOM,
+        route: NAVIGATORS.EDUCATIONAL_CONTENT_STACK,
     },
     {
         key: "offline",
         title: "Offline Content",
         icon: images.drawer_icons.offline,
-        route: NAVIGATORS.BOTTOM,
+        route: NAVIGATORS.OFFLINE_CONTENT_STACK,
     },
     {
         key: "wishlist",
