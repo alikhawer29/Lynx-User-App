@@ -9,7 +9,9 @@ import colors from '../../utils/colors';
 import { NAVIGATORS, ROUTES } from '../../utils/routes';
 import BottomTabNavigator from '../BottomTabNavigator';
 import ContactStackNavigator from '../ContactStackNavigator';
+import EducationalContentStackNavigator from '../EducationalContentStackNavigator';
 import NotificationStackNavigator from '../NotificationStackNavigator';
+import OfflineContentStackNavigator from '../OfflineContentStackNavigator';
 import Options from '../Options';
 import WishlistStackNavigator from '../WishlistStackNavigator';
 
@@ -22,6 +24,8 @@ const DrawerNavigator = () => {
     return (
         <Drawer.Navigator screenOptions={{ headerShown: false, drawerType: "slide", overlayColor: colors.transparent, drawerStyle: { backgroundColor: colors.light_primary, width: "70%" } }} drawerContent={(props) => <DrawerBar {...props} />} >
             <Drawer.Screen name={NAVIGATORS.BOTTOM} component={BottomTabNavigator} />
+            <Drawer.Screen name={NAVIGATORS.EDUCATIONAL_CONTENT_STACK} component={EducationalContentStackNavigator} />
+            <Drawer.Screen name={NAVIGATORS.OFFLINE_CONTENT_STACK} component={OfflineContentStackNavigator} />
             <Drawer.Screen name={NAVIGATORS.WISHLIST_STACK} component={WishlistStackNavigator} />
             <Drawer.Screen name={NAVIGATORS.NOTIFICATION_STACK} component={NotificationStackNavigator} />
             <Drawer.Screen name={NAVIGATORS.CONTACT_STACK} component={ContactStackNavigator} />
