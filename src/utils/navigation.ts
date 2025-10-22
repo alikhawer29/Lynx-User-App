@@ -1,8 +1,8 @@
 // navigation.ts
 import { CommonActions, createNavigationContainerRef } from '@react-navigation/native';
-import { AppStackParamList, AuthStackParamList, RootStackParamList, ServiceStackParamList } from '../interfaces';
+import { AppStackParamList, AuthStackParamList, EducationalContentStackParamList, OfflineContentStackParamList, RootStackParamList, ServiceStackParamList } from '../interfaces';
 
-type CombinedParamList = RootStackParamList & AuthStackParamList & AppStackParamList & ServiceStackParamList;
+type CombinedParamList = RootStackParamList & AuthStackParamList & AppStackParamList & ServiceStackParamList & EducationalContentStackParamList & OfflineContentStackParamList;
 
 export const navigationRef = createNavigationContainerRef<CombinedParamList>();
 
