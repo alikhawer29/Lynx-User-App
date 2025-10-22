@@ -5,6 +5,7 @@ import errorLogger from '../../middlewares/apierror.middleware';
 import successLogger from '../../middlewares/apisuccess.middleware';
 import { authApi } from '../Apis/Auth';
 import { chatbotApi } from '../Apis/Chatbot';
+import { contentApi } from '../Apis/Content';
 import { feedbackApi } from '../Apis/Feedback';
 import { generalApi } from '../Apis/General';
 import { serviceApi } from '../Apis/Service';
@@ -27,6 +28,7 @@ const rootReducer = combineReducers({
     [serviceApi.reducerPath]: serviceApi.reducer,
     [feedbackApi.reducerPath]: feedbackApi.reducer,
     [generalApi.reducerPath]: generalApi.reducer,
+    [contentApi.reducerPath]: contentApi.reducer,
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
@@ -43,6 +45,7 @@ export const store = configureStore({
             .concat(serviceApi.middleware)
             .concat(feedbackApi.middleware)
             .concat(generalApi.middleware)
+            .concat(contentApi.middleware)
             .concat(errorLogger)
             .concat(successLogger)
 });
