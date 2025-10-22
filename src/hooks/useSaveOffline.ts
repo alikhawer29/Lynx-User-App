@@ -21,20 +21,33 @@ const useSaveOffline = (OFFLINE_STORAGE_KEY: string) => {
 
     const saveOffline = async (content: OfflineContent) => {
         try {
+
             setIsSaving(true)
             setError(null)
 
             const dir_path = `${RNFS.DocumentDirectoryPath}/offline_media`
             const file_name = `${content._id}.${content.media_type === "video" ? "mp4" : "jpg"}`
             const local_path = `${dir_path}/${file_name}`
+            let local_thumbnail_path = null
 
-            const dirExists = await RNFS.exists(dir_path)
-            if (!dirExists) await RNFS.mkdir(dir_path)
+            const dir_exists = await RNFS.exists(dir_path)
+            if (!dir_exists) await RNFS.mkdir(dir_path)
 
             await RNFS.downloadFile({
                 fromUrl: content.media_url,
                 toFile: local_path,
             }).promise
+
+            if (content?.media_thumbnail_url) {
+
+                local_thumbnail_path = `${dir_path}/thumbnail-${file_name}`
+
+                await RNFS.downloadFile({
+                    fromUrl: content.media_url,
+                    toFile: local_thumbnail_path,
+                }).promise
+
+            }
 
             const existing_data = await AsyncStorage.getItem(OFFLINE_STORAGE_KEY)
             const parsed: OfflineContent[] = existing_data ? JSON.parse(existing_data) : []
@@ -44,16 +57,17 @@ const useSaveOffline = (OFFLINE_STORAGE_KEY: string) => {
             const new_data = already_exists
                 ? parsed.map(item =>
                     item._id === content._id
-                        ? { ...item, ...content, media_url: `file://${local_path}` }
+                        ? { ...item, ...content, media_url: `file://${local_path}`, media_thumbnail_url: local_thumbnail_path }
                         : item
                 )
-                : [...parsed, { ...content, media_url: `file://${local_path}` }]
+                : [...parsed, { ...content, media_url: `file://${local_path}`, media_thumbnail_url: local_thumbnail_path }]
 
             await AsyncStorage.setItem(OFFLINE_STORAGE_KEY, JSON.stringify(new_data))
 
             return {
                 success: true,
-                local_path
+                local_path,
+                local_thumbnail_path
             }
 
         } catch (err: any) {
