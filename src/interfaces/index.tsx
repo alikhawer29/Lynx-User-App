@@ -47,6 +47,18 @@ export type WishlistStackParamList = {
     Wishlist: undefined;
 }
 
+export type EducationalContentStackParamList = {
+    EducationalContent: undefined;
+    ViewArticle: { id: string };
+    ViewVideo: { id: string };
+}
+
+export type OfflineContentStackParamList = {
+    OfflineContent: undefined;
+    ViewArticle: { id: string };
+    ViewVideo: { id: string };
+}
+
 export type RootStackParamList = {
     MyProfile: undefined
     EditProfile: undefined
@@ -61,6 +73,8 @@ export type RootStackParamList = {
     SubscriptionLogs: undefined,
     Chatbot: undefined
 };
+
+export type TContentType = "article" | "video"
 
 export interface IWrapper {
     children: ReactNode
@@ -333,7 +347,7 @@ interface CategoryData {
 }
 
 export interface ServiceData {
-    _id: string | number
+    _id: string
     name: string
     category: CategoryData
     description: string
@@ -341,6 +355,15 @@ export interface ServiceData {
     review_count?: number
     image_url?: any
     is_favorite?: boolean
+}
+
+export interface ContentData {
+    _id: string
+    title: string
+    description: string
+    media_url?: string
+    media_thumbnail_url?: string
+    createdAt: Date
 }
 
 export interface INotificationCard {
@@ -357,6 +380,12 @@ export interface IServiceCard {
     data: ServiceData,
     onPress?: () => void,
     onFavorite?: () => void,
+}
+
+export interface IContentCard {
+    data: ContentData,
+    onPress?: () => void,
+    type: TContentType
 }
 
 export interface IBadge {
