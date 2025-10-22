@@ -22,7 +22,6 @@ const ViewArticle = () => {
         },
         functions: {
             onSave,
-
         }
     } = useViewArticleController()
 
