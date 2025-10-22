@@ -61,7 +61,7 @@ const ViewVideo = () => {
                                     </Text>
                                 </Row>
                                 <View style={styles.progress_bar}>
-                                    <View style={[styles.progress_fill, { width: `${(currentDuration / duration) * 100}%` }]} />
+                                    <View style={[styles.progress_fill, { width: `${((currentDuration || 0) / (duration || 0)) * 100}%` }]} />
                                 </View>
                             </Row>
                         </View>
