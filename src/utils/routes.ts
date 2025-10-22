@@ -2,6 +2,8 @@ const NAVIGATORS = {
     AUTH_STACK: "AuthStackNavigator",
     SERVICE_STACK: "ServiceStackNavigator",
     WISHLIST_STACK: "WishlistStackNavigator",
+    EDUCATIONAL_CONTENT_STACK: "EducationalContentStackNavigator",
+    OFFLINE_CONTENT_STACK: "OfflineContentStackNavigator",
     NOTIFICATION_STACK: "NotificationStackNavigator",
     CONTACT_STACK: "ContactStackNavigator",
     BOTTOM: "BottomTabNavigator",
@@ -30,6 +32,10 @@ const ROUTES = {
     NOTIFICATIONS: "Notifications",
     CONTACTUS: "ContactUs",
     WISHLIST: "Wishlist",
+    EDUCATIONAL_CONTENT: "EducationalContent",
+    OFFLINE_CONTENT: "OfflineContent",
+    VIEW_ARTICLE: "ViewArticle",
+    VIEW_VIDEO: "ViewVideo",
     // old
     PROGRESS_TRACKING: "ProgressTracking",
     CHAT: "Chat",
@@ -66,6 +72,22 @@ const ROUTES_OPTIONS = [
         right: null,
         profile: false,
         title: "Service Details"
+    },
+    {
+        route_name: ROUTES.EDUCATIONAL_CONTENT,
+        left: "drawer",
+        right: "notifications",
+        profile: false,
+        title: "Education",
+        auth: true
+    },
+    {
+        route_name: ROUTES.OFFLINE_CONTENT,
+        left: "drawer",
+        right: "notifications",
+        profile: false,
+        title: "Offline Content",
+        auth: true
     },
     {
         route_name: ROUTES.WISHLIST,
@@ -118,6 +140,22 @@ const ROUTES_OPTIONS = [
         right: null,
         profile: false,
         title: null,
+        bottom_tab: false
+    },
+    {
+        route_name: ROUTES.VIEW_ARTICLE,
+        left: "back",
+        right: null,
+        profile: false,
+        title: "View Article",
+        bottom_tab: false
+    },
+    {
+        route_name: ROUTES.VIEW_VIDEO,
+        left: "back",
+        right: null,
+        profile: false,
+        title: "View Video",
         bottom_tab: false
     },
 ] as const
