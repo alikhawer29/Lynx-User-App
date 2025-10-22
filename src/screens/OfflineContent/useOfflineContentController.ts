@@ -29,12 +29,6 @@ const useOfflineContentController = () => {
     const { getOfflineContents } = useSaveOffline("content")
 
     useEffect(() => {
-        getOfflineContents().then(res => {
-            setContent(res)
-        })
-    }, [])
-
-    useEffect(() => {
 
         const results = content.filter(item =>
             item?.title?.toLowerCase().includes(search)
@@ -46,12 +40,14 @@ const useOfflineContentController = () => {
 
     useEffect(() => {
         if (is_focused) {
-            setContent([])
+            getOfflineContents().then(res => {
+                setContent(res)
+            })
         }
     }, [is_focused])
 
-    const onPressCard = useCallback((id: string, type: string) => {
-        navigate(type === "article" ? ROUTES.VIEW_ARTICLE : ROUTES.VIEW_VIDEO, { id });
+    const onPressCard = useCallback((data: any) => {
+        navigate(data.type === "article" ? ROUTES.VIEW_ARTICLE : ROUTES.VIEW_VIDEO, { ...data });
     }, [])
 
     const onChangeTab = useCallback((tab: TContentType) => {
