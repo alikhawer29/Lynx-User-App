@@ -22,7 +22,8 @@ const colors = {
     transparent_black: 'rgba(0,0,0,0.08)',
     light_green: "#32cd32",
     transparent_light_green: "rgba(50, 205, 50, 0.3)",
-    transparent_white: "rgba(255, 255, 255, 0.3)"
+    transparent_white: "rgba(255, 255, 255, 0.3)",
+    transparent_dark_white: "rgba(255, 255, 255, 0.6)"
 };
 
 export default colors;
