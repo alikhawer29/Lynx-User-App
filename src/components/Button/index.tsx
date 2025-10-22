@@ -17,7 +17,7 @@ const Button: FC<IButton> = ({ text, style, onPress, type = "primary", font_size
     return (
         <Row gap={6} onPress={onPress} style={[styles.container, style, button_default_style]} align="center" justify="center">
             {
-                loading ? <Loader color={colors.white} /> :
+                loading ? <Loader color={colors.white} size={font_size * 2} /> :
                     (
                         <>
                             {icon && <Icon source={icon} size={24} />}
