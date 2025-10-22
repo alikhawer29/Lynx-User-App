@@ -6,6 +6,7 @@ import Loader from "../../components/Loader"
 import Ratings from "../../components/Ratings"
 import Row from "../../components/Row"
 import Text from "../../components/Text"
+import Touchable from "../../components/Touchable"
 import Wrapper from "../../components/Wrapper"
 import { ServiceData } from "../../interfaces"
 import colors from "../../utils/colors"
@@ -17,10 +18,12 @@ const ServiceDetails = () => {
     const {
         values: {
             data,
-            isLoading
+            isLoading,
+            selected
         },
         functions: {
-            onBookAppointment
+            onBookAppointment,
+            onSelectTier
         }
     } = useServiceDetailsController()
 
@@ -64,23 +67,21 @@ const ServiceDetails = () => {
                         </Text>
 
                         <Row gap={10} justify="space-evenly" style={styles.card_container}>
-                            <View style={styles.normal_card}>
-                                <Text size={24} weight="bold" line_height={28}>${service.category.price.normal}</Text>
-                                <Text color={colors.dark_gray} weight="semibold">Normal</Text>
-                            </View>
-                            <View style={styles.premium_card}>
-                                <Text size={24} weight="bold" line_height={28} color={colors.white}>${service.category.price.premium}</Text>
-                                <Text color={colors.light_gray} weight="semibold">Premium</Text>
-                            </View>
+                            <Touchable onPress={() => onSelectTier(0)} style={[styles.card, selected === 0 && styles.selected_card]}>
+                                <Text color={selected === 0 ? colors.white : colors.black} size={24} weight="bold" line_height={28}>${service.category.price.normal}</Text>
+                                <Text color={selected === 0 ? colors.light_gray : colors.dark_gray} weight="semibold">Normal</Text>
+                            </Touchable>
+                            <Touchable onPress={() => onSelectTier(1)} style={[styles.card, selected === 1 && styles.selected_card]}>
+                                <Text color={selected === 1 ? colors.white : colors.black} size={24} weight="bold" line_height={28}>${service.category.price.premium}</Text>
+                                <Text color={selected === 1 ? colors.light_gray : colors.dark_gray} weight="semibold">Premium</Text>
+                            </Touchable>
                         </Row>
-
                         <Text color={colors.dark_gray}>
                             <Text weight="bold" color={colors.dark_gray}>Standard:</Text> Regular service providers at base pricing.
                         </Text>
-                        <Text color={colors.dark_gray}>
+                        <Text color={colors.dark_gray} style={styles.premium_text}>
                             <Text weight="bold" color={colors.dark_gray}>Premium:</Text> More experienced or highly qualified providers at a premium rate.
                         </Text>
-
                         <Button text="Book an Appointment" type="secondary" style={styles.button} onPress={onBookAppointment} />
                     </ScrollView>
             }

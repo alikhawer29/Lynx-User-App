@@ -17,28 +17,25 @@ const styles = StyleSheet.create({
     card_container: {
         marginVertical: heightPixel(30)
     },
-    normal_card: {
+    card: {
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: colors.white,
         height: heightPixel(87),
         width: "45%",
         borderRadius: heightPixel(8),
         borderWidth: 1,
         borderColor: colors.light_gray,
+        backgroundColor: colors.white
     },
-    premium_card: {
-        alignItems: "center",
-        justifyContent: "center",
+    selected_card: {
         backgroundColor: colors.primary,
-        height: heightPixel(87),
-        width: "45%",
-        borderRadius: heightPixel(8),
-        borderWidth: 1,
-        borderColor: colors.light_gray,
+        borderColor: colors.primary,
     },
     button: {
         marginTop: heightPixel(60)
+    },
+    premium_text: {
+        marginTop: heightPixel(10)
     }
 })
 
