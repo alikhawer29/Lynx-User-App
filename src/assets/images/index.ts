@@ -30,6 +30,7 @@ const images = {
     cover_photo: require('./cover_photo.png'),
     camera: require('./camera.png'),
     no_data: require('./no-data.png'),
+    play: require('./play.png'),
     service: {
         one: require('./service_one.png'),
     },
