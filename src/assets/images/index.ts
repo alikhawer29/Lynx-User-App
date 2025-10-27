@@ -31,6 +31,8 @@ const images = {
     camera: require('./camera.png'),
     no_data: require('./no-data.png'),
     play: require('./play.png'),
+    play_rounded: require('./play_rounded.png'),
+    pause_rounded: require('./pause_rounded.png'),
     service: {
         one: require('./service_one.png'),
     },

@@ -2,8 +2,6 @@ import { FlatList, View } from 'react-native';
 import images from '../../assets/images';
 import ContentCard from '../../components/Cards/ContentCard';
 import Empty from '../../components/Empty';
-import FilterModal from '../../components/FilterModal';
-import Icon from '../../components/Icon';
 import Input from '../../components/Input';
 import Loader from '../../components/Loader';
 import Row from '../../components/Row';
@@ -11,9 +9,9 @@ import Seperator from '../../components/Seperator';
 import Text from '../../components/Text';
 import Touchable from '../../components/Touchable';
 import Wrapper from '../../components/Wrapper';
-import { ServiceData } from '../../interfaces';
+import { ContentData } from '../../interfaces';
 import colors from '../../utils/colors';
-import { heightPixel } from '../../utils/helper';
+import { capitalize, heightPixel } from '../../utils/helper';
 import styles from './styles';
 import useEducationalContentController from './useEducationalContentController';
 
@@ -74,14 +72,14 @@ const EducationalContent = () => {
       {
         isLoading ? <Loader text="Loading" size={35} vertical={30} /> :
           <FlatList
-            keyExtractor={(item: ServiceData) => item._id.toString()}
+            keyExtractor={(item: ContentData) => item._id.toString()}
             data={data}
-            renderItem={({ item }: { item: ServiceData }) => <ContentCard type={selected} data={item} onPress={() => onPressCard(item)} />}
+            renderItem={({ item }: { item: ContentData }) => <ContentCard type={selected} data={item} onPress={() => onPressCard(item)} />}
             showsVerticalScrollIndicator={false}
             ItemSeparatorComponent={() => <Seperator />}
             onRefresh={onReload}
             refreshing={isLoading}
-            ListEmptyComponent={() => <Empty label={`No ${selected} Found`} />}
+            ListEmptyComponent={() => <Empty label={`No ${capitalize(selected)} Found`} />}
           />
       }
     </Wrapper>

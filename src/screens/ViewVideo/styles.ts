@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     },
     progress_fill: {
         height: "100%",
-        backgroundColor: colors.pure_black,
+        backgroundColor: colors.grayish_black,
         borderRadius: heightPixel(10),
     },
     title_row: {
@@ -54,6 +54,9 @@ const styles = StyleSheet.create({
     offline_button: {
         paddingHorizontal: widthPixel(10),
     },
+    similar: {
+        marginVertical: heightPixel(15)
+    }
 })
 
 export default styles

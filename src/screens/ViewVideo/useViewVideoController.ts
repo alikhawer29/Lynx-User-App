@@ -3,6 +3,9 @@ import { useGetContentsQuery } from "../../redux/Apis/Content"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { VideoRef } from "react-native-video"
 import useSaveOffline from "../../hooks/useSaveOffline"
+import { navigate } from "../../utils/navigation"
+import { ROUTES } from "../../utils/routes"
+import { ContentData } from "../../interfaces"
 
 const useViewVideoController = () => {
 
@@ -12,6 +15,7 @@ const useViewVideoController = () => {
     const [duration, setDuration] = useState(0)
     const [currentDuration, setCurrentDuration] = useState(0)
     const [savedOffline, setSavedOffline] = useState(false)
+    const [playing, setPlaying] = useState(false)
 
     const { isSaving, saveOffline, removeOfflineContent, checkIfExists } = useSaveOffline("content")
 
@@ -54,6 +58,22 @@ const useViewVideoController = () => {
         video_ref.current?.pause()
     }, [])
 
+    const handlePlayPause = useCallback(() => {
+
+        if (playing) {
+            video_ref?.current?.pause()
+        } else {
+            video_ref?.current?.resume()
+        }
+
+        setPlaying(!playing)
+
+    }, [playing])
+
+    const onPressCard = useCallback((data: ContentData) => {
+        navigate(ROUTES.VIEW_VIDEO, { ...data })
+    }, [])
+
     return {
         refs: {
             video_ref
@@ -64,13 +84,16 @@ const useViewVideoController = () => {
             isSaving,
             duration,
             currentDuration,
-            saved_offline: savedOffline
+            saved_offline: savedOffline,
+            playing
         },
         functions: {
             onEnd,
             onLoad,
             onProgress,
-            onSave
+            onSave,
+            handlePlayPause,
+            onPressCard
         }
     }
 }

@@ -364,6 +364,7 @@ export interface ContentData {
     media_url?: string
     media_thumbnail_url?: string
     createdAt: Date
+    type: "article" | "video"
 }
 
 export interface INotificationCard {

@@ -47,7 +47,7 @@ export const createInsets = (value: number): Insets => ({
 })
 
 export const dateFormatter = (date: Date) => {
-    return dayjs(date).format("YYYY-MM-DD")
+    return dayjs(date).format("DD/MM/YYYY")
 };
 
 export const timeFormatter = (date: Date | string) => {

@@ -1,5 +1,5 @@
 import { useIsFocused } from "@react-navigation/native"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import useSaveOffline from "../../hooks/useSaveOffline"
 import useSearch from "../../hooks/useSearch"
 import { ContentData, TContentType } from "../../interfaces"
@@ -7,47 +7,46 @@ import { navigate } from "../../utils/navigation"
 import { ROUTES } from "../../utils/routes"
 
 const TABS = [
-    {
-        label: "Videos",
-        value: "video"
-    },
-    {
-        label: "Article",
-        value: "article"
-    },
+    { label: "Videos", value: "video" },
+    { label: "Article", value: "article" },
 ]
 
 const useOfflineContentController = () => {
 
-    const is_focused = useIsFocused()
-
+    const isFocused = useIsFocused()
     const { search, debouncedSearch, onChange: onChangeSearch } = useSearch()
+    const { getOfflineContents } = useSaveOffline("content")
 
     const [content, setContent] = useState<ContentData[]>([])
     const [selected, setSelected] = useState<TContentType>(TABS[0].value as TContentType)
 
-    const { getOfflineContents } = useSaveOffline("content")
-
     useEffect(() => {
-
-        const results = content.filter(item =>
-            item?.title?.toLowerCase().includes(search)
-        )
-
-        setContent(results)
-
-    }, [debouncedSearch])
-
-    useEffect(() => {
-        if (is_focused) {
+        if (isFocused) {
             getOfflineContents().then(res => {
-                setContent(res)
+                setContent(res || [])
             })
         }
-    }, [is_focused])
+    }, [isFocused, getOfflineContents])
 
-    const onPressCard = useCallback((data: any) => {
-        navigate(data.type === "article" ? ROUTES.VIEW_ARTICLE : ROUTES.VIEW_VIDEO, { ...data });
+    const filtered_data = useMemo(() => {
+  
+        const filtered_by_type = content.filter(item => item.type === selected)
+
+        if (!debouncedSearch?.trim()) {
+            return filtered_by_type
+        }
+
+        const lower_search = debouncedSearch.toLowerCase()
+
+        return filtered_by_type.filter(item =>
+            item?.title?.toLowerCase()?.includes(lower_search)
+        )
+
+    }, [content, selected, debouncedSearch])
+
+    const onPressCard = useCallback((data: ContentData) => {
+        const route = data.type === "article" ? ROUTES.VIEW_ARTICLE : ROUTES.VIEW_VIDEO
+        navigate(route, { ...data })
     }, [])
 
     const onChangeTab = useCallback((tab: TContentType) => {
@@ -56,7 +55,7 @@ const useOfflineContentController = () => {
 
     return {
         values: {
-            data: content.filter(item => item.type === selected),
+            data: filtered_data,
             isLoading: false,
             search,
             selected,
@@ -68,7 +67,6 @@ const useOfflineContentController = () => {
             onChangeTab
         }
     }
-
 }
 
 export default useOfflineContentController
