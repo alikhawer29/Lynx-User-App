@@ -26,10 +26,10 @@ const useOfflineContentController = () => {
                 setContent(res || [])
             })
         }
-    }, [isFocused, getOfflineContents])
+    }, [isFocused])
 
     const filtered_data = useMemo(() => {
-  
+
         const filtered_by_type = content.filter(item => item.type === selected)
 
         if (!debouncedSearch?.trim()) {
@@ -46,7 +46,7 @@ const useOfflineContentController = () => {
 
     const onPressCard = useCallback((data: ContentData) => {
         const route = data.type === "article" ? ROUTES.VIEW_ARTICLE : ROUTES.VIEW_VIDEO
-        navigate(route, { ...data })
+        navigate(route, { ...data, navigated_from: "offline_content" })
     }, [])
 
     const onChangeTab = useCallback((tab: TContentType) => {

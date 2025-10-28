@@ -26,7 +26,8 @@ const ViewVideo = () => {
             currentDuration,
             saved_offline,
             isSaving,
-            playing
+            playing,
+            show_similar_videos
         },
         refs: {
             video_ref
@@ -90,16 +91,21 @@ const ViewVideo = () => {
                         <View style={styles.offline_button_wrapper}>
                             <Button font_size={12} text={saved_offline ? "Remove From Offline" : "Save as Offline"} height={40} style={styles.offline_button} onPress={onSave} loading={isSaving} />
                         </View>
-                        <Text size={23} weight="bold" style={styles.similar}>Similar Videos</Text>
-                        <FlatList
-                            keyExtractor={(item: ContentData) => item._id.toString()}
-                            data={data?.similar_content}
-                            renderItem={({ item }: { item: ContentData }) => <ContentCard type={item?.type} data={item} onPress={() => onPressCard(item)} />}
-                            showsVerticalScrollIndicator={false}
-                            ItemSeparatorComponent={() => <Seperator />}
-                            refreshing={isLoading}
-                            ListEmptyComponent={() => <Empty label={`No similar videos found`} />}
-                        />
+                        {
+                            show_similar_videos &&
+                            <>
+                                <Text size={23} weight="bold" style={styles.similar}>Similar Videos</Text>
+                                <FlatList
+                                    keyExtractor={(item: ContentData) => item._id.toString()}
+                                    data={data?.similar_content}
+                                    renderItem={({ item }: { item: ContentData }) => <ContentCard type={item?.type} data={item} onPress={() => onPressCard(item)} />}
+                                    showsVerticalScrollIndicator={false}
+                                    ItemSeparatorComponent={() => <Seperator />}
+                                    refreshing={isLoading}
+                                    ListEmptyComponent={() => <Empty label={`No similar videos found`} />}
+                                />
+                            </>
+                        }
                     </>
                 )
             }

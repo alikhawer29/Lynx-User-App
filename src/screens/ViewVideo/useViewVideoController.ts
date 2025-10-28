@@ -85,7 +85,8 @@ const useViewVideoController = () => {
             duration,
             currentDuration,
             saved_offline: savedOffline,
-            playing
+            playing,
+            show_similar_videos: !(params?.navigated_from === "offline_content")
         },
         functions: {
             onEnd,
