@@ -57,10 +57,10 @@ const useSaveOffline = (OFFLINE_STORAGE_KEY: string) => {
             const new_data = already_exists
                 ? parsed.map(item =>
                     item._id === content._id
-                        ? { ...item, ...content, media_url: `file://${local_path}`, media_thumbnail_url: local_thumbnail_path }
+                        ? { ...item, ...content, media_url: `file://${local_path}`, media_thumbnail_url: local_thumbnail_path ? `file://${local_thumbnail_path}` : null }
                         : item
                 )
-                : [...parsed, { ...content, media_url: `file://${local_path}`, media_thumbnail_url: local_thumbnail_path }]
+                : [...parsed, { ...content, media_url: `file://${local_path}`, media_thumbnail_url: local_thumbnail_path ? `file://${local_thumbnail_path}` : null }]
 
             await AsyncStorage.setItem(OFFLINE_STORAGE_KEY, JSON.stringify(new_data))
 
