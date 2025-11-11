@@ -15,7 +15,7 @@ import styles from './styles';
 
 const Input: FC<IInput> = props => {
 
-    const { label, placeholder, type, icon, error, value, onChangeText, onChangeCountry, maxLength, disabled, required = false, height, mode = "primary", country = "AE" } = props
+    const { label, placeholder, type, icon, error, value, onChangeText, onChangeCountry, onSubmitEditing, maxLength, disabled, required = false, height, mode = "primary", country = "AE" } = props
 
     const [isPasswordVisible, setIsPasswordVisible] = useState(type === 'password');
     const [isFocused, setIsFocused] = useState(false);
@@ -81,19 +81,22 @@ const Input: FC<IInput> = props => {
                     <Component style={[styles.inputContainer, isFocused && mode !== "secondary" && styles.focusedInputContainer, type === "textarea" && styles.multiline_input_container, mode === "secondary" ? { borderColor: colors.transparent, backgroundColor: colors.grayish_black } : {}]} onPress={toggleDate} disabled={disabled}>
                         <TextInput
                             allowFontScaling={false}
-                            style={[styles.input, type === "textarea" ? styles.multiline_input : {}, height ? { height: heightPixel(height) } : {}]}
+                            style={[styles.input, type === "textarea" ? styles.multiline_input : {}, height ? { height: heightPixel(height) } : {}, mode === "secondary" ? { color: colors.white } : {}]}
                             placeholder={placeholder}
-                            placeholderTextColor={colors.dark_gray}
+                            placeholderTextColor={mode === "secondary" ? colors.light_gray : colors.dark_gray}
                             secureTextEntry={isPasswordVisible}
                             selectionColor={colors.primary}
+                            cursorColor={mode === "secondary" ? colors.white : colors.primary}
                             onFocus={() => setIsFocused(true)}
                             onBlur={() => setIsFocused(false)}
                             value={type === "time" && value != "" ? timeFormatter(value) : value}
                             onChangeText={onChangeText}
+                            onSubmitEditing={onSubmitEditing}
                             maxLength={maxLength}
                             multiline={type === "textarea"}
                             textAlignVertical={type == "textarea" ? "top" : "center"}
                             editable={(type !== "date" && type !== "time") && !disabled}
+                            returnKeyType="search"
                             {...keyboardProps}
                         />
                         {

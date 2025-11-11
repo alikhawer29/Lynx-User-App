@@ -11,28 +11,34 @@ import AppStackNavigator from './src/navigation/AppStackNavigator';
 import { persistor, store } from './src/redux/Store';
 import colors from './src/utils/colors';
 import { navigationRef } from './src/utils/navigation';
+import { StripeProvider } from '@stripe/stripe-react-native';
+
+// Replace with your actual Stripe publishable key
+const STRIPE_PUBLISHABLE_KEY = 'pk_test_51OHpI2EN9IooQZRaU3MAJ8mKTWdFhvI7vequEoOlA9qlEOP1gdLKSB01ec6GeJkfAjHgQjipR85UligbuLBs5UaI00aoghaww7';
 
 function App() {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <View style={styles.container}>
-          <StatusBar
-            barStyle={'dark-content'}
-            backgroundColor={colors.light_primary}
-          />
-          <ErrorBoundary FallbackComponent={ErrorFallback}>
-            <ModalProvider>
-              <NavigationContainer
-                ref={navigationRef}
-                onReady={() => Bootsplash.hide({ fade: true })}
-              >
-                <AppStackNavigator />
-                <Toast />
-              </NavigationContainer>
-            </ModalProvider>
-          </ErrorBoundary>
-        </View>
+        <StripeProvider publishableKey={STRIPE_PUBLISHABLE_KEY}>
+          <View style={styles.container}>
+            <StatusBar
+              barStyle={'dark-content'}
+              backgroundColor={colors.light_primary}
+            />
+            <ErrorBoundary FallbackComponent={ErrorFallback}>
+              <ModalProvider>
+                <NavigationContainer
+                  ref={navigationRef}
+                  onReady={() => Bootsplash.hide({ fade: true })}
+                >
+                  <AppStackNavigator />
+                  <Toast />
+                </NavigationContainer>
+              </ModalProvider>
+            </ErrorBoundary>
+          </View>
+        </StripeProvider>
       </PersistGate>
     </Provider>
   );

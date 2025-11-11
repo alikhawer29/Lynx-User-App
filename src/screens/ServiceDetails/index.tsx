@@ -83,6 +83,7 @@ const ServiceDetails = () => {
                             <Text weight="bold" color={colors.dark_gray}>Premium:</Text> More experienced or highly qualified providers at a premium rate.
                         </Text>
                         <Button text="Book an Appointment" type="secondary" style={styles.button} onPress={onBookAppointment} />
+
                     </ScrollView>
             }
         </Wrapper>

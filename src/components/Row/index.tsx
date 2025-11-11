@@ -10,6 +10,7 @@ const Row: FC<IRow> = ({
     justify = "flex-start",
     onPress,
     gap,
+    wrap,
     style
 }) => {
 
@@ -20,6 +21,7 @@ const Row: FC<IRow> = ({
     }
 
     if (gap) default_style.gap = widthPixel(gap)
+    if (wrap) default_style.flexWrap = "wrap"
 
     const Component = onPress ? Touchable : View
 

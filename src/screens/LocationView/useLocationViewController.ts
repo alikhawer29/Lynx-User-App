@@ -1,0 +1,226 @@
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { ServiceStackParamList } from '../../interfaces';
+import { ROUTES } from '../../utils/routes';
+import MapView from 'react-native-maps';
+
+type LocationViewRouteProp = RouteProp<ServiceStackParamList, 'LocationView'>;
+type LocationViewNavigationProp = StackNavigationProp<
+  ServiceStackParamList,
+  'LocationView'
+>;
+
+interface Coordinates {
+  latitude: number;
+  longitude: number;
+}
+
+const useLocationViewController = () => {
+  const { params } = useRoute<LocationViewRouteProp>();
+  const navigation = useNavigation<LocationViewNavigationProp>();
+  const mapRef = useRef<MapView>(null);
+
+  const viewOnly = params?.viewOnly || false;
+
+  const [searchAddress, setSearchAddress] = useState<string>(
+    params?.address || '',
+  );
+  const [isConfirmed, setIsConfirmed] = useState<boolean>(!!params?.address);
+  const [selectedCity, setSelectedCity] = useState<string>('');
+  const [markerCoords, setMarkerCoords] = useState<Coordinates>({
+    latitude: 37.78825,
+    longitude: -122.4324,
+  });
+  const [floor, setFloor] = useState<string>(params?.floor || '');
+
+  // Geocode the address when component loads with an address
+  useEffect(() => {
+    const geocodeAddress = async () => {
+      if (params?.address && params.address.length > 0) {
+        try {
+          const apiKey = 'AIzaSyA_iWed1MP6TIMA2r3V5zLF9VMQanjyZhU';
+          const response = await fetch(
+            `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
+              params.address,
+            )}&key=${apiKey}`,
+          );
+          const data = await response.json();
+
+          if (data.results && data.results.length > 0) {
+            const location = data.results[0].geometry.location;
+            const coords = {
+              latitude: location.lat,
+              longitude: location.lng,
+            };
+            setMarkerCoords(coords);
+
+            // Animate map to the location
+            if (mapRef.current) {
+              mapRef.current.animateToRegion(
+                {
+                  ...coords,
+                  latitudeDelta: 0.0922,
+                  longitudeDelta: 0.0421,
+                },
+                1000,
+              );
+            }
+          }
+        } catch (error) {
+          console.error('Geocoding error on load:', error);
+        }
+      }
+    };
+
+    geocodeAddress();
+  }, [params?.address]);
+
+  const onChangeSearch = useCallback(
+    (text: string) => {
+      setSearchAddress(text);
+      // Auto-confirm when user types a valid address (more than 10 characters)
+      // This simulates geocoding - in real app, you'd call Google Places API
+      if (text.length > 10 && !isConfirmed) {
+        setIsConfirmed(true);
+        // Extract city name (simplified - in real app use geocoding API)
+        setSelectedCity(text.split(',')[0] || text);
+      }
+    },
+    [isConfirmed],
+  );
+
+  const onMarkerDragEnd = useCallback(async (e: any) => {
+    const coords = e.nativeEvent.coordinate;
+    setMarkerCoords(coords);
+
+    // Reverse geocode to get address from coordinates
+    try {
+      const apiKey = 'AIzaSyA_iWed1MP6TIMA2r3V5zLF9VMQanjyZhU';
+      const response = await fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${coords.latitude},${coords.longitude}&key=${apiKey}`,
+      );
+      const data = await response.json();
+
+      if (data.results && data.results.length > 0) {
+        const formattedAddress = data.results[0].formatted_address;
+        setSearchAddress(formattedAddress);
+        setSelectedCity(
+          data.results[0].address_components[0]?.long_name || formattedAddress,
+        );
+      } else {
+        // Fallback to coordinates
+        setSearchAddress(
+          `${coords.latitude.toFixed(4)}, ${coords.longitude.toFixed(4)}`,
+        );
+      }
+    } catch (error) {
+      console.error('Reverse geocoding error:', error);
+      // Fallback to coordinates
+      setSearchAddress(
+        `${coords.latitude.toFixed(4)}, ${coords.longitude.toFixed(4)}`,
+      );
+    }
+    setIsConfirmed(true);
+  }, []);
+
+  const onConfirm = useCallback(() => {
+    // Navigate back to BookService with the selected address, floor, and coordinates
+    navigation.navigate(ROUTES.BOOK_SERVICE, {
+      service: params.service,
+      selectedTier: params.selectedTier,
+      confirmedAddress: searchAddress,
+      confirmedFloor: floor,
+      confirmedLat: markerCoords.latitude,
+      confirmedLng: markerCoords.longitude,
+    });
+  }, [params, navigation, searchAddress, floor, markerCoords]);
+
+  const onEditAddress = useCallback(() => {
+    setIsConfirmed(false);
+  }, []);
+
+  const onChangeFloor = useCallback((text: string) => {
+    setFloor(text);
+  }, []);
+
+  const onSearchConfirm = useCallback(async () => {
+    if (searchAddress.trim().length > 0) {
+      try {
+        // Use Google Geocoding API to convert address to coordinates
+        const apiKey = 'AIzaSyA_iWed1MP6TIMA2r3V5zLF9VMQanjyZhU';
+        const response = await fetch(
+          `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
+            searchAddress,
+          )}&key=${apiKey}`,
+        );
+        const data = await response.json();
+
+        if (data.results && data.results.length > 0) {
+          const location = data.results[0].geometry.location;
+          const formattedAddress = data.results[0].formatted_address;
+
+          // Update marker position
+          const newCoords = {
+            latitude: location.lat,
+            longitude: location.lng,
+          };
+          setMarkerCoords(newCoords);
+
+          // Animate map to new location
+          if (mapRef.current) {
+            mapRef.current.animateToRegion(
+              {
+                latitude: location.lat,
+                longitude: location.lng,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+              },
+              1000,
+            );
+          }
+
+          // Update search address with formatted address
+          setSearchAddress(formattedAddress);
+          setSelectedCity(
+            data.results[0].address_components[0]?.long_name || searchAddress,
+          );
+          setIsConfirmed(true);
+        } else {
+          // If geocoding fails, just confirm with the typed address
+          setIsConfirmed(true);
+          setSelectedCity(searchAddress.split(',')[0] || searchAddress);
+        }
+      } catch (error) {
+        console.error('Geocoding error:', error);
+        // Fallback: just confirm with the typed address
+        setIsConfirmed(true);
+        setSelectedCity(searchAddress.split(',')[0] || searchAddress);
+      }
+    }
+  }, [searchAddress]);
+
+  return {
+    values: {
+      searchAddress,
+      isConfirmed,
+      selectedCity,
+      markerCoords,
+      floor,
+      viewOnly,
+    },
+    functions: {
+      onChangeSearch,
+      onConfirm,
+      onEditAddress,
+      onMarkerDragEnd,
+      onChangeFloor,
+      onSearchConfirm,
+    },
+    refs: {
+      mapRef,
+    },
+  };
+};
+
+export default useLocationViewController;

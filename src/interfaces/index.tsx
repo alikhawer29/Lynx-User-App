@@ -41,6 +41,66 @@ export type ContactUsStackParamList = {
 export type ServiceStackParamList = {
     Services: undefined;
     ServiceDetails: { id?: string | number };
+    BookService: {
+        service: ServiceData;
+        selectedTier: number;
+        confirmedAddress?: string;
+        confirmedFloor?: string;
+        confirmedLat?: number;
+        confirmedLng?: number;
+        firstName?: string;
+        lastName?: string;
+        phone?: string;
+        phoneCountry?: string;
+        phoneDialingCode?: string;
+        email?: string;
+        selectedTimeSlot?: string;
+        selectedDate?: string;
+    };
+    LocationView: {
+        service: ServiceData;
+        selectedTier: number;
+        address?: string;
+        floor?: string;
+        viewOnly?: boolean;
+    };
+    ServiceDateTime: {
+        service: ServiceData;
+        selectedTier: number;
+        address: string;
+        floor?: string;
+        lat?: number;
+        lng?: number;
+        firstName?: string;
+        lastName?: string;
+        phone?: string;
+        phoneCountry?: string;
+        phoneDialingCode?: string;
+        email?: string;
+        selectedTimeSlot?: string;
+        selectedDate?: string;
+    };
+    PaymentDetails: {
+        service: ServiceData;
+        selectedTier: number;
+        address: string;
+        floor?: string;
+        firstName: string;
+        lastName: string;
+        phone: string;
+        email: string;
+        sessionTime: string;
+        sessionDate: string;
+        availableHours: string;
+        bookingId: string;
+        bookingNumber?: string;
+    };
+    MyAppointments: undefined; // ← Added this line
+
+}
+
+export type MyAppointmentsStackParamList = {
+    MyAppointments: undefined;
 }
 
 export type WishlistStackParamList = {
@@ -154,6 +214,7 @@ export interface IRow {
     onPress?: () => void
     style?: StyleProp<ViewStyle>
     gap?: number
+    wrap?: boolean
 }
 
 export interface IInput {
@@ -167,6 +228,7 @@ export interface IInput {
     mode?: "primary" | "secondary";
     onChangeText?: (text: string) => void;
     onChangeCountry?: (country: any) => void;
+    onSubmitEditing?: () => void;
     maxLength?: number;
     disabled?: boolean;
     required?: boolean;
@@ -339,6 +401,7 @@ interface NotificationData {
 }
 
 interface CategoryData {
+    _id?: string
     name: string
     price: {
         normal: string | number

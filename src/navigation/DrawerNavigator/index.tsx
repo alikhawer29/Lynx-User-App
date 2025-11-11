@@ -12,6 +12,7 @@ import ContactStackNavigator from '../ContactStackNavigator';
 import EducationalContentStackNavigator from '../EducationalContentStackNavigator';
 import NotificationStackNavigator from '../NotificationStackNavigator';
 import OfflineContentStackNavigator from '../OfflineContentStackNavigator';
+import MyAppointmentsStackNavigator from '../MyAppointmentsStackNavigator';
 import Options from '../Options';
 import WishlistStackNavigator from '../WishlistStackNavigator';
 
@@ -27,6 +28,7 @@ const DrawerNavigator = () => {
             <Drawer.Screen name={NAVIGATORS.EDUCATIONAL_CONTENT_STACK} component={EducationalContentStackNavigator} />
             <Drawer.Screen name={NAVIGATORS.OFFLINE_CONTENT_STACK} component={OfflineContentStackNavigator} />
             <Drawer.Screen name={NAVIGATORS.WISHLIST_STACK} component={WishlistStackNavigator} />
+            <Drawer.Screen name={NAVIGATORS.MY_APPOINTMENTS_STACK} component={MyAppointmentsStackNavigator} />
             <Drawer.Screen name={NAVIGATORS.NOTIFICATION_STACK} component={NotificationStackNavigator} />
             <Drawer.Screen name={NAVIGATORS.CONTACT_STACK} component={ContactStackNavigator} />
             <Drawer.Screen name={ROUTES.SERVICE_DETAILS} component={ServiceDetails} options={(props) => Options(props, authorized)} />

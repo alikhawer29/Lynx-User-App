@@ -170,9 +170,7 @@ export const ModalProvider = ({ children }: ModalProviderProps) => {
                                             source={
                                                 modalContent.type === "success"
                                                     ? images.modal_check
-                                                    : modalContent.type === "warning"
-                                                        ? images.warning
-                                                        : images.modal_cross
+                                                    : images.modal_cross
                                             }
                                             style={{
                                                 height: heightPixel(78),

@@ -23,7 +23,7 @@ const DRAWER_ROUTES = [
         key: "appointments",
         title: "My Appointments",
         icon: images.drawer_icons.appointments,
-        route: NAVIGATORS.BOTTOM,
+        route: NAVIGATORS.MY_APPOINTMENTS_STACK,
     },
     {
         key: "educational",
