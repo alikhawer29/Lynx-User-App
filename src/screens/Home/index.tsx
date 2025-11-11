@@ -11,7 +11,7 @@ import { ServiceData } from '../../interfaces';
 import { useGetServicesQuery, useHandleFavoriteMutation } from '../../redux/Apis/Service';
 import colors from '../../utils/colors';
 import { navigate } from '../../utils/navigation';
-import { NAVIGATORS, ROUTES } from '../../utils/routes';
+import { NAVIGATORS } from '../../utils/routes';
 import styles from './styles';
 
 const Home = () => {
@@ -42,14 +42,15 @@ const Home = () => {
   }, [isFavoriteSuccess])
 
   const onPressViewAll = useCallback(() => {
-    navigate(NAVIGATORS.SERVICE_STACK, { screen: ROUTES.SERVICES });
+    // Navigate to the Services tab in the BottomTabNavigator
+    navigate(NAVIGATORS.SERVICE_STACK);
   }, []);
 
-  const onFavorite = useCallback((id: number) => {
+  const onFavorite = useCallback((id: string) => {
 
     favorite(id)
 
-    let updated_services = services.map((item: any) => {
+    let updated_services = services.map((item: ServiceData) => {
       if (item._id === id) {
         return {
           ...item,

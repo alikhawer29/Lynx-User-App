@@ -19,6 +19,8 @@ type NavigatorParamList = {
   EducationalContentStackNavigator: undefined;
   OfflineContentStackNavigator: undefined;
   WishlistStackNavigator: undefined;
+  ServiceStackNavigator: undefined;
+  HomeStackNavigator: undefined;
   BottomTabNavigator: undefined;
   DrawerNavigator: undefined;
 };

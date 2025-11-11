@@ -7,12 +7,17 @@ import { ROUTES } from "../../utils/routes"
 import FeaturedServiceCard from "../Cards/FeaturedServiceCard"
 import styles from "./styles"
 
-const HomeCarousel: FC = ({ data, onFavorite }) => {
+interface HomeCarouselProps {
+    data: ServiceData[];
+    onFavorite: (id: string) => void;
+}
+
+const HomeCarousel: FC<HomeCarouselProps> = ({ data, onFavorite }) => {
 
     const [page, setPage] = useState<number>(0)
     const flatListRef = useRef<FlatList<ServiceData[]> | null>(null)
 
-    const onPressDetail = useCallback((id) => {
+    const onPressDetail = useCallback((id: string) => {
         navigate(ROUTES.SERVICE_DETAILS, { id })
     }, [])
 

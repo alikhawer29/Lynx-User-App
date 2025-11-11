@@ -99,6 +99,17 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     alignItems: 'center',
   },
+  time_slot_booked: {
+    flex: 1,
+    paddingVertical: heightPixel(12),
+    paddingHorizontal: heightPixel(10),
+    borderRadius: heightPixel(8),
+    borderWidth: 1,
+    borderColor: colors.danger,
+    backgroundColor: '#ffebee',
+    alignItems: 'center',
+    opacity: 0.6,
+  },
   schedules_header: {
     marginBottom: heightPixel(15),
   },
@@ -120,6 +131,11 @@ const styles = StyleSheet.create({
   date_item_selected: {
     borderColor: colors.danger,
     backgroundColor: colors.danger,
+  },
+  date_item_disabled: {
+    borderColor: colors.danger,
+    backgroundColor: '#ffebee',
+    opacity: 0.6,
   },
   available_hours_title: {
     marginBottom: heightPixel(15),

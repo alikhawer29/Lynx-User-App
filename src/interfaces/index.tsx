@@ -55,6 +55,7 @@ export type ServiceStackParamList = {
         phoneDialingCode?: string;
         email?: string;
         selectedTimeSlot?: string;
+        selectedSlotId?: string;
         selectedDate?: string;
     };
     LocationView: {
@@ -78,6 +79,7 @@ export type ServiceStackParamList = {
         phoneDialingCode?: string;
         email?: string;
         selectedTimeSlot?: string;
+        selectedSlotId?: string;
         selectedDate?: string;
     };
     PaymentDetails: {

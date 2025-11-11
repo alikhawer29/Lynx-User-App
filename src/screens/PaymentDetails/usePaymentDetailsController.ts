@@ -7,7 +7,8 @@ import {
   useCreatePaymentIntentMutation,
   useUpdatePaymentStatusMutation,
 } from '../../redux/Apis/Booking';
-import { navigate } from '../../utils/navigation';
+import { navigationRef } from '../../utils/navigation';
+import { CommonActions } from '@react-navigation/native';
 
 type PaymentDetailsRouteProp = RouteProp<
   ServiceStackParamList,
@@ -103,8 +104,20 @@ const usePaymentDetailsController = () => {
 
   const onSuccessOk = useCallback(() => {
     setShowSuccessModal(false);
-    // Navigate to My Appointments Stack Navigator
-    navigate(NAVIGATORS.MY_APPOINTMENTS_STACK);
+
+    // Reset navigation to My Appointments to prevent going back to payment screen
+    if (navigationRef.isReady()) {
+      navigationRef.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [
+            {
+              name: NAVIGATORS.MY_APPOINTMENTS_STACK,
+            },
+          ],
+        }),
+      );
+    }
   }, []);
 
   return {

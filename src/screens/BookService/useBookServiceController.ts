@@ -42,6 +42,16 @@ interface SlotData {
   is_active: boolean;
   time_range: string;
   id: string;
+  is_booked: boolean;
+  booking_info?: {
+    booking_id: string;
+    provider: {
+      _id: string;
+      first_name: string;
+      last_name: string;
+    };
+    session_date: string;
+  } | null;
 }
 
 const useBookServiceController = () => {
@@ -69,6 +79,9 @@ const useBookServiceController = () => {
   const [email, setEmail] = useState<string>(params?.email || '');
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string>(
     params?.selectedTimeSlot || '',
+  );
+  const [selectedSlotId, setSelectedSlotId] = useState<string>(
+    params?.selectedSlotId || '',
   );
   const [selectedDate, setSelectedDate] = useState<string>(
     params?.selectedDate || '',
@@ -134,10 +147,24 @@ const useBookServiceController = () => {
     );
     console.log('📅 Current month:', monthNames[today.getMonth()]);
 
-    // Auto-select today's date
+    // Auto-select today's date if it's not Sunday, otherwise select next available day
     const todayFormatted = today.toISOString().split('T')[0];
-    console.log('🎯 Auto-selecting today:', todayFormatted);
-    setSelectedDate(todayFormatted);
+    const todayDayName = dayNames[today.getDay()];
+
+    if (todayDayName === 'SUN') {
+      // If today is Sunday, select Monday (next day)
+      const tomorrow = new Date(today);
+      tomorrow.setDate(today.getDate() + 1);
+      const tomorrowFormatted = tomorrow.toISOString().split('T')[0];
+      console.log(
+        '🎯 Today is Sunday, auto-selecting Monday:',
+        tomorrowFormatted,
+      );
+      setSelectedDate(tomorrowFormatted);
+    } else {
+      console.log('🎯 Auto-selecting today:', todayFormatted);
+      setSelectedDate(todayFormatted);
+    }
   }, []);
 
   // Fetch slots when date is selected
@@ -271,14 +298,33 @@ const useBookServiceController = () => {
     });
   }, [params, address, floor, navigation]);
 
-  const onSelectTimeSlot = useCallback((timeSlot: string) => {
-    setSelectedTimeSlot(timeSlot);
-  }, []);
+  const onSelectTimeSlot = useCallback(
+    (timeSlot: string, slotId: string, isBooked: boolean) => {
+      // Prevent selecting booked slots
+      if (isBooked) {
+        console.log('❌ Cannot select booked slot:', timeSlot);
+        return;
+      }
 
-  const onSelectDate = useCallback((date: string) => {
-    console.log('🖱️ User clicked on date:', date);
+      setSelectedTimeSlot(timeSlot);
+      setSelectedSlotId(slotId);
+      console.log('✅ Selected slot:', timeSlot, 'ID:', slotId);
+    },
+    [],
+  );
+
+  const onSelectDate = useCallback((date: string, dayName: string) => {
+    console.log('🖱️ User clicked on date:', date, 'Day:', dayName);
+
+    // Prevent selecting Sundays
+    if (dayName === 'SUN') {
+      console.log('❌ Cannot select Sunday');
+      return;
+    }
+
     setSelectedDate(date);
     setSelectedTimeSlot(''); // Reset selected time slot when date changes
+    setSelectedSlotId(''); // Reset selected slot ID when date changes
   }, []);
 
   const onContinue = useCallback(() => {
@@ -297,6 +343,7 @@ const useBookServiceController = () => {
         phoneDialingCode,
         email,
         selectedTimeSlot,
+        selectedSlotId,
         selectedDate,
       });
     }
@@ -314,6 +361,7 @@ const useBookServiceController = () => {
     phoneDialingCode,
     email,
     selectedTimeSlot,
+    selectedSlotId,
     selectedDate,
     navigation,
   ]);

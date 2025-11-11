@@ -28,6 +28,9 @@ const useServiceDateTimeController = () => {
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string>(
     params?.selectedTimeSlot || '',
   );
+  const [selectedSlotId, setSelectedSlotId] = useState<string>(
+    params?.selectedSlotId || '',
+  );
 
   const onSelectSessionTime = useCallback((time: 'AM' | 'PM') => {
     setSessionTime(time);
@@ -60,9 +63,10 @@ const useServiceDateTimeController = () => {
       phoneDialingCode: params.phoneDialingCode,
       email: params.email,
       selectedTimeSlot: selectedTimeSlot,
+      selectedSlotId: selectedSlotId,
       selectedDate: sessionDate,
     });
-  }, [params, navigation, selectedTimeSlot, sessionDate]);
+  }, [params, navigation, selectedTimeSlot, selectedSlotId, sessionDate]);
 
   const onEditContact = useCallback(() => {
     navigation.navigate(ROUTES.BOOK_SERVICE, {
@@ -79,9 +83,10 @@ const useServiceDateTimeController = () => {
       phoneDialingCode: params.phoneDialingCode,
       email: params.email,
       selectedTimeSlot: selectedTimeSlot,
+      selectedSlotId: selectedSlotId,
       selectedDate: sessionDate,
     });
-  }, [params, navigation, selectedTimeSlot, sessionDate]);
+  }, [params, navigation, selectedTimeSlot, selectedSlotId, sessionDate]);
 
   const onContinue = useCallback(async () => {
     console.log('onContinue called');
@@ -121,6 +126,7 @@ const useServiceDateTimeController = () => {
         },
         session_date: sessionDateFormatted,
         session_time: sessionTimeFormatted,
+        slot_id: selectedSlotId,
       };
 
       console.log('Booking payload:', JSON.stringify(payload, null, 2));
@@ -185,9 +191,10 @@ const useServiceDateTimeController = () => {
       phoneDialingCode: params.phoneDialingCode,
       email: params.email,
       selectedTimeSlot: selectedTimeSlot,
+      selectedSlotId: selectedSlotId,
       selectedDate: sessionDate,
     });
-  }, [params, navigation, selectedTimeSlot, sessionDate]);
+  }, [params, navigation, selectedTimeSlot, selectedSlotId, sessionDate]);
 
   return {
     values: {

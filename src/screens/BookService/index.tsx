@@ -251,143 +251,6 @@ const BookService = () => {
                 </View>
 
 
-                {/* Contact Details Section */}
-                {/* <Touchable style={styles.section}>
-                    <Text size={18} weight="bold" line_height={22} style={styles.section_title}>
-                        Contact Details
-                    </Text>
-
-                    <Input
-                        label="First Name"
-                        placeholder="Enter First Name"
-                        type="text"
-                        value={firstName}
-                        onChangeText={(text) => {
-                            handleChange('firstName')(text)
-                            handleTouch('firstName')
-                        }}
-                        error={touched.firstName ? errors.firstName : ''}
-                        required
-                    />
-
-                    <Input
-                        label="Last Name"
-                        placeholder="Enter Last Name"
-                        type="text"
-                        value={lastName}
-                        onChangeText={(text) => {
-                            handleChange('lastName')(text)
-                            handleTouch('lastName')
-                        }}
-                        error={touched.lastName ? errors.lastName : ''}
-                        required
-                    />
-
-                    <Input
-                        label="Phone Number"
-                        placeholder="Enter Phone Number"
-                        type="phone"
-                        value={phone}
-                        country={phoneCountry}
-                        onChangeText={(text) => {
-                            handleChange('phone')(text)
-                            handleTouch('phone')
-                        }}
-                        onChangeCountry={(country) => {
-                            setPhoneCountry(country.cca2)
-                            setPhoneDialingCode(`+${country.callingCode[0]}`)
-                        }}
-                        error={touched.phone ? errors.phone : ''}
-                        required
-                    />
-
-                    <Input
-                        label="Email Address"
-                        placeholder="Enter Email Address"
-                        type="email"
-                        value={email}
-                        onChangeText={(text) => {
-                            handleChange('email')(text)
-                            handleTouch('email')
-                        }}
-                        error={touched.email ? errors.email : ''}
-                        required
-                    />
-                </Touchable> */}
-
-                {/* Service Details Section */}
-                {/* <View style={styles.section}>
-                    <Row align="center" justify="space-between" style={styles.schedules_header}>
-                        <Text size={18} weight="bold" line_height={22}>Schedules</Text>
-                        <Text size={14} weight="semibold" color={colors.dark_gray}>{currentMonth}</Text>
-                    </Row>
-
-                    <Row gap={8} style={styles.dates_container}>
-                        {weekDates.map((dateItem) => (
-                            <Touchable
-                                key={dateItem.date}
-                                style={[
-                                    styles.date_item,
-                                    selectedDate === dateItem.date && styles.date_item_selected
-                                ]}
-                                onPress={() => onSelectDate(dateItem.date)}
-                            >
-                                <Text
-                                    size={16}
-                                    weight="bold"
-                                    color={selectedDate === dateItem.date ? colors.white : colors.black}
-                                >
-                                    {dateItem.day}
-                                </Text>
-                                <Text
-                                    size={10}
-                                    weight="semibold"
-                                    color={selectedDate === dateItem.date ? colors.white : colors.dark_gray}
-                                >
-                                    {dateItem.dayName}
-                                </Text>
-                            </Touchable>
-                        ))}
-                    </Row>
-
-                    <Text size={18} weight="bold" line_height={22} style={styles.available_hours_title}>
-                        Available Hours
-                    </Text>
-
-                    {slotsLoading ? (
-                        <View style={styles.slots_loading}>
-                            <Loader text="Loading slots..." size={25} vertical={10} />
-                        </View>
-                    ) : slots.length > 0 ? (
-                        <Row gap={10} style={styles.time_slots_container} wrap>
-                            {slots.map((slot) => (
-                                <Touchable
-                                    key={slot.id}
-                                    style={[
-                                        styles.time_slot,
-                                        selectedTimeSlot === slot.time_range && styles.time_slot_selected
-                                    ]}
-                                    onPress={() => onSelectTimeSlot(slot.time_range)}
-                                >
-                                    <Text
-                                        size={12}
-                                        weight="semibold"
-                                        color={selectedTimeSlot === slot.time_range ? colors.white : colors.black}
-                                    >
-                                        {slot.time_range}
-                                    </Text>
-                                </Touchable>
-                            ))}
-                        </Row>
-                    ) : (
-                        <View style={styles.no_slots}>
-                            <Text size={14} color={colors.dark_gray} position="center">
-                                No slots available for this date
-                            </Text>
-                        </View>
-                    )}
-                </View> */}
-
                 {/* Service Details */}
                 <View style={styles.section}>
                     <Touchable
@@ -406,31 +269,50 @@ const BookService = () => {
                             </Row>
 
                             <Row gap={8} style={styles.dates_container}>
-                                {weekDates.map((dateItem) => (
-                                    <Touchable
-                                        key={dateItem.date}
-                                        style={[
-                                            styles.date_item,
-                                            selectedDate === dateItem.date && styles.date_item_selected
-                                        ]}
-                                        onPress={() => onSelectDate(dateItem.date)}
-                                    >
-                                        <Text
-                                            size={16}
-                                            weight="bold"
-                                            color={selectedDate === dateItem.date ? colors.white : colors.black}
+                                {weekDates.map((dateItem) => {
+                                    const isSunday = dateItem.dayName === 'SUN';
+                                    const isSelected = selectedDate === dateItem.date;
+
+                                    return (
+                                        <Touchable
+                                            key={dateItem.date}
+                                            style={[
+                                                styles.date_item,
+                                                isSelected && !isSunday && styles.date_item_selected,
+                                                isSunday && styles.date_item_disabled
+                                            ]}
+                                            onPress={() => onSelectDate(dateItem.date, dateItem.dayName)}
+                                            disabled={isSunday}
                                         >
-                                            {dateItem.day}
-                                        </Text>
-                                        <Text
-                                            size={10}
-                                            weight="semibold"
-                                            color={selectedDate === dateItem.date ? colors.white : colors.dark_gray}
-                                        >
-                                            {dateItem.dayName}
-                                        </Text>
-                                    </Touchable>
-                                ))}
+                                            <Text
+                                                size={16}
+                                                weight="bold"
+                                                color={
+                                                    isSunday
+                                                        ? colors.danger
+                                                        : isSelected
+                                                            ? colors.white
+                                                            : colors.black
+                                                }
+                                            >
+                                                {dateItem.day}
+                                            </Text>
+                                            <Text
+                                                size={10}
+                                                weight="semibold"
+                                                color={
+                                                    isSunday
+                                                        ? colors.danger
+                                                        : isSelected
+                                                            ? colors.white
+                                                            : colors.dark_gray
+                                                }
+                                            >
+                                                {dateItem.dayName}
+                                            </Text>
+                                        </Touchable>
+                                    );
+                                })}
                             </Row>
 
                             <Text size={18} weight="bold" style={styles.available_hours_title}>
@@ -441,24 +323,37 @@ const BookService = () => {
                                 <Loader text="Loading slots..." />
                             ) : slots.length > 0 ? (
                                 <Row wrap style={styles.time_slots_container} gap={10}>
-                                    {slots.map((slot) => (
-                                        <Touchable
-                                            key={slot.id}
-                                            style={[
-                                                styles.time_slot,
-                                                selectedTimeSlot === slot.time_range && styles.time_slot_selected
-                                            ]}
-                                            onPress={() => onSelectTimeSlot(slot.time_range)}
-                                        >
-                                            <Text
-                                                size={12}
-                                                weight="semibold"
-                                                color={selectedTimeSlot === slot.time_range ? colors.white : colors.black}
+                                    {slots.map((slot) => {
+                                        const isBooked = slot.is_booked;
+                                        const isSelected = selectedTimeSlot === slot.time_range;
+
+                                        return (
+                                            <Touchable
+                                                key={slot.id}
+                                                style={[
+                                                    styles.time_slot,
+                                                    isSelected && !isBooked && styles.time_slot_selected,
+                                                    isBooked && styles.time_slot_booked
+                                                ]}
+                                                onPress={() => onSelectTimeSlot(slot.time_range, slot.id, isBooked)}
+                                                disabled={isBooked}
                                             >
-                                                {slot.time_range}
-                                            </Text>
-                                        </Touchable>
-                                    ))}
+                                                <Text
+                                                    size={12}
+                                                    weight="semibold"
+                                                    color={
+                                                        isBooked
+                                                            ? colors.danger
+                                                            : isSelected
+                                                                ? colors.white
+                                                                : colors.black
+                                                    }
+                                                >
+                                                    {slot.time_range}
+                                                </Text>
+                                            </Touchable>
+                                        );
+                                    })}
                                 </Row>
                             ) : (
                                 <Text size={14} color={colors.dark_gray}>No slots available</Text>
