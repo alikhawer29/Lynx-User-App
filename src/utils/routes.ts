@@ -35,6 +35,7 @@ const ROUTES = {
   SERVICE_DATE_TIME: 'ServiceDateTime',
   PAYMENT_DETAILS: 'PaymentDetails',
   MY_APPOINTMENTS: 'MyAppointments',
+  APPOINTMENT_DETAILS: 'AppointmentDetails',
   NOTIFICATIONS: 'Notifications',
   CONTACTUS: 'ContactUs',
   WISHLIST: 'Wishlist',
@@ -114,6 +115,13 @@ const ROUTES_OPTIONS = [
     profile: false,
     title: 'My Appointments',
     auth: true,
+  },
+  {
+    route_name: ROUTES.APPOINTMENT_DETAILS,
+    left: 'back',
+    right: null,
+    profile: false,
+    title: 'Appointment Details',
   },
   {
     route_name: ROUTES.EDUCATIONAL_CONTENT,

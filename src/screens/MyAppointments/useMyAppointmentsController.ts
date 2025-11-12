@@ -1,5 +1,14 @@
 import { useCallback, useState, useEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { useLazyGetBookingsQuery } from '../../redux/Apis/Booking';
+import { MyAppointmentsStackParamList } from '../../interfaces';
+import { ROUTES } from '../../utils/routes';
+
+type MyAppointmentsNavigationProp = StackNavigationProp<
+  MyAppointmentsStackParamList,
+  'MyAppointments'
+>;
 
 type FilterType =
   | 'all'
@@ -23,6 +32,7 @@ const FILTER_TABS: { key: FilterType; label: string }[] = [
 ];
 
 const useMyAppointmentsController = () => {
+  const navigation = useNavigation<MyAppointmentsNavigationProp>();
   const [selectedFilter, setSelectedFilter] = useState<FilterType>('all');
   const [page, setPage] = useState(1);
   const [bookings, setBookings] = useState<any[]>([]);
@@ -111,6 +121,13 @@ const useMyAppointmentsController = () => {
     loadBookings(selectedFilter, 1, false);
   }, [selectedFilter, loadBookings]);
 
+  const onPressBooking = useCallback(
+    (bookingId: string) => {
+      navigation.navigate(ROUTES.APPOINTMENT_DETAILS, { bookingId });
+    },
+    [navigation],
+  );
+
   return {
     values: {
       bookings,
@@ -124,6 +141,7 @@ const useMyAppointmentsController = () => {
       onChangeFilter,
       onLoadMore,
       onRefresh,
+      onPressBooking,
     },
   };
 };

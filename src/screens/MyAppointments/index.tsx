@@ -18,7 +18,7 @@ import dayjs from 'dayjs';
 const MyAppointments = () => {
   const {
     values: { bookings, isLoading, isFetching, selectedFilter, filterTabs, hasMore },
-    functions: { onChangeFilter, onLoadMore, onRefresh },
+    functions: { onChangeFilter, onLoadMore, onRefresh, onPressBooking },
   } = useMyAppointmentsController();
 
   const getStatusColor = (status: string) => {
@@ -58,7 +58,11 @@ const MyAppointments = () => {
     const priceType = item.price_type === 'normal' ? 'Normal' : 'Premium';
 
     return (
-      <View style={styles.booking_card}>
+      <TouchableOpacity
+        style={styles.booking_card}
+        onPress={() => onPressBooking(item._id)}
+        activeOpacity={0.7}
+      >
         {/* DATE + STATUS */}
         <View style={styles.booking_header}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -98,7 +102,7 @@ const MyAppointments = () => {
             </>
           )}
         </View>
-      </View>
+      </TouchableOpacity>
     );
   };
 

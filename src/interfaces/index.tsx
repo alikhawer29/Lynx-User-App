@@ -103,6 +103,9 @@ export type ServiceStackParamList = {
 
 export type MyAppointmentsStackParamList = {
     MyAppointments: undefined;
+    AppointmentDetails: {
+        bookingId: string;
+    };
 }
 
 export type WishlistStackParamList = {
