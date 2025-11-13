@@ -1,11 +1,13 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { ServiceStackParamList } from '../../interfaces';
+import { ServiceStackParamList, MyAppointmentsStackParamList } from '../../interfaces';
 import { ROUTES } from '../../utils/routes';
 import MapView from 'react-native-maps';
 
-type LocationViewRouteProp = RouteProp<ServiceStackParamList, 'LocationView'>;
+type LocationViewRouteProp =
+  | RouteProp<ServiceStackParamList, 'LocationView'>
+  | RouteProp<MyAppointmentsStackParamList, 'LocationView'>;
 type LocationViewNavigationProp = StackNavigationProp<
   ServiceStackParamList,
   'LocationView'
@@ -28,15 +30,46 @@ const useLocationViewController = () => {
   );
   const [isConfirmed, setIsConfirmed] = useState<boolean>(!!params?.address);
   const [selectedCity, setSelectedCity] = useState<string>('');
-  const [markerCoords, setMarkerCoords] = useState<Coordinates>({
-    latitude: 37.78825,
-    longitude: -122.4324,
-  });
+
+  // Initialize with provided lat/lng if available, otherwise use default
+  const initialCoords = (params as any)?.lat && (params as any)?.lng
+    ? {
+        latitude: (params as any).lat,
+        longitude: (params as any).lng,
+      }
+    : {
+        latitude: 37.78825,
+        longitude: -122.4324,
+      };
+
+  const [markerCoords, setMarkerCoords] = useState<Coordinates>(initialCoords);
   const [floor, setFloor] = useState<string>(params?.floor || '');
 
-  // Geocode the address when component loads with an address
+  // Geocode the address when component loads with an address, or animate to lat/lng if provided
   useEffect(() => {
     const geocodeAddress = async () => {
+      // If lat/lng are provided directly, just animate to that location
+      if ((params as any)?.lat && (params as any)?.lng) {
+        const coords = {
+          latitude: (params as any).lat,
+          longitude: (params as any).lng,
+        };
+
+        // Animate map to the location
+        if (mapRef.current) {
+          mapRef.current.animateToRegion(
+            {
+              ...coords,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
+            },
+            1000,
+          );
+        }
+        return;
+      }
+
+      // Otherwise, geocode the address if provided
       if (params?.address && params.address.length > 0) {
         try {
           const apiKey = 'AIzaSyA_iWed1MP6TIMA2r3V5zLF9VMQanjyZhU';
@@ -74,7 +107,7 @@ const useLocationViewController = () => {
     };
 
     geocodeAddress();
-  }, [params?.address]);
+  }, [params?.address, (params as any)?.lat, (params as any)?.lng]);
 
   const onChangeSearch = useCallback(
     (text: string) => {

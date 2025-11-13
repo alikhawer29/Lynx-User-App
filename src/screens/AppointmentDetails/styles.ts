@@ -9,7 +9,6 @@ import {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.white,
   },
   scroll_content: {
     paddingHorizontal: GLOBAL_HORIZONTAL_PADDING,
@@ -36,6 +35,7 @@ const styles = StyleSheet.create({
   provider_info: {
     flexDirection: 'row',
     alignItems: 'center',
+    flex: 1,
   },
   provider_avatar: {
     width: widthPixel(40),
@@ -49,18 +49,33 @@ const styles = StyleSheet.create({
   provider_label: {
     fontSize: 16,
     color: '#22282C',
+    fontWeight: 'bold',
   },
   provider_name: {
     fontSize: 14,
     fontWeight: '600',
     color: colors.black,
   },
-  status_badge: {
-    paddingHorizontal: widthPixel(12),
-    paddingVertical: heightPixel(6),
-    borderRadius: heightPixel(3),
+  status_badge_container: {
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
+    gap: heightPixel(3),
   },
-
+  status_row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: widthPixel(8),
+  },
+  status_label: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: colors.dark_gray,
+  },
+  status_badge: {
+    paddingHorizontal: widthPixel(10),
+    paddingVertical: heightPixel(1),
+    borderRadius: heightPixel(6),
+  },
   status_text: {
     fontSize: 12,
     fontWeight: '600',
@@ -70,7 +85,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontWeight: 'bold',
     color: colors.black,
-    marginBottom: heightPixel(5),
+    // marginBottom: heightPixel(5),
   },
 
   category_row: {
@@ -78,13 +93,19 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: heightPixel(20),
+    
   },
   category_text: {
     fontSize: 14,
     color: colors.dark_gray,
+    borderColor: colors.light_gray,
+    borderBottomWidth: 1,
+    borderRadius: heightPixel(8),
+    paddingHorizontal: widthPixel(10),
+    paddingVertical: heightPixel(2),
   },
   price_text: {
-    fontSize: 24,
+    fontSize: 40,
     fontWeight: 'bold',
     color: colors.black,
   },
@@ -96,7 +117,6 @@ const styles = StyleSheet.create({
     fontSize: 23,
     fontWeight: 'bold',
     color: colors.black,
-    marginTop: heightPixel(20),
     marginBottom: heightPixel(15),
   },
   details_grid: {
@@ -116,6 +136,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: colors.dark_gray,
     marginBottom: heightPixel(4),
+    fontWeight: 'bold',
   },
   detail_value: {
     fontSize: 14,
@@ -128,19 +149,20 @@ const styles = StyleSheet.create({
   },
   view_location_text: {
     fontSize: 14,
-    color: colors.primary,
+    color: '#B69D74',
     marginLeft: widthPixel(5),
     textDecorationLine: 'underline',
   },
   requested_section: {
-    backgroundColor: '#FFF4E5',
-    padding: heightPixel(15),
-    borderRadius: heightPixel(8),
+    padding: heightPixel(5),
+    borderRadius: heightPixel(10),
     marginTop: heightPixel(20),
     marginBottom: heightPixel(20),
+    borderWidth: 1,
+    borderColor: colors.light_gray,
   },
   requested_title: {
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: 'bold',
     color: colors.black,
     marginBottom: heightPixel(10),
@@ -151,6 +173,12 @@ const styles = StyleSheet.create({
   },
   requested_detail_item: {
     flex: 1,
+  },
+   service_provider_item: {
+    width: '48%',
+  },
+  service_provider_item_full: {
+    width: '50%',
   },
   button_container: {
     position: 'absolute',

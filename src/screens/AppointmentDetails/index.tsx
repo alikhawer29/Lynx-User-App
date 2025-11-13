@@ -63,7 +63,22 @@ const AppointmentDetails = () => {
       case 'cancelled':
         return { bg: '#FFEBEE', text: '#F44336' };
       case 'requested':
-        return { bg: '#E3F2FD', text: '#2196F3' };
+        return { bg: 'rgba(169, 121, 38, 0.2)', text: '#A97926' };
+      default:
+        return { bg: '#F5F5F5', text: '#757575' };
+    }
+  };
+
+  const getSubStatusColor = (subStatus: string) => {
+    switch (subStatus?.toLowerCase()) {
+      case 'upcoming':
+        return { bg: 'rgba(76, 175, 80, 0.15)', text: '#4CAF50' };
+      case 'completed':
+        return { bg: '#E8F5E9', text: '#4CAF50' };
+      case 'cancelled':
+        return { bg: '#FFEBEE', text: '#F44336' };
+      case 'no-show':
+        return { bg: 'rgba(255, 193, 7, 0.15)', text: '#FFC107' };
       default:
         return { bg: '#F5F5F5', text: '#757575' };
     }
@@ -94,10 +109,12 @@ const AppointmentDetails = () => {
   // Check if reschedule request exists
   const hasRescheduleRequest = booking.status?.toLowerCase() === 'requested';
 
+
   // Check if refund button should be shown (pending status)
   const canRefund = booking.status?.toLowerCase() === 'pending';
 
-  console.log(booking, 'booking')
+  const subStatus = booking.sub_status || 'upcoming';
+  const subStatusColors = getSubStatusColor(subStatus);
 
   return (
     <Wrapper>
@@ -135,103 +152,153 @@ const AppointmentDetails = () => {
             </View>
           </View>
 
-          <View style={[styles.status_badge, { backgroundColor: statusColors.bg }]}>
-            <Text style={[styles.status_text, { color: statusColors.text }]}>
-              Status : {booking.status?.charAt(0).toUpperCase() + booking.status?.slice(1)}
+          {/* <View style={[styles.status_badge, {}]}>
+            <Text style={styles.provider_name}>Status :</Text>
+            <Text style={[styles.status_text, { color: statusColors.text, backgroundColor: statusColors.bg }]}>
+              {booking.status?.charAt(0).toUpperCase() + booking.status?.slice(1)}
             </Text>
+          </View> */}
+          <View style={styles.status_badge_container}>
+            <View style={styles.status_row}>
+              <Text size={12} style={styles.status_label}>Status :</Text>
+              <View style={[styles.status_badge, { backgroundColor: statusColors.bg }]}>
+                <Text size={12} style={[styles.status_text, { color: statusColors.text }]}>
+                  {booking.status?.charAt(0).toUpperCase() + booking.status?.slice(1)}
+                </Text>
+              </View>
+            </View>
+            <View style={styles.status_row}>
+              <Text size={12} style={styles.status_label}>Sub-Status :</Text>
+              <View style={[styles.status_badge, { backgroundColor: subStatusColors.bg }]}>
+                <Text size={12} style={[styles.status_text, { color: subStatusColors.text }]}>
+                  {subStatus.charAt(0).toUpperCase() + subStatus.slice(1)}
+                </Text>
+              </View>
+            </View>
           </View>
         </View>
 
         {/* Service Name */}
-        <Text style={styles.service_name}>{serviceName}</Text>
+        <Text size={25} style={styles.service_name}>{serviceName}</Text>
 
         {/* Category + Price */}
         <View style={styles.category_row}>
-          <Text style={styles.category_text}>Category Type: {categoryName}</Text>
+          <Text size={13} style={styles.category_text}>Category Type: {categoryName}</Text>
           <View style={{ alignItems: 'flex-end' }}>
-            <Text style={styles.price_text}>${booking.price}</Text>
-            <Text style={styles.price_type}>{priceType} Price</Text>
+            <Text size={25} weight="bold" style={styles.price_text}>${booking.price}</Text>
+            <Text size={10} style={styles.price_type}>{priceType} Price</Text>
           </View>
         </View>
 
+
         {/* Booking Details Section */}
-        <Text style={styles.section_title}>Booking Details</Text>
+        <Text size={23} style={styles.section_title}>Booking Details</Text>
 
         <View style={styles.details_grid}>
           <View style={styles.detail_item}>
-            <Text style={styles.detail_label}>Booking ID:</Text>
-            <Text style={styles.detail_value}>#{booking.booking_id || booking._id?.slice(-8)}</Text>
+            <Text size={16} style={styles.detail_label}>Booking ID:</Text>
+            <Text size={16} style={styles.detail_value}>#{booking.booking_id || booking._id?.slice(-8)}</Text>
           </View>
 
           <View style={styles.detail_item}>
-            <Text style={styles.detail_label}>Booking Date:</Text>
-            <Text style={styles.detail_value}>{formattedDate}</Text>
+            <Text size={16} style={styles.detail_label}>Booking Date:</Text>
+            <Text size={16} style={styles.detail_value}>{formattedDate}</Text>
           </View>
 
           <View style={styles.detail_item}>
-            <Text style={styles.detail_label}>User Name:</Text>
-            <Text style={styles.detail_value}>
+            <Text size={16} style={styles.detail_label}>User Name:</Text>
+            <Text size={16} style={styles.detail_value}>
               {booking.contact_details?.first_name} {booking.contact_details?.last_name}
             </Text>
           </View>
 
-          <View style={styles.detail_item}>
-            <Text style={styles.detail_label}>Phone Number</Text>
-            <Text style={styles.detail_value}>
+          <View style={styles.detail_item} >
+            <Text size={16} style={styles.detail_label}>Phone Number</Text>
+            <Text size={16} style={styles.detail_value}>
               🇺🇸 {booking.contact_details?.country_code || '+1'}-{booking.contact_details?.phone_number}
             </Text>
           </View>
 
-          <View style={styles.detail_item_full}>
-            <Text style={styles.detail_label}>Email Address:</Text>
-            <Text style={styles.detail_value}>{booking.contact_details?.email}</Text>
+          <View style={styles.detail_item}>
+            <Text size={16} style={styles.detail_label}>Email Address:</Text>
+            <Text size={16} style={styles.detail_value}>{booking.contact_details?.email}</Text>
           </View>
 
-          <View style={styles.detail_item_full}>
-            <Text style={styles.detail_label}>Location:</Text>
+          <View style={styles.detail_item}>
+            <Text size={16} style={styles.detail_label}>Location:</Text>
             <View style={styles.location_row}>
-              <Text style={styles.detail_value}>
-                {booking.address?.full_address || 'Maplink'}
+              <Text size={16} style={styles.detail_value}>
+                {'Maplink'}
               </Text>
               <TouchableOpacity onPress={onViewLocation}>
-                <Text style={styles.view_location_text}>View Location</Text>
+                <Text size={16} style={styles.view_location_text} color='#B69D74'>View Location</Text>
               </TouchableOpacity>
             </View>
           </View>
 
           <View style={styles.detail_item_full}>
-            <Text style={styles.detail_label}>Address:</Text>
-            <Text style={styles.detail_value}>
+            <Text size={16} style={styles.detail_label}>Address:</Text>
+            <Text size={16} style={styles.detail_value}>
               {booking.address?.full_address || '1234, Business St #567, State, Country.'}
             </Text>
           </View>
 
           <View style={styles.detail_item}>
-            <Text style={styles.detail_label}>Service Date:</Text>
-            <Text style={styles.detail_value}>{formattedDate}</Text>
+            <Text size={16} style={styles.detail_label}>Service Date:</Text>
+            <Text size={16} style={styles.detail_value}>{formattedDate}</Text>
           </View>
 
           <View style={styles.detail_item}>
-            <Text style={styles.detail_label}>Service Time:</Text>
-            <Text style={styles.detail_value}>{booking.session_time || '12:30'}</Text>
+            <Text size={16} style={styles.detail_label}>Service Time:</Text>
+            <Text size={16} style={styles.detail_value}>{booking.session_time || '12:30'}</Text>
           </View>
         </View>
 
-        {/* Requested Date Details (if reschedule requested) */}
-        {hasRescheduleRequest && booking.reschedule_request && (
+        {/* Service Provider Details */}
+        {booking.provider_id && (
           <View style={styles.requested_section}>
-            <Text style={styles.requested_title}>Requested Date Details</Text>
+            <Text size={20} style={styles.requested_title}>Service Provider Details</Text>
+            <View style={styles.provider_details_grid}>
+              <View style={styles.service_provider_item}>
+                <Text style={styles.detail_label}>Name:</Text>
+                <Text style={styles.detail_value}>
+                  {booking.provider_id.first_name} {booking.provider_id.last_name}
+                </Text>
+              </View>
+              <View style={styles.service_provider_item}>
+                <Text style={styles.detail_label}>Phone Number:</Text>
+                <Text style={styles.detail_value}>
+                  {booking.provider_id.phone_number || '1234567890'}
+                </Text>
+              </View>
+            </View>
+            <View style={styles.provider_details_grid}>
+              <View style={styles.service_provider_item_full}>
+                <Text style={styles.detail_label}>Email:</Text>
+                <Text style={styles.detail_value}>
+                  {booking.provider_id.email}
+                </Text>
+              </View>
+            </View>
+          </View>
+        )}
+
+        {/* Requested Date Details (if reschedule requested) */}
+        {hasRescheduleRequest && booking.reschedule_requested && (
+
+          <View style={styles.requested_section}>
+            <Text size={20} style={styles.requested_title}>Requested Date Details</Text>
             <View style={styles.requested_details_row}>
               <View style={styles.requested_detail_item}>
                 <Text style={styles.detail_label}>Service Date:</Text>
                 <Text style={styles.detail_value}>
-                  {dayjs(booking.reschedule_request.session_date).format('DD/MM/YYYY')}
+                  {dayjs(booking.proposed_session_date).format('DD/MM/YYYY')}
                 </Text>
               </View>
               <View style={styles.requested_detail_item}>
                 <Text style={styles.detail_label}>Service Time:</Text>
                 <Text style={styles.detail_value}>
-                  {booking.reschedule_request.session_time || '12:30'}
+                  {booking.proposed_session_time || '12:30'}
                 </Text>
               </View>
             </View>

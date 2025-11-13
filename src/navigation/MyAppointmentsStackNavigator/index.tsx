@@ -4,6 +4,7 @@ import { MyAppointmentsStackParamList } from '../../interfaces';
 import { selectLoggedIn } from '../../redux/Slices/AuthSlice';
 import MyAppointments from '../../screens/MyAppointments';
 import AppointmentDetails from '../../screens/AppointmentDetails';
+import LocationView from '../../screens/LocationView';
 import { ROUTES } from '../../utils/routes';
 import Options from '../Options';
 
@@ -19,6 +20,7 @@ const MyAppointmentsStackNavigator = () => {
     >
       <Stack.Screen name={ROUTES.MY_APPOINTMENTS} component={MyAppointments} />
       <Stack.Screen name={ROUTES.APPOINTMENT_DETAILS} component={AppointmentDetails} />
+      <Stack.Screen name={ROUTES.LOCATION_VIEW} component={LocationView} />
     </Stack.Navigator>
   );
 };

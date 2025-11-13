@@ -42,10 +42,6 @@ const useServiceDetailsController = () => {
       });
     } else if (data?.data) {
      
-      // navigationRef.navigate(ROUTES.BOOK_SERVICE, {
-      //       service: data.data,
-      //   selectedTier: selected,
-      //     });
       navigate(ROUTES.BOOK_SERVICE, {
         service: data.data,
         selectedTier: selected,

@@ -5,8 +5,7 @@ import { MyAppointmentsStackParamList } from '../../interfaces';
 import {
   useLazyGetBookingDetailsQuery,
   useRequestRefundMutation,
-  useApproveRescheduleMutation,
-  useRejectRescheduleMutation,
+  useRescheduleResponseMutation,
 } from '../../redux/Apis/Booking';
 
 type AppointmentDetailsRouteProp = RouteProp<
@@ -26,10 +25,8 @@ const useAppointmentDetailsController = () => {
     useLazyGetBookingDetailsQuery();
   const [requestRefund, { isLoading: isRefundLoading }] =
     useRequestRefundMutation();
-  const [approveReschedule, { isLoading: isApproveLoading }] =
-    useApproveRescheduleMutation();
-  const [rejectReschedule, { isLoading: isRejectLoading }] =
-    useRejectRescheduleMutation();
+  const [rescheduleResponse, { isLoading: isRescheduleLoading }] =
+    useRescheduleResponseMutation();
 
   const [showRefundPolicyModal, setShowRefundPolicyModal] = useState(false);
   const [showRefundReasonModal, setShowRefundReasonModal] = useState(false);
@@ -111,12 +108,15 @@ const useAppointmentDetailsController = () => {
   const onConfirmApprove = useCallback(async () => {
     try {
       setShowApproveModal(false);
-      await approveReschedule(params.bookingId).unwrap();
+      await rescheduleResponse({
+        id: params.bookingId,
+        response: 'approved',
+      }).unwrap();
       setShowRefundSuccessModal(true); // Reuse success modal
     } catch (error) {
       console.error('Approve reschedule failed:', error);
     }
-  }, [params.bookingId, approveReschedule]);
+  }, [params.bookingId, rescheduleResponse]);
 
   // Reschedule reject flow
   const onPressReject = useCallback(() => {
@@ -136,16 +136,17 @@ const useAppointmentDetailsController = () => {
 
     try {
       setShowRejectReasonModal(false);
-      await rejectReschedule({
+      await rescheduleResponse({
         id: params.bookingId,
-        reason: rejectionReason,
+        response: 'rejected',
+        rejection_reason: rejectionReason,
       }).unwrap();
       setRejectionReason('');
       setShowRejectSuccessModal(true);
     } catch (error) {
       console.error('Reject reschedule failed:', error);
     }
-  }, [params.bookingId, rejectionReason, rejectReschedule]);
+  }, [params.bookingId, rejectionReason, rescheduleResponse]);
 
   const onCloseRejectSuccess = useCallback(() => {
     setShowRejectSuccessModal(false);
@@ -153,17 +154,23 @@ const useAppointmentDetailsController = () => {
   }, [onRefreshDetails]);
 
   const onViewLocation = useCallback(() => {
-    // Navigate to map view if needed
-    console.log('View location');
-  }, []);
+    if (booking?.address) {
+      navigation.navigate('LocationView', {
+        lat: booking.address.lat,
+        lng: booking.address.lng,
+        address: booking.address.full_address,
+        floor: booking.address.floor,
+        viewOnly: true,
+      });
+    }
+  }, [booking, navigation]);
 
   return {
     values: {
       booking,
       isLoading,
       isRefundLoading,
-      isApproveLoading,
-      isRejectLoading,
+      isRescheduleLoading,
       showRefundPolicyModal,
       showRefundReasonModal,
       showRefundSuccessModal,

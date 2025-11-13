@@ -61,17 +61,14 @@ export const bookingApi = createApi({
         body,
       }),
     }),
-    approveReschedule: builder.mutation({
-      query: id => ({
-        url: `reschedule/approve/${id}`,
+    rescheduleResponse: builder.mutation({
+      query: ({ id, response, rejection_reason }) => ({
+        url: `reschedule-response/${id}`,
         method: 'POST',
-      }),
-    }),
-    rejectReschedule: builder.mutation({
-      query: ({ id, ...body }) => ({
-        url: `reschedule/reject/${id}`,
-        method: 'POST',
-        body,
+        body: {
+          response,
+          ...(rejection_reason && { rejection_reason }),
+        },
       }),
     }),
   }),
@@ -86,6 +83,5 @@ export const {
   useGetBookingDetailsQuery,
   useLazyGetBookingDetailsQuery,
   useRequestRefundMutation,
-  useApproveRescheduleMutation,
-  useRejectRescheduleMutation,
+  useRescheduleResponseMutation,
 } = bookingApi;

@@ -20,6 +20,7 @@ export type AuthStackParamList = {
 
 export type HomeStackParamList = {
     Home: undefined;
+    ServiceDetails: { id?: string | number };
     BookService: {
         service: ServiceData;
         selectedTier: number;
@@ -37,7 +38,45 @@ export type HomeStackParamList = {
         selectedSlotId?: string;
         selectedDate?: string;
     };
-
+    LocationView: {
+        service: ServiceData;
+        selectedTier: number;
+        address?: string;
+        floor?: string;
+        viewOnly?: boolean;
+    };
+    ServiceDateTime: {
+        service: ServiceData;
+        selectedTier: number;
+        address: string;
+        floor?: string;
+        lat?: number;
+        lng?: number;
+        firstName?: string;
+        lastName?: string;
+        phone?: string;
+        phoneCountry?: string;
+        phoneDialingCode?: string;
+        email?: string;
+        selectedTimeSlot?: string;
+        selectedSlotId?: string;
+        selectedDate?: string;
+    };
+    PaymentDetails: {
+        service: ServiceData;
+        selectedTier: number;
+        address: string;
+        floor?: string;
+        firstName: string;
+        lastName: string;
+        phone: string;
+        email: string;
+        sessionTime: string;
+        sessionDate: string;
+        availableHours: string;
+        bookingId: string;
+        bookingNumber?: string;
+    };
 }
 
 export type NotificationStackParamList = {
@@ -123,6 +162,13 @@ export type MyAppointmentsStackParamList = {
     MyAppointments: undefined;
     AppointmentDetails: {
         bookingId: string;
+    };
+    LocationView: {
+        lat: number;
+        lng: number;
+        address?: string;
+        floor?: string;
+        viewOnly?: boolean;
     };
 }
 
