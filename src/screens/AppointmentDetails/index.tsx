@@ -16,7 +16,6 @@ import colors from '../../utils/colors';
 import styles from './styles';
 import useAppointmentDetailsController from './useAppointmentDetailsController';
 import dayjs from 'dayjs';
-import images from '../../assets/images';
 
 const AppointmentDetails = () => {
   const {
@@ -148,7 +147,7 @@ const AppointmentDetails = () => {
 
         {/* Category + Price */}
         <View style={styles.category_row}>
-          <Text style={styles.category_text}>Category Typess: {categoryName}</Text>
+          <Text style={styles.category_text}>Category Type: {categoryName}</Text>
           <View style={{ alignItems: 'flex-end' }}>
             <Text style={styles.price_text}>${booking.price}</Text>
             <Text style={styles.price_type}>{priceType} Price</Text>

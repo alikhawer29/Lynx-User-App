@@ -20,6 +20,24 @@ export type AuthStackParamList = {
 
 export type HomeStackParamList = {
     Home: undefined;
+    BookService: {
+        service: ServiceData;
+        selectedTier: number;
+        confirmedAddress?: string;
+        confirmedFloor?: string;
+        confirmedLat?: number;
+        confirmedLng?: number;
+        firstName?: string;
+        lastName?: string;
+        phone?: string;
+        phoneCountry?: string;
+        phoneDialingCode?: string;
+        email?: string;
+        selectedTimeSlot?: string;
+        selectedSlotId?: string;
+        selectedDate?: string;
+    };
+
 }
 
 export type NotificationStackParamList = {
