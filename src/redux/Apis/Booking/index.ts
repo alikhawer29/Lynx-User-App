@@ -55,9 +55,10 @@ export const bookingApi = createApi({
       keepUnusedDataFor: 0,
     }),
     requestRefund: builder.mutation({
-      query: id => ({
-        url: `refund/${id}`,
+      query: ({ id, ...body }) => ({
+        url: `cancel/${id}`,
         method: 'POST',
+        body,
       }),
     }),
     approveReschedule: builder.mutation({

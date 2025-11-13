@@ -91,7 +91,7 @@ const MyAppointments = () => {
           </View>
 
           {/* SUB STATUS */}
-          {item?.payment_status === 'paid' && item.booking_status && (
+          {item?.status !== 'pending' || item?.status !== 'cancelled' && (
             <>
               {/* <Text style={styles.sub_status_label}>Sub-Status: </Text> */}
               <View style={[styles.status_badge, { backgroundColor: bookingStatusColors.bg }]}>

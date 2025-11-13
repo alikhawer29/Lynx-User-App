@@ -32,10 +32,12 @@ const useAppointmentDetailsController = () => {
     useRejectRescheduleMutation();
 
   const [showRefundPolicyModal, setShowRefundPolicyModal] = useState(false);
+  const [showRefundReasonModal, setShowRefundReasonModal] = useState(false);
   const [showRefundSuccessModal, setShowRefundSuccessModal] = useState(false);
   const [showApproveModal, setShowApproveModal] = useState(false);
   const [showRejectReasonModal, setShowRejectReasonModal] = useState(false);
   const [showRejectSuccessModal, setShowRejectSuccessModal] = useState(false);
+  const [refundReason, setRefundReason] = useState('');
   const [rejectionReason, setRejectionReason] = useState('');
 
   // Fetch booking details on mount
@@ -63,15 +65,34 @@ const useAppointmentDetailsController = () => {
     setShowRefundPolicyModal(false);
   }, []);
 
+  const onProceedToRefundReason = useCallback(() => {
+    setShowRefundPolicyModal(false);
+    setShowRefundReasonModal(true);
+  }, []);
+
+  const onCancelRefundReason = useCallback(() => {
+    setShowRefundReasonModal(false);
+    setRefundReason('');
+  }, []);
+
   const onConfirmRefund = useCallback(async () => {
+    if (!refundReason.trim()) {
+      console.log('Please enter refund reason');
+      return;
+    }
+
     try {
-      setShowRefundPolicyModal(false);
-      await requestRefund(params.bookingId).unwrap();
+      setShowRefundReasonModal(false);
+      await requestRefund({
+        id: params.bookingId,
+        cancellation_reason: refundReason,
+      }).unwrap();
+      setRefundReason('');
       setShowRefundSuccessModal(true);
     } catch (error) {
       console.error('Refund request failed:', error);
     }
-  }, [params.bookingId, requestRefund]);
+  }, [params.bookingId, refundReason, requestRefund]);
 
   const onCloseRefundSuccess = useCallback(() => {
     setShowRefundSuccessModal(false);
@@ -144,16 +165,20 @@ const useAppointmentDetailsController = () => {
       isApproveLoading,
       isRejectLoading,
       showRefundPolicyModal,
+      showRefundReasonModal,
       showRefundSuccessModal,
       showApproveModal,
       showRejectReasonModal,
       showRejectSuccessModal,
+      refundReason,
       rejectionReason,
     },
     functions: {
       onRefreshDetails,
       onPressRefund,
       onCancelRefundPolicy,
+      onProceedToRefundReason,
+      onCancelRefundReason,
       onConfirmRefund,
       onCloseRefundSuccess,
       onPressApprove,
@@ -164,6 +189,7 @@ const useAppointmentDetailsController = () => {
       onConfirmReject,
       onCloseRejectSuccess,
       onViewLocation,
+      setRefundReason,
       setRejectionReason,
     },
   };

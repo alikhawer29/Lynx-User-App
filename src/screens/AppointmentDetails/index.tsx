@@ -24,16 +24,20 @@ const AppointmentDetails = () => {
       booking,
       isLoading,
       showRefundPolicyModal,
+      showRefundReasonModal,
       showRefundSuccessModal,
       showApproveModal,
       showRejectReasonModal,
       showRejectSuccessModal,
+      refundReason,
       rejectionReason,
     },
     functions: {
       onRefreshDetails,
       onPressRefund,
       onCancelRefundPolicy,
+      onProceedToRefundReason,
+      onCancelRefundReason,
       onConfirmRefund,
       onCloseRefundSuccess,
       onPressApprove,
@@ -44,6 +48,7 @@ const AppointmentDetails = () => {
       onConfirmReject,
       onCloseRejectSuccess,
       onViewLocation,
+      setRefundReason,
       setRejectionReason,
     },
   } = useAppointmentDetailsController();
@@ -110,7 +115,8 @@ const AppointmentDetails = () => {
       >
         {/* Service Image */}
         <Image
-          source={{ uri: booking?.service_id?.image_url || 'https://via.placeholder.com/400x200' }}
+          // source={{ uri: booking?.service_id?.image_url || 'https://via.placeholder.com/400x200' }}
+          source={{ uri: 'https://img1.hscicdn.com/image/upload/f_auto,t_ds_wide_w_1200,q_60/lsci/db/PICTURES/CMS/409100/409144.6.jpg' }}
           style={styles.service_image}
           resize="cover"
         />
@@ -119,7 +125,8 @@ const AppointmentDetails = () => {
         <View style={styles.provider_row}>
           <View style={styles.provider_info}>
             <Image
-              source={{ uri: booking?.provider_id?.image_url || 'https://via.placeholder.com/400x200' }}
+              // source={{ uri: booking?.provider_id?.image_url || 'https://via.placeholder.com/400x200' }}
+              source={{ uri: 'https://img1.hscicdn.com/image/upload/f_auto,t_ds_wide_w_1200,q_60/lsci/db/PICTURES/CMS/409100/409144.6.jpg' }}
               style={styles.provider_avatar}
               resize="cover"
             />
@@ -141,7 +148,7 @@ const AppointmentDetails = () => {
 
         {/* Category + Price */}
         <View style={styles.category_row}>
-          <Text style={styles.category_text}>Category Type: {categoryName}</Text>
+          <Text style={styles.category_text}>Category Typess: {categoryName}</Text>
           <View style={{ alignItems: 'flex-end' }}>
             <Text style={styles.price_text}>${booking.price}</Text>
             <Text style={styles.price_type}>{priceType} Price</Text>
@@ -184,7 +191,7 @@ const AppointmentDetails = () => {
           <View style={styles.detail_item_full}>
             <Text style={styles.detail_label}>Location:</Text>
             <View style={styles.location_row}>
-              <Text style={styles.detail_value} numberOfLines={1}>
+              <Text style={styles.detail_value}>
                 {booking.address?.full_address || 'Maplink'}
               </Text>
               <TouchableOpacity onPress={onViewLocation}>
@@ -291,12 +298,45 @@ const AppointmentDetails = () => {
 
             <View style={styles.modal_button_row}>
               <View style={styles.modal_button}>
-                <Button text="Refund" type="secondary" onPress={onConfirmRefund} />
+                <Button text="Refund" type="secondary" onPress={onProceedToRefundReason} />
               </View>
               <View style={styles.modal_button}>
                 <Button text="Cancel" onPress={onCancelRefundPolicy} />
               </View>
             </View>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Refund Reason Modal */}
+      <Modal
+        visible={showRefundReasonModal}
+        transparent
+        animationType="fade"
+        onRequestClose={onCancelRefundReason}
+      >
+        <View style={styles.modal_overlay}>
+          <View style={styles.modal_content}>
+            <TouchableOpacity
+              style={styles.modal_close_button}
+              onPress={onCancelRefundReason}
+            >
+              <Text style={{ color: colors.white, fontSize: 16 }}>✕</Text>
+            </TouchableOpacity>
+
+            <Text style={styles.modal_title}>Refund Reason</Text>
+
+            <TextInput
+              style={styles.text_input}
+              placeholder="Provide Refund Reason....."
+              placeholderTextColor={colors.dark_gray}
+              value={refundReason}
+              onChangeText={setRefundReason}
+              multiline
+              numberOfLines={4}
+            />
+
+            <Button text="Ok" onPress={onConfirmRefund} />
           </View>
         </View>
       </Modal>
@@ -319,7 +359,7 @@ const AppointmentDetails = () => {
 
             <View style={styles.modal_icon_container}>
               <View style={[styles.modal_icon_circle, { backgroundColor: '#4CAF50' }]}>
-                <Text style={{ fontSize: 32, color: colors.white }}>✓</Text>
+                <Text style={{ fontSize: 40, color: colors.white, fontWeight: 'bold' }}>✓</Text>
               </View>
             </View>
 
@@ -423,7 +463,7 @@ const AppointmentDetails = () => {
 
             <View style={styles.modal_icon_container}>
               <View style={[styles.modal_icon_circle, { backgroundColor: '#4CAF50' }]}>
-                <Text style={{ fontSize: 32, color: colors.white }}>✓</Text>
+                <Text style={{ fontSize: 40, color: colors.white, fontWeight: 'bold' }}>✓</Text>
               </View>
             </View>
 

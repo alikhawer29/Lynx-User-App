@@ -1,6 +1,10 @@
 import { StyleSheet } from 'react-native';
 import colors from '../../utils/colors';
-import { heightPixel, widthPixel, GLOBAL_HORIZONTAL_PADDING } from '../../utils/helper';
+import {
+  heightPixel,
+  widthPixel,
+  GLOBAL_HORIZONTAL_PADDING,
+} from '../../utils/helper';
 
 const styles = StyleSheet.create({
   container: {
@@ -43,8 +47,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   provider_label: {
-    fontSize: 12,
-    color: colors.dark_gray,
+    fontSize: 16,
+    color: '#22282C',
   },
   provider_name: {
     fontSize: 14,
@@ -56,16 +60,19 @@ const styles = StyleSheet.create({
     paddingVertical: heightPixel(6),
     borderRadius: heightPixel(3),
   },
+
   status_text: {
     fontSize: 12,
     fontWeight: '600',
   },
+
   service_name: {
-    fontSize: 24,
+    fontSize: 25,
     fontWeight: 'bold',
     color: colors.black,
     marginBottom: heightPixel(5),
   },
+
   category_row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -86,7 +93,7 @@ const styles = StyleSheet.create({
     color: colors.dark_gray,
   },
   section_title: {
-    fontSize: 18,
+    fontSize: 23,
     fontWeight: 'bold',
     color: colors.black,
     marginTop: heightPixel(20),
@@ -106,7 +113,7 @@ const styles = StyleSheet.create({
     marginBottom: heightPixel(15),
   },
   detail_label: {
-    fontSize: 12,
+    fontSize: 16,
     color: colors.dark_gray,
     marginBottom: heightPixel(4),
   },
@@ -191,7 +198,7 @@ const styles = StyleSheet.create({
     width: widthPixel(30),
     height: widthPixel(30),
     borderRadius: widthPixel(15),
-    backgroundColor: colors.brown,
+    backgroundColor: '#8B7355',
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 1,
@@ -249,4 +256,3 @@ const styles = StyleSheet.create({
 });
 
 export default styles;
-
