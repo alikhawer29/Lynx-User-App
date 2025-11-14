@@ -16,6 +16,7 @@ import colors from '../../utils/colors';
 import styles from './styles';
 import useAppointmentDetailsController from './useAppointmentDetailsController';
 import dayjs from 'dayjs';
+import Ratings from '../../components/Ratings';
 
 const AppointmentDetails = () => {
   const {
@@ -30,6 +31,16 @@ const AppointmentDetails = () => {
       showRejectSuccessModal,
       refundReason,
       rejectionReason,
+      isRefundLoading,
+      isRescheduleLoading,
+      showReportModal,
+      showReportSuccessModal,
+      reportText,
+      reportFiles,
+      showReviewModal,
+      showReviewSuccessModal,
+      reviewText,
+      rating,
     },
     functions: {
       onRefreshDetails,
@@ -49,6 +60,19 @@ const AppointmentDetails = () => {
       onViewLocation,
       setRefundReason,
       setRejectionReason,
+      onPressReportService,
+      onCancelReport,
+      onConfirmReport,
+      onCloseReportSuccess,
+      onUploadReportFiles,
+      setReportText,
+      setReportFiles,
+      onPressReviewService,
+      onCancelReview,
+      onConfirmReview,
+      onCloseReviewSuccess,
+      setReviewText,
+      setRating,
     },
   } = useAppointmentDetailsController();
 
@@ -57,13 +81,14 @@ const AppointmentDetails = () => {
       case 'pending':
         return { bg: 'rgba(253, 179, 50, 0.2)', text: '#FDB332' };
       case 'approved':
-        return { bg: '#E8F5E9', text: '#4CAF50' };
+        return { bg: 'rgba(126, 191, 69, 0.2)', text: '#7EBF45' };
       case 'rejected':
-        return { bg: '#FFEBEE', text: '#F44336' };
+        return { bg: 'rgba(255, 0, 0, 0.2)', text: '#FF0000' };
       case 'cancelled':
-        return { bg: '#FFEBEE', text: '#F44336' };
+        return { bg: 'rgba(255, 0, 0, 0.2)', text: '#FF0000' };
       case 'requested':
         return { bg: 'rgba(169, 121, 38, 0.2)', text: '#A97926' };
+
       default:
         return { bg: '#F5F5F5', text: '#757575' };
     }
@@ -72,13 +97,11 @@ const AppointmentDetails = () => {
   const getSubStatusColor = (subStatus: string) => {
     switch (subStatus?.toLowerCase()) {
       case 'upcoming':
-        return { bg: 'rgba(76, 175, 80, 0.15)', text: '#4CAF50' };
+        return { bg: 'rgba(129, 159, 45, 0.2)', text: '#819F2D' };
+      case 'in-progress':
+        return { bg: 'rgba(248, 100, 0, 0.2)', text: '#F86400' };
       case 'completed':
-        return { bg: '#E8F5E9', text: '#4CAF50' };
-      case 'cancelled':
-        return { bg: '#FFEBEE', text: '#F44336' };
-      case 'no-show':
-        return { bg: 'rgba(255, 193, 7, 0.15)', text: '#FFC107' };
+        return { bg: 'rgba(0, 225, 15, 0.2)', text: '#00E10F' };
       default:
         return { bg: '#F5F5F5', text: '#757575' };
     }
@@ -106,15 +129,28 @@ const AppointmentDetails = () => {
     ? `${booking.provider_id.first_name} ${booking.provider_id.last_name}`
     : 'Josh Elbert';
 
-  // Check if reschedule request exists
-  const hasRescheduleRequest = booking.status?.toLowerCase() === 'requested';
+  const providerPhoneNumber = booking.provider_id?.dialing_code + booking.provider_id?.phone || '';
 
+  const canReportService = booking.is_reported;
 
-  // Check if refund button should be shown (pending status)
-  const canRefund = booking.status?.toLowerCase() === 'pending';
+  const hasReviews = booking.reviews && booking.reviews.length > 0;
 
-  const subStatus = booking.sub_status || 'upcoming';
+  const subStatus = booking.booking_status || 'upcoming';
   const subStatusColors = getSubStatusColor(subStatus);
+
+  // 1. Review and Report buttons - should show when booking_status is "approved"
+  const canShowReviewAndReport = booking.booking_status?.toLowerCase() === 'approved';
+
+  // 2. Refund button - show when:
+  //    - status is "pending" OR
+  //    - status is "approved" AND booking_status is "upcoming"
+  const canRefund =
+    booking.status?.toLowerCase() === 'pending' ||
+    (booking.status?.toLowerCase() === 'approved' &&
+      booking.booking_status?.toLowerCase() === 'upcoming');
+
+  // 3. Reschedule approve/reject buttons - show when status is "requested"
+  const hasRescheduleRequest = booking.status?.toLowerCase() === 'requested';
 
   return (
     <Wrapper>
@@ -152,29 +188,25 @@ const AppointmentDetails = () => {
             </View>
           </View>
 
-          {/* <View style={[styles.status_badge, {}]}>
-            <Text style={styles.provider_name}>Status :</Text>
-            <Text style={[styles.status_text, { color: statusColors.text, backgroundColor: statusColors.bg }]}>
-              {booking.status?.charAt(0).toUpperCase() + booking.status?.slice(1)}
-            </Text>
-          </View> */}
           <View style={styles.status_badge_container}>
             <View style={styles.status_row}>
               <Text size={12} style={styles.status_label}>Status :</Text>
               <View style={[styles.status_badge, { backgroundColor: statusColors.bg }]}>
-                <Text size={12} style={[styles.status_text, { color: statusColors.text }]}>
+                <Text size={12} color={statusColors.text} style={[styles.status_text]}>
                   {booking.status?.charAt(0).toUpperCase() + booking.status?.slice(1)}
                 </Text>
               </View>
             </View>
-            <View style={styles.status_row}>
-              <Text size={12} style={styles.status_label}>Sub-Status :</Text>
-              <View style={[styles.status_badge, { backgroundColor: subStatusColors.bg }]}>
-                <Text size={12} style={[styles.status_text, { color: subStatusColors.text }]}>
-                  {subStatus.charAt(0).toUpperCase() + subStatus.slice(1)}
-                </Text>
+            {booking.status === 'approved' &&
+              <View style={styles.status_row}>
+                <Text size={12} style={styles.status_label}>Sub-Status :</Text>
+                <View style={[styles.status_badge, { backgroundColor: subStatusColors.bg }]}>
+                  <Text size={12} color={subStatusColors.text} style={[styles.status_text]}>
+                    {subStatus.charAt(0).toUpperCase() + subStatus.slice(1)}
+                  </Text>
+                </View>
               </View>
-            </View>
+            }
           </View>
         </View>
 
@@ -215,7 +247,7 @@ const AppointmentDetails = () => {
           <View style={styles.detail_item} >
             <Text size={16} style={styles.detail_label}>Phone Number</Text>
             <Text size={16} style={styles.detail_value}>
-              🇺🇸 {booking.contact_details?.country_code || '+1'}-{booking.contact_details?.phone_number}
+              {booking.contact_details?.country_code || '+1'}-{booking.contact_details?.phone_number}
             </Text>
           </View>
 
@@ -256,9 +288,9 @@ const AppointmentDetails = () => {
 
         {/* Service Provider Details */}
         {booking.provider_id && (
-          <View style={styles.requested_section}>
-            <Text size={20} style={styles.requested_title}>Service Provider Details</Text>
-            <View style={styles.provider_details_grid}>
+          <View style={styles.service_provider_section}>
+            <Text size={20} style={styles.service_provider_title}>Service Provider Details</Text>
+            <View style={styles.service_provider_details_row}>
               <View style={styles.service_provider_item}>
                 <Text style={styles.detail_label}>Name:</Text>
                 <Text style={styles.detail_value}>
@@ -268,11 +300,11 @@ const AppointmentDetails = () => {
               <View style={styles.service_provider_item}>
                 <Text style={styles.detail_label}>Phone Number:</Text>
                 <Text style={styles.detail_value}>
-                  {booking.provider_id.phone_number || '1234567890'}
+                  {providerPhoneNumber}
                 </Text>
               </View>
             </View>
-            <View style={styles.provider_details_grid}>
+            <View style={styles.service_provider_details_row}>
               <View style={styles.service_provider_item_full}>
                 <Text style={styles.detail_label}>Email:</Text>
                 <Text style={styles.detail_value}>
@@ -304,9 +336,23 @@ const AppointmentDetails = () => {
             </View>
           </View>
         )}
+
+        {/* here i want to show reviews if has reviews */}
+        {hasReviews && (
+          <View style={styles.reviews_section}>
+            <Text size={20} style={styles.reviews_title}>Rating</Text>
+            <Ratings rating={booking.rating} review_count={booking.review_count} size={14} />
+            {booking.reviews.map((review: any) => (
+              <View key={review._id} style={styles.review_item}>
+                <Text size={16} style={styles.review_text}>{review.review}</Text>
+              </View>
+            ))}
+          </View>
+        )}
+
       </ScrollView>
 
-      {/* Bottom Buttons */}
+      {/* Bottom Buttons - Refund or Reschedule Actions */}
       {(canRefund || hasRescheduleRequest) && (
         <View style={styles.button_container}>
           {canRefund && !hasRescheduleRequest && (
@@ -326,6 +372,36 @@ const AppointmentDetails = () => {
         </View>
       )}
 
+      {/* Review and Report Buttons - Show only when booking_status is "approved" */}
+      {canShowReviewAndReport && (
+        <View style={styles.button_container}>
+          <View style={styles.button_row}>
+            {/* Show Review button only if NO reviews */}
+            {!hasReviews && (
+              <View style={styles.button_half}>
+                <Button
+                  text="Review Service"
+                  type="secondary"
+                  onPress={onPressReviewService}
+                />
+              </View>
+            )}
+
+            {/* Show Report button only if NOT reported */}
+            {!canReportService && (
+              <View style={styles.button_half}>
+                <Button
+                  text="Report Service"
+                  onPress={onPressReportService}
+                />
+              </View>
+            )}
+          </View>
+        </View>
+      )}
+
+
+
       {/* Refund Policy Modal */}
       <Modal
         visible={showRefundPolicyModal}
@@ -339,35 +415,35 @@ const AppointmentDetails = () => {
               style={styles.modal_close_button}
               onPress={onCancelRefundPolicy}
             >
-              <Text style={{ color: colors.white, fontSize: 16 }}>✕</Text>
+              <Text color='white' style={{ color: colors.white, fontSize: 16 }}>✕</Text>
             </TouchableOpacity>
 
             <View style={styles.modal_icon_container}>
-              <View style={[styles.modal_icon_circle, { backgroundColor: '#FFEBEE' }]}>
-                <Text style={{ fontSize: 32, color: '#F44336' }}>!</Text>
+              <View style={[styles.modal_icon_circle, { backgroundColor: '#FF4444' }]}>
+                <Text size={35} color={'white'}>!</Text>
               </View>
             </View>
 
-            <Text style={styles.modal_title}>Refund Policy</Text>
+            <Text style={styles.modal_title} size={23} position="center">Refund Policy</Text>
 
-            <Text style={styles.policy_text}>
+            <Text style={styles.policy_text} position="center">
               Intelligent Refund Management Helped By Implementing The Two Wallet System. There Are Two Conditions:
             </Text>
 
-            <Text style={styles.policy_text}>
+            <Text style={styles.policy_text} position="center">
               01. Happens Less Than 24 Hours Before Event, Where Half Amount Is Refunded In The Wallet, And Other Half Sent To Consultant For Example.
             </Text>
 
-            <Text style={styles.policy_text}>
+            <Text style={styles.policy_text} position="center">
               02. Happens Less Than A Week I.e. To The 24 Hours Full Refund To The Wallet.
             </Text>
 
             <View style={styles.modal_button_row}>
               <View style={styles.modal_button}>
-                <Button text="Refund" type="secondary" onPress={onProceedToRefundReason} />
+                <Button text="Refund" onPress={onProceedToRefundReason} />
               </View>
               <View style={styles.modal_button}>
-                <Button text="Cancel" onPress={onCancelRefundPolicy} />
+                <Button text="Cancel" type="secondary" onPress={onCancelRefundPolicy} />
               </View>
             </View>
           </View>
@@ -542,7 +618,188 @@ const AppointmentDetails = () => {
           </View>
         </View>
       </Modal>
-    </Wrapper>
+
+      {/* Report Service Modal */}
+      <Modal
+        visible={showReportModal}
+        transparent
+        animationType="fade"
+        onRequestClose={onCancelReport}
+      >
+        <View style={styles.modal_overlay}>
+          <View style={styles.modal_content}>
+            <TouchableOpacity
+              style={styles.modal_close_button}
+              onPress={onCancelReport}
+            >
+              <Text style={{ color: colors.white, fontSize: 16 }}>✕</Text>
+            </TouchableOpacity>
+
+            <Text style={styles.modal_title} size={23} position='center'>Report Details</Text>
+
+            <View style={styles.input_container}>
+              <Text style={styles.input_label} size={16}>Report</Text>
+              <TextInput
+                style={styles.text_area}
+                placeholder="..."
+                placeholderTextColor={colors.medium_gray}
+                multiline
+                numberOfLines={6}
+                value={reportText}
+                onChangeText={setReportText}
+                textAlignVertical="top"
+              />
+            </View>
+
+            <TouchableOpacity
+              style={styles.upload_button}
+              onPress={onUploadReportFiles}
+            >
+              <Text style={styles.upload_icon}>📎</Text>
+              <Text style={styles.upload_text}>
+                {reportFiles.length > 0
+                  ? `${reportFiles.length} file(s) selected`
+                  : 'Upload Files (Images/Photos)'}
+              </Text>
+            </TouchableOpacity>
+
+            {reportFiles.length > 0 && (
+              <View style={styles.files_list}>
+                {reportFiles.map((file, index) => (
+                  <Text key={index} style={styles.file_name}>
+                    {file.name}
+                  </Text>
+                ))}
+              </View>
+            )}
+
+            <View style={styles.button_row}>
+              <View style={styles.button_half}>
+                <Button text="Report" onPress={onConfirmReport} />
+              </View>
+              <View style={styles.button_half}>
+                <Button text="Cancel" type="secondary" onPress={onCancelReport} />
+              </View>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Report Success Modal */}
+      <Modal
+        visible={showReportSuccessModal}
+        transparent
+        animationType="fade"
+        onRequestClose={onCloseReportSuccess}
+      >
+        <View style={styles.modal_overlay}>
+          <View style={styles.modal_content}>
+            <TouchableOpacity
+              style={styles.modal_close_button}
+              onPress={onCloseReportSuccess}
+            >
+              <Text color='white' style={{ color: colors.white, fontSize: 16 }}>✕</Text>
+            </TouchableOpacity>
+
+            <View style={styles.modal_icon_container}>
+              <View style={[styles.modal_icon_circle, { backgroundColor: '#6BB577' }]}>
+                <Text size={25} color='white' style={{ fontSize: 40, color: colors.white, fontWeight: 'bold' }}>✓</Text>
+              </View>
+            </View>
+
+            <Text style={styles.modal_title} size={23} position='center'>Submitted</Text>
+            <Text style={styles.modal_message} size={12} color='#666666' position='center'>
+              Booking Has Been Reported. Your Report Against This Booking Has Been Submitted To The Admin.
+            </Text>
+
+            <Button text="Ok" onPress={onCloseReportSuccess} />
+          </View>
+        </View>
+      </Modal>
+
+      {/* Review Service Modal */}
+      <Modal
+        visible={showReviewModal}
+        transparent
+        animationType="fade"
+        onRequestClose={onCancelReview}
+      >
+        <View style={styles.modal_overlay}>
+          <View style={styles.modal_content}>
+            <TouchableOpacity
+              style={styles.modal_close_button}
+              onPress={onCancelReview}
+            >
+              <Text style={{ color: colors.white, fontSize: 16 }}>✕</Text>
+            </TouchableOpacity>
+
+            <Text style={styles.modal_title}>Rate Service</Text>
+
+            {/* Star Rating */}
+            <View style={styles.star_container}>
+              {[1, 2, 3, 4, 5].map((star) => (
+                <TouchableOpacity
+                  key={star}
+                  onPress={() => setRating(star)}
+                >
+                  <Text style={styles.star}>
+                    {star <= rating ? '⭐' : '☆'}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+
+            <View style={styles.input_container}>
+              <Text style={styles.input_label}>Review</Text>
+              <TextInput
+                style={styles.text_area}
+                placeholder="Write A Review..."
+                placeholderTextColor={colors.medium_gray}
+                multiline
+                numberOfLines={6}
+                value={reviewText}
+                onChangeText={setReviewText}
+                textAlignVertical="top"
+              />
+            </View>
+
+            <Button text="Ok" onPress={onConfirmReview} />
+          </View>
+        </View>
+      </Modal>
+
+      {/* Review Success Modal */}
+      <Modal
+        visible={showReviewSuccessModal}
+        transparent
+        animationType="fade"
+        onRequestClose={onCloseReviewSuccess}
+      >
+        <View style={styles.modal_overlay}>
+          <View style={styles.modal_content}>
+            <TouchableOpacity
+              style={styles.modal_close_button}
+              onPress={onCloseReviewSuccess}
+            >
+              <Text style={{ color: colors.white, fontSize: 16 }} color={'white'}>✕</Text>
+            </TouchableOpacity>
+
+            <View style={styles.modal_icon_container}>
+              <View style={[styles.modal_icon_circle, { backgroundColor: '#6BB577' }]}>
+                <Text color='white' size={25} style={{ fontSize: 40, color: colors.white, fontWeight: 'bold' }}>✓</Text>
+              </View>
+            </View>
+
+            <Text style={styles.modal_title} size={23} position={"center"}>Submitted</Text>
+            <Text style={styles.modal_message} position={"center"}>
+              Review Has Been Submitted.
+            </Text>
+
+            <Button text="Ok" onPress={onCloseReviewSuccess} />
+          </View>
+        </View>
+      </Modal>
+    </Wrapper >
   );
 };
 

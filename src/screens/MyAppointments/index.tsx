@@ -26,13 +26,14 @@ const MyAppointments = () => {
       case 'pending':
         return { bg: 'rgba(253, 179, 50, 0.2)', text: '#FDB332' };
       case 'approved':
-        return { bg: '#E8F5E9', text: '#4CAF50' };
+        return { bg: 'rgba(126, 191, 69, 0.2)', text: '#7EBF45' };
       case 'rejected':
-        return { bg: '#FFEBEE', text: '#F44336' };
+        return { bg: 'rgba(255, 0, 0, 0.2)', text: '#FF0000' };
       case 'cancelled':
-        return { bg: '#FFEBEE', text: '#F44336' };
+        return { bg: 'rgba(255, 0, 0, 0.2)', text: '#FF0000' };
       case 'requested':
-        return { bg: '#E3F2FD', text: '#2196F3' };
+        return { bg: 'rgba(169, 121, 38, 0.2)', text: '#A97926' };
+
       default:
         return { bg: '#F5F5F5', text: '#757575' };
     }
@@ -41,11 +42,11 @@ const MyAppointments = () => {
   const getBookingStatusColor = (status: string) => {
     switch (status?.toLowerCase()) {
       case 'upcoming':
-        return { bg: '#E3F2FD', text: '#2196F3' };
+        return { bg: 'rgba(129, 159, 45, 0.2)', text: '#819F2D' };
       case 'in-progress':
-        return { bg: '#FFF4E5', text: '#FF9800' };
+        return { bg: 'rgba(248, 100, 0, 0.2)', text: '#F86400' };
       case 'completed':
-        return { bg: '#E8F5E9', text: '#4CAF50' };
+        return { bg: 'rgba(0, 225, 15, 0.2)', text: '#00E10F' };
       default:
         return { bg: '#F5F5F5', text: '#757575' };
     }
@@ -70,7 +71,7 @@ const MyAppointments = () => {
           </View>
 
           <View style={[styles.status_badge, { backgroundColor: statusColors.bg }]}>
-            <Text style={[styles.status_text, { color: statusColors.text }]}>
+            <Text color={statusColors.text} style={[styles.status_text]}>
               {item.status?.charAt(0).toUpperCase() + item.status?.slice(1)}
             </Text>
           </View>
@@ -78,9 +79,6 @@ const MyAppointments = () => {
 
         {/* BOOKING ID */}
         <Text style={styles.label_text}>Booking ID: #{item.booking_id || item._id?.slice(-6)}</Text>
-
-        {/* SERVICE NAME */}
-        {/* <Text style={styles.label_text}>{item.service?.name || item.category?.name}</Text> */}
 
         <View style={styles.booking_header}>
           {/* PRICE */}
@@ -91,18 +89,18 @@ const MyAppointments = () => {
           </View>
 
           {/* SUB STATUS */}
-          {item?.status !== 'pending' || item?.status !== 'cancelled' && (
+          {item?.status === 'approved' && (
             <>
               {/* <Text style={styles.sub_status_label}>Sub-Status: </Text> */}
               <View style={[styles.status_badge, { backgroundColor: bookingStatusColors.bg }]}>
-                <Text style={[styles.sub_status_value, { color: bookingStatusColors.text }]}>
+                <Text color={bookingStatusColors.text} style={[styles.sub_status_value]}>
                   {item.booking_status?.charAt(0).toUpperCase() + item.booking_status?.slice(1)}
                 </Text>
               </View>
             </>
           )}
         </View>
-      </TouchableOpacity>
+      </TouchableOpacity >
     );
   };
 

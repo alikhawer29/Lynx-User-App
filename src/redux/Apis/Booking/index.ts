@@ -71,6 +71,20 @@ export const bookingApi = createApi({
         },
       }),
     }),
+    reportBooking: builder.mutation({
+      query: (body) => ({
+        url: `${BASE_URL}/report/create`,
+        method: 'POST',
+        body,
+      }),
+    }),
+    reviewBooking: builder.mutation({
+      query: (body) => ({
+        url: `${BASE_URL}/review/create`,
+        method: 'POST',
+        body,
+      }),
+    }),
   }),
 });
 
@@ -84,4 +98,6 @@ export const {
   useLazyGetBookingDetailsQuery,
   useRequestRefundMutation,
   useRescheduleResponseMutation,
+  useReportBookingMutation,
+  useReviewBookingMutation,
 } = bookingApi;

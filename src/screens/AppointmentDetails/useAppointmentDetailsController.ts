@@ -6,7 +6,11 @@ import {
   useLazyGetBookingDetailsQuery,
   useRequestRefundMutation,
   useRescheduleResponseMutation,
+  useReportBookingMutation,
+  useReviewBookingMutation,
 } from '../../redux/Apis/Booking';
+import { openMultipleImagePicker } from '../../utils/picker';
+import { formHandler } from '../../utils/helper';
 
 type AppointmentDetailsRouteProp = RouteProp<
   MyAppointmentsStackParamList,
@@ -27,6 +31,10 @@ const useAppointmentDetailsController = () => {
     useRequestRefundMutation();
   const [rescheduleResponse, { isLoading: isRescheduleLoading }] =
     useRescheduleResponseMutation();
+  const [reportBooking, { isLoading: isReportLoading }] =
+    useReportBookingMutation();
+  const [reviewBooking, { isLoading: isReviewLoading }] =
+    useReviewBookingMutation();
 
   const [showRefundPolicyModal, setShowRefundPolicyModal] = useState(false);
   const [showRefundReasonModal, setShowRefundReasonModal] = useState(false);
@@ -36,6 +44,18 @@ const useAppointmentDetailsController = () => {
   const [showRejectSuccessModal, setShowRejectSuccessModal] = useState(false);
   const [refundReason, setRefundReason] = useState('');
   const [rejectionReason, setRejectionReason] = useState('');
+
+  // Report Service states
+  const [showReportModal, setShowReportModal] = useState(false);
+  const [showReportSuccessModal, setShowReportSuccessModal] = useState(false);
+  const [reportText, setReportText] = useState('');
+  const [reportFiles, setReportFiles] = useState<any[]>([]);
+
+  // Review Service states
+  const [showReviewModal, setShowReviewModal] = useState(false);
+  const [showReviewSuccessModal, setShowReviewSuccessModal] = useState(false);
+  const [reviewText, setReviewText] = useState('');
+  const [rating, setRating] = useState(0);
 
   // Fetch booking details on mount
   useEffect(() => {
@@ -163,12 +183,104 @@ const useAppointmentDetailsController = () => {
     }
   }, [booking, navigation]);
 
+  // Report Service handlers
+  const onPressReportService = useCallback(() => {
+    setShowReportModal(true);
+  }, []);
+
+  const onCancelReport = useCallback(() => {
+    setShowReportModal(false);
+    setReportText('');
+    setReportFiles([]);
+  }, []);
+
+  const onConfirmReport = useCallback(async () => {
+    if (!reportText.trim()) {
+      console.log('Please enter report details');
+      return;
+    }
+
+    try {
+      setShowReportModal(false);
+
+      const payload = {
+        service: booking?.service?._id,
+        reason: reportText,
+        booking: params.bookingId,
+        attachments: reportFiles,
+      };
+
+      const formData = formHandler(payload);
+
+      await reportBooking(formData).unwrap();
+
+      setShowReportSuccessModal(true);
+    } catch (error) {
+      console.error('Report submission failed:', error);
+    }
+  }, [params.bookingId, reportText, reportFiles, reportBooking, booking]);
+
+  const onCloseReportSuccess = useCallback(() => {
+    setShowReportSuccessModal(false);
+    setReportText('');
+    setReportFiles([]);
+    onRefreshDetails();
+  }, [onRefreshDetails]);
+
+  const onUploadReportFiles = useCallback(() => {
+    openMultipleImagePicker((files) => {
+      if (files && files.length > 0) {
+        setReportFiles(files);
+      }
+    });
+  }, []);
+
+  // Review Service handlers
+  const onPressReviewService = useCallback(() => {
+    setShowReviewModal(true);
+  }, []);
+
+  const onCancelReview = useCallback(() => {
+    setShowReviewModal(false);
+    setReviewText('');
+    setRating(0);
+  }, []);
+
+  const onConfirmReview = useCallback(async () => {
+    if (!reviewText.trim() || rating === 0) {
+      console.log('Please provide rating and review');
+      return;
+    }
+
+    try {
+      setShowReviewModal(false);
+      await reviewBooking({
+        rating: rating,
+        review: reviewText,
+        booking: params.bookingId,
+      }).unwrap();
+
+      setShowReviewSuccessModal(true);
+    } catch (error) {
+      console.error('Review submission failed:', error);
+    }
+  }, [params.bookingId, reviewText, rating, reviewBooking]);
+
+  const onCloseReviewSuccess = useCallback(() => {
+    setShowReviewSuccessModal(false);
+    setReviewText('');
+    setRating(0);
+    onRefreshDetails();
+  }, [onRefreshDetails]);
+
   return {
     values: {
       booking,
       isLoading,
       isRefundLoading,
       isRescheduleLoading,
+      isReportLoading,
+      isReviewLoading,
       showRefundPolicyModal,
       showRefundReasonModal,
       showRefundSuccessModal,
@@ -177,6 +289,16 @@ const useAppointmentDetailsController = () => {
       showRejectSuccessModal,
       refundReason,
       rejectionReason,
+      // Report states
+      showReportModal,
+      showReportSuccessModal,
+      reportText,
+      reportFiles,
+      // Review states
+      showReviewModal,
+      showReviewSuccessModal,
+      reviewText,
+      rating,
     },
     functions: {
       onRefreshDetails,
@@ -196,6 +318,21 @@ const useAppointmentDetailsController = () => {
       onViewLocation,
       setRefundReason,
       setRejectionReason,
+      // Report functions
+      onPressReportService,
+      onCancelReport,
+      onConfirmReport,
+      onCloseReportSuccess,
+      onUploadReportFiles,
+      setReportText,
+      setReportFiles,
+      // Review functions
+      onPressReviewService,
+      onCancelReview,
+      onConfirmReview,
+      onCloseReviewSuccess,
+      setReviewText,
+      setRating,
     },
   };
 };

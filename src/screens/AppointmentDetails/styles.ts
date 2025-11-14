@@ -174,11 +174,34 @@ const styles = StyleSheet.create({
   requested_detail_item: {
     flex: 1,
   },
+
+  service_provider_section: {
+    padding: heightPixel(5),
+    borderRadius: heightPixel(10),
+    marginTop: heightPixel(20),
+    marginBottom: heightPixel(20),
+    borderWidth: 1,
+    borderColor: colors.light_gray,
+  },
+  service_provider_title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: colors.black,
+    marginBottom: heightPixel(10),
+  },
+  service_provider_details_row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  service_provider_detail_item: {
+    flex: 1,
+  },
    service_provider_item: {
     width: '48%',
   },
   service_provider_item_full: {
     width: '50%',
+  marginTop: heightPixel(10),
   },
   button_container: {
     position: 'absolute',
@@ -280,6 +303,82 @@ const styles = StyleSheet.create({
     minHeight: heightPixel(100),
     textAlignVertical: 'top',
     marginBottom: heightPixel(15),
+  },
+  // Report and Review Modal Styles
+  input_container: {
+    width: '100%',
+    marginBottom: heightPixel(15),
+  },
+  input_label: {
+    fontSize: 14,
+    color: colors.black,
+    marginBottom: heightPixel(8),
+    fontWeight: '500',
+  },
+  text_area: {
+    borderWidth: 1,
+    borderColor: colors.light_gray,
+    borderRadius: heightPixel(8),
+    padding: heightPixel(12),
+    fontSize: 14,
+    color: colors.black,
+    minHeight: heightPixel(120),
+    textAlignVertical: 'top',
+  },
+  upload_button: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: colors.light_gray,
+    borderRadius: heightPixel(8),
+    padding: heightPixel(12),
+    marginBottom: heightPixel(20),
+    backgroundColor: colors.white,
+  },
+  upload_icon: {
+    fontSize: 20,
+    marginRight: widthPixel(8),
+  },
+  upload_text: {
+    fontSize: 14,
+    color: colors.dark_gray,
+  },
+  star_container: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: heightPixel(20),
+    gap: widthPixel(10),
+  },
+  star: {
+    fontSize: 35,
+    color: '#FFB400',
+  },
+  reviews_section: {
+    marginTop: heightPixel(20),
+  },
+  reviews_title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: colors.black,
+    marginBottom: heightPixel(7),
+  },
+  review_item: {
+    marginBottom: heightPixel(10),
+  },
+  review_text: {
+    fontSize: 14,
+    color: colors.black,
+  },
+  files_list: {
+    marginBottom: heightPixel(15),
+    paddingHorizontal: widthPixel(10),
+  },
+  file_name: {
+    fontSize: 12,
+    color: colors.dark_gray,
+    marginBottom: heightPixel(5),
   },
 });
 

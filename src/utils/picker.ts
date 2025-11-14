@@ -54,3 +54,24 @@ export const openImageCamera = (onSelect) => {
       console.log(err)
     })
 }
+
+export const openMultipleImagePicker = async (onSelect) => {
+  launchImageLibrary({
+    mediaType: 'mixed', // Allows both photos and videos
+    selectionLimit: 0, // 0 means unlimited selection
+  })
+    .then((result) => {
+      if (result.assets && result.assets.length > 0) {
+        const files = result.assets.map((file) => ({
+          uri: file.uri,
+          name: file.fileName || `file_${Date.now()}`,
+          type: file.type || 'image/jpeg',
+          size: file.fileSize,
+        }))
+        onSelect(files)
+      }
+    })
+    .catch((err) => {
+      console.log('Image Picker Error: ', err)
+    })
+}
