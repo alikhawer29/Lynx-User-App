@@ -140,13 +140,6 @@ const useBookServiceController = () => {
 
     setWeekDates(currentWeek);
     setCurrentMonth(monthNames[today.getMonth()]);
-
-    console.log(
-      '📆 Generated week dates:',
-      JSON.stringify(currentWeek, null, 2),
-    );
-    console.log('📅 Current month:', monthNames[today.getMonth()]);
-
     // Auto-select today's date if it's not Sunday, otherwise select next available day
     const todayFormatted = today.toISOString().split('T')[0];
     const todayDayName = dayNames[today.getDay()];
@@ -156,13 +149,8 @@ const useBookServiceController = () => {
       const tomorrow = new Date(today);
       tomorrow.setDate(today.getDate() + 1);
       const tomorrowFormatted = tomorrow.toISOString().split('T')[0];
-      console.log(
-        '🎯 Today is Sunday, auto-selecting Monday:',
-        tomorrowFormatted,
-      );
       setSelectedDate(tomorrowFormatted);
     } else {
-      console.log('🎯 Auto-selecting today:', todayFormatted);
       setSelectedDate(todayFormatted);
     }
   }, []);
@@ -170,11 +158,6 @@ const useBookServiceController = () => {
   // Fetch slots when date is selected
   useEffect(() => {
     if (selectedDate) {
-      console.log('📅 Fetching slots for date:', selectedDate);
-      console.log(
-        '📡 API URL will be:',
-        `${BASE_URL}/slot/date/${selectedDate}`,
-      );
       fetchSlots(selectedDate);
     }
   }, [selectedDate, fetchSlots]);
@@ -182,20 +165,17 @@ const useBookServiceController = () => {
   // Update slots when data is fetched
   useEffect(() => {
     if (slotsError) {
-      console.log('🔴 Slots API Error:', JSON.stringify(slotsError, null, 2));
+      console.log('Slots API Error:', JSON.stringify(slotsError, null, 2));
     }
 
     console.log(
-      '📦 API Response received:',
+      'API Response received:',
       JSON.stringify(slotsData, null, 2),
     );
 
     if (slotsData?.success && slotsData?.data) {
-      console.log('✅ Slots data found:', slotsData.data.length, 'slots');
-      console.log('📋 Slots:', JSON.stringify(slotsData.data, null, 2));
       setSlots(slotsData.data);
     } else {
-      console.log('❌ No slots data or API failed');
       setSlots([]);
     }
   }, [slotsData, slotsError]);
@@ -302,23 +282,19 @@ const useBookServiceController = () => {
     (timeSlot: string, slotId: string, isBooked: boolean) => {
       // Prevent selecting booked slots
       if (isBooked) {
-        console.log('❌ Cannot select booked slot:', timeSlot);
         return;
       }
 
       setSelectedTimeSlot(timeSlot);
       setSelectedSlotId(slotId);
-      console.log('✅ Selected slot:', timeSlot, 'ID:', slotId);
     },
     [],
   );
 
   const onSelectDate = useCallback((date: string, dayName: string) => {
-    console.log('🖱️ User clicked on date:', date, 'Day:', dayName);
 
     // Prevent selecting Sundays
     if (dayName === 'SUN') {
-      console.log('❌ Cannot select Sunday');
       return;
     }
 

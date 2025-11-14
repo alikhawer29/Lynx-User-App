@@ -33,7 +33,6 @@ const useServiceDetailsController = () => {
   );
 
   const onBookAppointment = useCallback(() => {
-    console.log(data?.data,'data?.datadata?.data')
     if (!authorize) {
       showOkModal({
         type: 'success',

@@ -87,8 +87,6 @@ const usePaymentDetailsController = () => {
             transaction_id: paymentIntent.id,
             payment_method: 'card',
           }).unwrap();
-
-          console.log('Payment status updated successfully');
         } catch (updateError) {
           console.error('Failed to update payment status:', updateError);
         }

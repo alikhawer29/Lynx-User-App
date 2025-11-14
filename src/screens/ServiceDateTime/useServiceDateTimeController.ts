@@ -89,10 +89,6 @@ const useServiceDateTimeController = () => {
   }, [params, navigation, selectedTimeSlot, selectedSlotId, sessionDate]);
 
   const onContinue = useCallback(async () => {
-    console.log('onContinue called');
-    console.log('selectedTimeSlot:', selectedTimeSlot);
-    console.log('sessionDate:', sessionDate);
-
     try {
       // Extract time from selectedTimeSlot (e.g., "06:00 AM - 06:30 AM" -> "06:00")
       const timeMatch = selectedTimeSlot.match(/(\d{2}:\d{2})/);
@@ -129,11 +125,7 @@ const useServiceDateTimeController = () => {
         slot_id: selectedSlotId,
       };
 
-      console.log('Booking payload:', JSON.stringify(payload, null, 2));
-
       const result = await createBooking(payload).unwrap();
-
-      console.log('Booking success:', result);
 
       // Navigate to payment screen with booking_id
       if (result?.data?._id) {

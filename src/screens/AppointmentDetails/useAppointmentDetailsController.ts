@@ -74,7 +74,6 @@ const useAppointmentDetailsController = () => {
 
   const onConfirmRefund = useCallback(async () => {
     if (!refundReason.trim()) {
-      console.log('Please enter refund reason');
       return;
     }
 
@@ -130,7 +129,6 @@ const useAppointmentDetailsController = () => {
 
   const onConfirmReject = useCallback(async () => {
     if (!rejectionReason.trim()) {
-      console.log('Please enter rejection reason');
       return;
     }
 

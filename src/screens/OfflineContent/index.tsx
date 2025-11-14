@@ -32,8 +32,6 @@ const OfflineContent = () => {
     }
   } = useOfflineContentController()
 
-  console.log("datadatadatadata", data);
-
   return (
     <Wrapper>
       <Row align='center' style={{ height: heightPixel(52), borderWidth: 1, borderColor: colors.medium_gray, borderRadius: heightPixel(8) }}>
