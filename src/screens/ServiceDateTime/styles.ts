@@ -6,6 +6,15 @@ const styles = StyleSheet.create({
   scroll_content: {
     paddingBottom: heightPixel(30),
   },
+  price_text: {
+    fontSize: 25,
+    fontWeight: 'bold',
+    color: colors.black,
+  },
+  price_type: {
+    fontSize: 12,
+    color: colors.dark_gray,
+  },
   service_image: {
     height: heightPixel(180),
     borderRadius: heightPixel(8),
@@ -49,6 +58,7 @@ const styles = StyleSheet.create({
   },
   detail_label: {
     marginBottom: heightPixel(10),
+    color: '#22282C',
   },
   time_button: {
     flexDirection: 'row',

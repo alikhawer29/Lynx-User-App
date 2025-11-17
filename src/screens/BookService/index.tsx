@@ -274,7 +274,6 @@ const BookService = () => {
 
                             <Row gap={8} style={styles.dates_container}>
                                 {weekDates.map((dateItem) => {
-                                    const isSunday = dateItem.dayName === 'SUN';
                                     const isSelected = selectedDate === dateItem.date;
 
                                     return (
@@ -282,35 +281,21 @@ const BookService = () => {
                                             key={dateItem.date}
                                             style={[
                                                 styles.date_item,
-                                                isSelected && !isSunday && styles.date_item_selected,
-                                                isSunday && styles.date_item_disabled
+                                                isSelected && styles.date_item_selected
                                             ]}
                                             onPress={() => onSelectDate(dateItem.date, dateItem.dayName)}
-                                            disabled={isSunday}
                                         >
                                             <Text
                                                 size={16}
                                                 weight="bold"
-                                                color={
-                                                    isSunday
-                                                        ? colors.danger
-                                                        : isSelected
-                                                            ? colors.white
-                                                            : colors.black
-                                                }
+                                                color={isSelected ? colors.white : colors.black}
                                             >
                                                 {dateItem.day}
                                             </Text>
                                             <Text
                                                 size={10}
                                                 weight="semibold"
-                                                color={
-                                                    isSunday
-                                                        ? colors.danger
-                                                        : isSelected
-                                                            ? colors.white
-                                                            : colors.dark_gray
-                                                }
+                                                color={isSelected ? colors.white : colors.dark_gray}
                                             >
                                                 {dateItem.dayName}
                                             </Text>
@@ -326,7 +311,7 @@ const BookService = () => {
                             {slotsLoading ? (
                                 <Loader text="Loading slots..." />
                             ) : slots.length > 0 ? (
-                                <Row wrap style={styles.time_slots_container} gap={10}>
+                                <View style={styles.time_slots_container}>
                                     {slots.map((slot) => {
                                         const isBooked = slot.is_booked;
                                         const isSelected = selectedTimeSlot === slot.time_range;
@@ -343,14 +328,12 @@ const BookService = () => {
                                                 disabled={isBooked}
                                             >
                                                 <Text
-                                                    size={12}
+                                                    size={14}
                                                     weight="semibold"
                                                     color={
-                                                        isBooked
-                                                            ? colors.danger
-                                                            : isSelected
-                                                                ? colors.white
-                                                                : colors.black
+                                                        isBooked || isSelected
+                                                            ? colors.white
+                                                            : '#333333'
                                                     }
                                                 >
                                                     {slot.time_range_new}
@@ -358,7 +341,7 @@ const BookService = () => {
                                             </Touchable>
                                         );
                                     })}
-                                </Row>
+                                </View>
                             ) : (
                                 <Text size={14} color={colors.dark_gray}>No slots available</Text>
                             )}
@@ -369,7 +352,7 @@ const BookService = () => {
 
                 <Button
                     text="Continue"
-                    type="secondary"
+                    // type="secondary"
                     style={styles.continue_button}
                     onPress={onContinue}
                 />
