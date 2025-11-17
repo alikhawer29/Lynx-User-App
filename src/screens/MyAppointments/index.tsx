@@ -14,6 +14,8 @@ import colors from '../../utils/colors';
 import styles from './styles';
 import useMyAppointmentsController from './useMyAppointmentsController';
 import dayjs from 'dayjs';
+import Icon from '../../components/Icon';
+import images from '../../assets/images';
 
 const MyAppointments = () => {
   const {
@@ -66,7 +68,12 @@ const MyAppointments = () => {
       >
         {/* DATE + STATUS */}
         <View style={styles.booking_header}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+            <Icon
+              source={images.calendar}
+              size={15}
+            // color={colors.primary}
+            />
             <Text style={styles.booking_date}>{formattedDate}</Text>
           </View>
 

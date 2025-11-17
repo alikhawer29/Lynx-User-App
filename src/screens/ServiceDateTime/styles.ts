@@ -60,6 +60,9 @@ const styles = StyleSheet.create({
     marginBottom: heightPixel(10),
     color: '#22282C',
   },
+  service_detail_item: {
+    flex: 1,
+  },
   time_button: {
     flexDirection: 'row',
     alignItems: 'center',

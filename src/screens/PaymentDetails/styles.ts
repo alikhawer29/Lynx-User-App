@@ -8,6 +8,7 @@ const styles = StyleSheet.create({
   },
   amount_label: {
     marginBottom: heightPixel(25),
+    alignItems: 'center',
   },
   form_section: {
     gap: heightPixel(5),

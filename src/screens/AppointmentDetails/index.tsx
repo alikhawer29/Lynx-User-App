@@ -140,7 +140,7 @@ const AppointmentDetails = () => {
   const subStatusColors = getSubStatusColor(subStatus);
 
   // 1. Review and Report buttons - should show when booking_status is "approved"
-  const canShowReviewAndReport = booking.booking_status?.toLowerCase() === 'approved';
+  const canShowReviewAndReport = booking.status?.toLowerCase() === 'approved';
 
   // 2. Refund button - show when:
   //    - status is "pending" OR
@@ -152,6 +152,10 @@ const AppointmentDetails = () => {
 
   // 3. Reschedule approve/reject buttons - show when status is "requested"
   const hasRescheduleRequest = booking.status?.toLowerCase() === 'requested';
+
+  const canChat = booking.status?.toLowerCase() === 'approved' &&
+    (booking.booking_status?.toLowerCase() === 'upcoming' ||
+      booking.booking_status?.toLowerCase() === 'in-progress');
 
   return (
     <Wrapper>
@@ -168,8 +172,8 @@ const AppointmentDetails = () => {
       >
         {/* Service Image */}
         <Image
-          // source={{ uri: booking?.service_id?.image_url || 'https://via.placeholder.com/400x200' }}
-          source={{ uri: 'https://img1.hscicdn.com/image/upload/f_auto,t_ds_wide_w_1200,q_60/lsci/db/PICTURES/CMS/409100/409144.6.jpg' }}
+          source={{ uri: booking?.service_id?.image_url || 'https://via.placeholder.com/400x200' }}
+          // source={{ uri: 'https://img1.hscicdn.com/image/upload/f_auto,t_ds_wide_w_1200,q_60/lsci/db/PICTURES/CMS/409100/409144.6.jpg' }}
           style={styles.service_image}
           resize="cover"
         />
@@ -178,8 +182,8 @@ const AppointmentDetails = () => {
         <View style={styles.provider_row}>
           <View style={styles.provider_info}>
             <Image
-              // source={{ uri: booking?.provider_id?.image_url || 'https://via.placeholder.com/400x200' }}
-              source={{ uri: 'https://img1.hscicdn.com/image/upload/f_auto,t_ds_wide_w_1200,q_60/lsci/db/PICTURES/CMS/409100/409144.6.jpg' }}
+              source={{ uri: booking?.provider_id?.image_url || 'https://via.placeholder.com/400x200' }}
+              // source={{ uri: 'https://img1.hscicdn.com/image/upload/f_auto,t_ds_wide_w_1200,q_60/lsci/db/PICTURES/CMS/409100/409144.6.jpg' }}
               style={styles.provider_avatar}
               resize="cover"
             />
@@ -220,6 +224,12 @@ const AppointmentDetails = () => {
           <View style={{ alignItems: 'flex-end' }}>
             <Text style={styles.price_text}>${booking.price}</Text>
             <Text size={10} style={styles.price_type}>{priceType} Price</Text>
+          </View>
+        </View>
+
+        <View style={styles.category_row}>
+          <View style={{ alignItems: 'flex-end' }}>
+            <Text style={styles.chat_text}>Start Chat</Text>
           </View>
         </View>
 
@@ -636,10 +646,10 @@ const AppointmentDetails = () => {
               <Text style={{ color: colors.white, fontSize: 16 }}>✕</Text>
             </TouchableOpacity>
 
-            <Text style={styles.modal_title} size={23} position='center'>Report Details</Text>
+            <Text style={styles.modal_title} position='center'>Report Details</Text>
 
             <View style={styles.input_container}>
-              <Text style={styles.input_label} size={16}>Report</Text>
+              <Text style={styles.input_label}>Report</Text>
               <TextInput
                 style={styles.text_area}
                 placeholder="..."
@@ -660,7 +670,7 @@ const AppointmentDetails = () => {
               <Text style={styles.upload_text}>
                 {reportFiles.length > 0
                   ? `${reportFiles.length} file(s) selected`
-                  : 'Upload Files (Images/Photos)'}
+                  : 'Upload Files (PDF, Docx, JPG)'}
               </Text>
             </TouchableOpacity>
 

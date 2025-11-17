@@ -117,73 +117,84 @@ const ServiceDateTime = () => {
                         <Text size={16} weight="bold" color='#22282C' underline>Edit</Text>
                     </Row>
                     <View style={styles.contact_grid}>
-                        <View style={styles.contact_item}>
-                            <Text size={16} color='#22282C' weight="semibold">First Name*</Text>
-                            <Text size={14} weight="semibold" color='#666666'>{firstName || '-'}</Text>
-                        </View>
-                        <View style={styles.contact_item}>
-                            <Text size={16} color='#22282C' weight="semibold">Last Name*</Text>
-                            <Text size={14} weight="semibold" color='#666666'>{lastName || '-'}</Text>
-                        </View>
-                        <View style={styles.contact_item}>
-                            <Text size={16} color='#22282C' weight="semibold">Phone Number*</Text>
-                            {phone ? (
-                                <Row align="center" gap={5}>
-                                    <CountryPicker
-                                        countryCode={phoneCountry as any || 'AE'}
-                                        withFlag
-                                        withEmoji={false}
-                                        withFilter={false}
-                                        withAlphaFilter={false}
-                                        withCallingCode={false}
-                                        withCountryNameButton={false}
-                                        containerButtonStyle={{ padding: 0, margin: 0 }}
-                                    />
-                                    <Text size={14} weight="semibold" color='#666666'>{phone}</Text>
-                                </Row>
-                            ) : (
-                                <Text size={14} weight="semibold">-</Text>
-                            )}
-                        </View>
-                        <View style={styles.contact_item}>
-                            <Text size={16} color='#22282C' weight="semibold">Email Address*</Text>
-                            <Text size={14} weight="semibold" color='#666666'>{email || '-'}</Text>
-                        </View>
+                        <Row>
+                            <View style={styles.contact_item}>
+                                <Text size={16} color='#22282C' weight="semibold">First Name*</Text>
+                                <Text size={14} weight="semibold" color='#666666'>{firstName || '-'}</Text>
+                            </View>
+                            <View style={styles.contact_item}>
+                                <Text size={16} color='#22282C' weight="semibold">Last Name*</Text>
+                                <Text size={14} weight="semibold" color='#666666'>{lastName || '-'}</Text>
+                            </View>
+                        </Row>
+                        <Row>
+                            <View style={styles.contact_item}>
+                                <Text size={16} color='#22282C' weight="semibold">Phone Number*</Text>
+                                {phone ? (
+                                    <Row align="center" gap={5}>
+                                        <CountryPicker
+                                            countryCode={phoneCountry as any || 'AE'}
+                                            withFlag
+                                            withEmoji={false}
+                                            withFilter={false}
+                                            withAlphaFilter={false}
+                                            withCallingCode={false}
+                                            withCountryNameButton={false}
+                                            containerButtonStyle={{ padding: 0, margin: 0 }}
+                                        />
+                                        <Text size={14} weight="semibold" color='#666666'>{phone}</Text>
+                                    </Row>
+                                ) : (
+                                    <Text size={14} weight="semibold">-</Text>
+                                )}
+                            </View>
+                            <View style={styles.contact_item}>
+                                <Text size={16} color='#22282C' weight="semibold">Email Address*</Text>
+                                <Text size={14} weight="semibold" color='#666666'>{email || '-'}</Text>
+                            </View>
+
+                        </Row>
+
+
+
                     </View>
                 </Touchable>
 
                 {/* Service Details Section */}
                 <View style={styles.section}>
                     <Row align="center" justify="space-between" style={{ marginBottom: 15 }}>
-                        <Text size={20} weight="bold" line_height={22}>Service Details</Text>
+                        <Text size={20} weight="bold" color="#22282C">Service Details</Text>
                         <Text size={16} weight="bold" color='#22282C' underline onPress={onEditService}>
                             Edit
                         </Text>
                     </Row>
 
-                    {/* Session Time */}
-                    <View style={styles.detail_item}>
-                        <Text size={16} weight="semibold" style={styles.detail_label}>Session Time</Text>
-                        <Row align="center" gap={5}>
-                            <Icon source={images.calendar} size={16} tint_color={colors.dark_gray} />
-                            <Text size={14} color='#666666'>
-                                {selectedTimeSlot || 'No time slot selected'}
-                            </Text>
-                        </Row>
-                    </View>
+                    <Row align="flex-start" justify="space-between" gap={15}>
+                        {/* Session Time */}
+                        <View style={styles.service_detail_item}>
+                            <Text size={16} weight="semibold" color="#22282C">Session Time</Text>
+                            <Row align="center" gap={5} style={{ marginTop: 8 }}>
+                                <Icon source={images.calendar} size={16} tint_color="#666666" />
+                                <Text size={14} color='#666666'>
+                                    {selectedTimeSlot || 'No time slot selected'}
+                                </Text>
+                            </Row>
+                        </View>
 
-                    {/* Session Date */}
-                    <View style={styles.detail_item}>
-                        <Text size={16} weight="semibold" style={styles.detail_label}>Session Date</Text>
-                        <Row align="center" gap={5}>
-                            <Icon source={images.calendar} size={16} tint_color={colors.dark_gray} />
-                            <Text size={14} color='#666666'>
-                                {sessionDate || 'Select Date'}
-                            </Text>
-                        </Row>
-                    </View>
+                        {/* Session Date */}
+                        <View style={styles.service_detail_item}>
+                            <Text size={16} weight="semibold" color="#22282C">Session Date</Text>
+                            <Row align="center" gap={5} style={{ marginTop: 8 }}>
+                                <Icon source={images.calendar} size={16} tint_color="#666666" />
+                                <Text size={14} color='#666666'>
+                                    {sessionDate || 'Select Date'}
+                                </Text>
+                            </Row>
+                        </View>
+                    </Row>
 
                 </View>
+
 
                 <Button
                     text="Book Service"

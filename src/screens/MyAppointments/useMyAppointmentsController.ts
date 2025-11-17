@@ -16,9 +16,10 @@ type FilterType =
   | 'cancelled'
   | 'approved'
   | 'rejected'
+  | 'requested'
   | 'upcoming'
   | 'in-progress'
-  | 'paid';
+  | 'completed';
 
 const FILTER_TABS: { key: FilterType; label: string }[] = [
   { key: 'all', label: 'All' },
@@ -26,9 +27,10 @@ const FILTER_TABS: { key: FilterType; label: string }[] = [
   { key: 'cancelled', label: 'Cancelled' },
   { key: 'approved', label: 'Approved' },
   { key: 'rejected', label: 'Rejected' },
+  { key: 'requested', label: 'Requested' },
   { key: 'upcoming', label: 'Upcoming' },
   { key: 'in-progress', label: 'In-Progress' },
-  { key: 'paid', label: 'Paid' },
+  { key: 'completed', label: 'Past' },
 ];
 
 const useMyAppointmentsController = () => {
@@ -65,8 +67,8 @@ const useMyAppointmentsController = () => {
             filterType === 'in-progress'
           ) {
             params.booking_status = filterType;
-          } else if (filterType === 'paid') {
-            params.payment_status = 'paid';
+          } else if (filterType === 'completed') {
+            params.booking_status = 'completed';
           } else if (filterType === 'cancelled') {
             params.status = 'cancelled';
           }

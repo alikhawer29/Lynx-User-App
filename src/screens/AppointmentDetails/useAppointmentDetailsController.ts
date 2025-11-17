@@ -228,7 +228,8 @@ const useAppointmentDetailsController = () => {
   }, [onRefreshDetails]);
 
   const onUploadReportFiles = useCallback(() => {
-    openMultipleImagePicker((files) => {
+    console.log('Uploading report files');
+    openMultipleImagePicker(files => {
       if (files && files.length > 0) {
         setReportFiles(files);
       }

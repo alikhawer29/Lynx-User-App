@@ -22,12 +22,12 @@ const styles = StyleSheet.create({
     borderColor: colors.medium_gray,
   },
   filter_tab_active: {
-    backgroundColor: colors.primary,
-    borderColor: colors.primary,
+    backgroundColor: '#B69D74',
+    borderColor: '#B69D74',
   },
   filter_text: {
     fontSize: 14,
-    color: colors.dark_gray,
+    color: '#B69D74',
   },
   filter_text_active: {
     color: colors.white,

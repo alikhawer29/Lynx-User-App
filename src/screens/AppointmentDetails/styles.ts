@@ -108,6 +108,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: colors.black,
   },
+
+  chat_text: {
+    fontSize: 14,
+    color: colors.primary,
+    textDecorationLine: 'underline',
+  },
   price_type: {
     fontSize: 12,
     color: colors.dark_gray,
@@ -207,10 +213,10 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: colors.white,
+    backgroundColor: colors.light_primary,
     paddingHorizontal: GLOBAL_HORIZONTAL_PADDING,
-    paddingVertical: heightPixel(15),
-    borderTopWidth: 1,
+    paddingVertical: heightPixel(30),
+    // borderTopWidth: 1,
     borderTopColor: colors.light_gray,
     shadowColor: colors.black,
     shadowOffset: {
@@ -219,7 +225,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.1,
     shadowRadius: 3,
-    elevation: 5,
+    // elevation: 5,
   },
   button_row: {
     flexDirection: 'row',
@@ -265,7 +271,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   modal_title: {
-    fontSize: 18,
+    fontSize: 23,
     fontWeight: 'bold',
     color: colors.black,
     textAlign: 'center',
@@ -309,8 +315,8 @@ const styles = StyleSheet.create({
     marginBottom: heightPixel(15),
   },
   input_label: {
-    fontSize: 14,
-    color: colors.black,
+    fontSize: 16,
+    color: '#22282C',
     marginBottom: heightPixel(8),
     fontWeight: '500',
   },
@@ -323,6 +329,7 @@ const styles = StyleSheet.create({
     color: colors.black,
     minHeight: heightPixel(120),
     textAlignVertical: 'top',
+    backgroundColor: '#F5F5EF',
   },
   upload_button: {
     flexDirection: 'row',
@@ -351,7 +358,7 @@ const styles = StyleSheet.create({
     gap: widthPixel(10),
   },
   star: {
-    fontSize: 35,
+    fontSize: 20,
     color: '#FFB400',
   },
   reviews_section: {
