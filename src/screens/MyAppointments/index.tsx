@@ -45,7 +45,7 @@ const MyAppointments = () => {
     switch (status?.toLowerCase()) {
       case 'upcoming':
         return { bg: 'rgba(129, 159, 45, 0.2)', text: '#819F2D' };
-      case 'in-progress':
+      case 'in_progress':
         return { bg: 'rgba(248, 100, 0, 0.2)', text: '#F86400' };
       case 'completed':
         return { bg: 'rgba(0, 225, 15, 0.2)', text: '#00E10F' };
@@ -101,7 +101,10 @@ const MyAppointments = () => {
               {/* <Text style={styles.sub_status_label}>Sub-Status: </Text> */}
               <View style={[styles.status_badge, { backgroundColor: bookingStatusColors.bg }]}>
                 <Text color={bookingStatusColors.text} style={[styles.sub_status_value]}>
-                  {item.booking_status?.charAt(0).toUpperCase() + item.booking_status?.slice(1)}
+                  {item.booking_status === 'in_progress'
+                    ? 'In-Progress'
+                    : item.booking_status?.charAt(0).toUpperCase() + item.booking_status?.slice(1)
+                  }
                 </Text>
               </View>
             </>

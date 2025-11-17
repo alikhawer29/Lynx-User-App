@@ -103,10 +103,10 @@ const useBookServiceController = () => {
     { data: slotsData, isLoading: slotsLoading, error: slotsError },
   ] = useLazyGetSlotsByDateQuery();
 
-  // Generate current week dates
+  // Generate next 7 days starting from today
   useEffect(() => {
     const today = new Date();
-    const currentWeek: WeekDate[] = [];
+    const nextSevenDays: WeekDate[] = [];
     const dayNames = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
     const monthNames = [
       'January',
@@ -123,15 +123,12 @@ const useBookServiceController = () => {
       'December',
     ];
 
-    // Get the start of the week (Sunday)
-    const startOfWeek = new Date(today);
-    startOfWeek.setDate(today.getDate() - today.getDay());
-
+    // Generate 7 days starting from today
     for (let i = 0; i < 7; i++) {
-      const date = new Date(startOfWeek);
-      date.setDate(startOfWeek.getDate() + i);
+      const date = new Date(today);
+      date.setDate(today.getDate() + i);
 
-      currentWeek.push({
+      nextSevenDays.push({
         date: date.toISOString().split('T')[0], // YYYY-MM-DD
         day: String(date.getDate()).padStart(2, '0'),
         dayName: dayNames[date.getDay()],
@@ -139,21 +136,11 @@ const useBookServiceController = () => {
       });
     }
 
-    setWeekDates(currentWeek);
+    setWeekDates(nextSevenDays);
     setCurrentMonth(monthNames[today.getMonth()]);
-    // Auto-select today's date if it's not Sunday, otherwise select next available day
+    // Auto-select today's date
     const todayFormatted = today.toISOString().split('T')[0];
-    const todayDayName = dayNames[today.getDay()];
-
-    if (todayDayName === 'SUN') {
-      // If today is Sunday, select Monday (next day)
-      const tomorrow = new Date(today);
-      tomorrow.setDate(today.getDate() + 1);
-      const tomorrowFormatted = tomorrow.toISOString().split('T')[0];
-      setSelectedDate(tomorrowFormatted);
-    } else {
-      setSelectedDate(todayFormatted);
-    }
+    setSelectedDate(todayFormatted);
   }, []);
 
   // Fetch slots when date is selected
@@ -291,9 +278,9 @@ const useBookServiceController = () => {
 
   const onSelectDate = useCallback((date: string, dayName: string) => {
     // Prevent selecting Sundays
-    if (dayName === 'SUN') {
-      return;
-    }
+    // if (dayName === 'SUN') {
+    //   return;
+    // }
 
     setSelectedDate(date);
     setSelectedTimeSlot(''); // Reset selected time slot when date changes

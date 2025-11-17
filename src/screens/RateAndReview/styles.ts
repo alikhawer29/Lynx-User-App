@@ -9,12 +9,12 @@ const styles = StyleSheet.create({
   },
   header_section: {
     // backgroundColor: colors.white,
-    paddingVertical: heightPixel(20),
-    paddingHorizontal: widthPixel(20),
+    paddingVertical: heightPixel(0),
+    paddingHorizontal: widthPixel(0),
   },
   rating_title_container: {
     alignItems: 'flex-end',
-    marginBottom: heightPixel(15),
+    marginBottom: heightPixel(5),
   },
   rating_title: {
     fontSize: 20,

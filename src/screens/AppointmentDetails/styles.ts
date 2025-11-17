@@ -110,9 +110,9 @@ const styles = StyleSheet.create({
   },
 
   chat_text: {
-    fontSize: 14,
+    fontSize: 18,
     color: colors.primary,
-    textDecorationLine: 'underline',
+    fontWeight: 'bold',
   },
   price_type: {
     fontSize: 12,
@@ -123,6 +123,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: colors.black,
     marginBottom: heightPixel(15),
+    marginTop: heightPixel(10),
   },
   details_grid: {
     flexDirection: 'row',

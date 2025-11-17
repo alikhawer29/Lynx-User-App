@@ -131,15 +131,15 @@ const styles = StyleSheet.create({
   },
   date_item: {
     flex: 1,
-    paddingVertical: heightPixel(12),
-    paddingHorizontal: heightPixel(8),
+    paddingVertical: heightPixel(10),
+    paddingHorizontal: heightPixel(5),
     borderRadius: heightPixel(8),
     borderWidth: 1,
     borderColor: '#E0E0E0',
     backgroundColor: colors.white,
     alignItems: 'center',
     justifyContent: 'center',
-    minWidth: heightPixel(60),
+    minWidth: heightPixel(41),
   },
   date_item_selected: {
     borderWidth: 0,

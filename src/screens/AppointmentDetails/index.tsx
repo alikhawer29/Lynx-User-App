@@ -18,6 +18,8 @@ import useAppointmentDetailsController from './useAppointmentDetailsController';
 import dayjs from 'dayjs';
 import Ratings from '../../components/Ratings';
 import Badge from '../../components/Badge';
+import Icon from '../../components/Icon';
+import images from '../../assets/images';
 
 const AppointmentDetails = () => {
   const {
@@ -99,7 +101,7 @@ const AppointmentDetails = () => {
     switch (subStatus?.toLowerCase()) {
       case 'upcoming':
         return { bg: 'rgba(129, 159, 45, 0.2)', text: '#819F2D' };
-      case 'in-progress':
+      case 'in_progress':
         return { bg: 'rgba(248, 100, 0, 0.2)', text: '#F86400' };
       case 'completed':
         return { bg: 'rgba(0, 225, 15, 0.2)', text: '#00E10F' };
@@ -140,7 +142,7 @@ const AppointmentDetails = () => {
   const subStatusColors = getSubStatusColor(subStatus);
 
   // 1. Review and Report buttons - should show when booking_status is "approved"
-  const canShowReviewAndReport = booking.status?.toLowerCase() === 'approved';
+  const canShowReviewAndReport = booking.booking_status?.toLowerCase() === 'completed';
 
   // 2. Refund button - show when:
   //    - status is "pending" OR
@@ -155,7 +157,7 @@ const AppointmentDetails = () => {
 
   const canChat = booking.status?.toLowerCase() === 'approved' &&
     (booking.booking_status?.toLowerCase() === 'upcoming' ||
-      booking.booking_status?.toLowerCase() === 'in-progress');
+      booking.booking_status?.toLowerCase() === 'in_progress');
 
   return (
     <Wrapper>
@@ -207,7 +209,11 @@ const AppointmentDetails = () => {
                 <Text size={13} style={styles.status_label}>Sub-Status :</Text>
                 <View style={[styles.status_badge, { backgroundColor: subStatusColors.bg }]}>
                   <Text size={13} color={subStatusColors.text} style={[styles.status_text]}>
-                    {subStatus.charAt(0).toUpperCase() + subStatus.slice(1)}
+                    {/* {subStatus.charAt(0).toUpperCase() + subStatus.slice(1)} */}
+                    {subStatus === 'in_progress'
+                      ? 'In-Progress'
+                      : subStatus?.charAt(0).toUpperCase() + subStatus?.slice(1)
+                    }
                   </Text>
                 </View>
               </View>
@@ -227,10 +233,12 @@ const AppointmentDetails = () => {
           </View>
         </View>
 
-        <View style={styles.category_row}>
-          <View style={{ alignItems: 'flex-end' }}>
-            <Text style={styles.chat_text}>Start Chat</Text>
-          </View>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+          <Icon
+            source={images.chat}
+            size={30}
+          />
+          <Text size={18} style={styles.chat_text}>Start Chat</Text>
         </View>
 
 
