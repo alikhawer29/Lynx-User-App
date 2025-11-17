@@ -66,6 +66,7 @@ const BookService = () => {
 
 
     const price = selectedTier === 0 ? service.category.price.normal : service.category.price.premium
+    const priceType = selectedTier === 0 ? 'Normal' : 'Premium'
 
     return (
         <Wrapper>
@@ -81,18 +82,21 @@ const BookService = () => {
 
                 <Row align="center" justify="space-between" style={styles.header_row}>
                     <View>
-                        <Text size={20} weight="bold" line_height={24}>{service.name}</Text>
+                        <Text size={25} weight="bold" color='#22282C' line_height={24}>{service.name}</Text>
                         <Badge text={`Category Type: ${service.category.name}`} size={13} />
                     </View>
-                    <Text size={20} weight="bold" color={colors.primary}>${price}</Text>
+                    <View style={{ alignItems: 'flex-end' }}>
+                        <Text style={styles.price_text}>${price}</Text>
+                        <Text size={10} style={styles.price_type}>{priceType} Price</Text>
+                    </View>
                 </Row>
 
-                <Text size={14} color={colors.dark_gray} style={styles.price_label}>Normal Price</Text>
+
 
                 {/* Address Details Section */}
                 <View style={styles.section}>
                     <Row align="center" justify="space-between">
-                        <Text size={18} weight="bold" line_height={22}>Address Details</Text>
+                        <Text size={20} weight="bold" line_height={22}>Address Details</Text>
                         {address && (
                             <Text
                                 size={14}
@@ -131,8 +135,8 @@ const BookService = () => {
                             </MapView>
                             <Row align="center" justify="space-between" style={styles.address_info}>
                                 <View style={styles.address_text_container}>
-                                    <Text size={14} weight="semibold" color={colors.black}>{address}</Text>
-                                    {floor && <Text size={12} color={colors.dark_gray}>{floor}</Text>}
+                                    <Text size={14} weight="semibold" color='#22282C'>{address}</Text>
+                                    {floor && <Text size={12} color='#22282C'>{floor}</Text>}
                                 </View>
                                 <Button text="View" type="outlined" height={40} onPress={onViewLocation} />
                             </Row>
@@ -187,7 +191,7 @@ const BookService = () => {
                         onPress={() => setShowContactDetails(!showContactDetails)}
                         style={styles.collapse_header}
                     >
-                        <Text size={18} weight="bold">Contact Details</Text>
+                        <Text size={20} weight="bold">Contact Details</Text>
                         {/* <Text size={16}>{showContactDetails ? "▲" : "▼"}</Text> */}
                     </Touchable>
 
@@ -257,7 +261,7 @@ const BookService = () => {
                         onPress={() => setShowServiceDetails(!showServiceDetails)}
                         style={styles.collapse_header}
                     >
-                        <Text size={18} weight="bold">Service Details</Text>
+                        <Text size={20} weight="bold">Service Details</Text>
                     </Touchable>
 
                     {showServiceDetails && (
@@ -349,7 +353,7 @@ const BookService = () => {
                                                                 : colors.black
                                                     }
                                                 >
-                                                    {slot.time_range}
+                                                    {slot.time_range_new}
                                                 </Text>
                                             </Touchable>
                                         );

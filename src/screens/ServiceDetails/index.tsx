@@ -23,7 +23,8 @@ const ServiceDetails = () => {
         },
         functions: {
             onBookAppointment,
-            onSelectTier
+            onSelectTier,
+            onViewReviews
         }
     } = useServiceDetailsController()
 
@@ -51,14 +52,16 @@ const ServiceDetails = () => {
                             </Row>
                             <Row align="center" justify="space-between">
                                 <Badge text={`Category Type: ${service.category.name}`} size={13} />
-                                <Text
-                                    size={16}
-                                    weight="bold"
-                                    color={colors.primary}
-                                    underline
-                                >
-                                    View Reviews
-                                </Text>
+                                <Touchable onPress={onViewReviews}>
+                                    <Text
+                                        size={16}
+                                        weight="bold"
+                                        color={colors.primary}
+                                        underline
+                                    >
+                                        View Reviews
+                                    </Text>
+                                </Touchable>
                             </Row>
                         </View>
 

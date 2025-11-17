@@ -10,7 +10,14 @@ const Ratings: FC<IRatings> = ({ review_count, rating, size = 12 }) => {
     return (
         <Row align="center" gap={6}>
             <Icon source={images.star} size={size} />
-            <Text color={colors.dark_gray} size={size}>{rating} {review_count ? `(${review_count}+)` : null}</Text>
+            {/* <Text color={colors.dark_gray} size={size}>{rating} {review_count ? `(${review_count}+)` : null}</Text> */}
+            <Text color={colors.dark_gray} size={size}>
+                {rating} {
+                    review_count
+                        ? `(${review_count > 100 ? "100+" : review_count})`
+                        : null
+                }
+            </Text>
         </Row>
     )
 }

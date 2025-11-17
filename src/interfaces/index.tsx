@@ -21,6 +21,12 @@ export type AuthStackParamList = {
 export type HomeStackParamList = {
     Home: undefined;
     ServiceDetails: { id?: string | number };
+    RateAndReview: {
+        serviceId: string;
+        reviews: any[];
+        avgRating: number;
+        reviewCount: number;
+    };
     BookService: {
         service: ServiceData;
         selectedTier: number;
@@ -98,6 +104,12 @@ export type ContactUsStackParamList = {
 export type ServiceStackParamList = {
     Services: undefined;
     ServiceDetails: { id?: string | number };
+    RateAndReview: {
+        serviceId: string;
+        reviews: any[];
+        avgRating: number;
+        reviewCount: number;
+    };
     BookService: {
         service: ServiceData;
         selectedTier: number;
@@ -486,7 +498,8 @@ export interface ServiceData {
     rating: number
     review_count?: number
     image_url?: any
-    is_favorite?: boolean
+    is_favorite?: boolean,
+    avg_rating?: number
 }
 
 export interface ContentData {

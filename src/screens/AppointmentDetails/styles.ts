@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
   },
 
   service_name: {
-    fontSize: 25,
+    fontSize: 20,
     fontWeight: 'bold',
     color: colors.black,
     // marginBottom: heightPixel(5),
@@ -93,7 +93,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: heightPixel(20),
-    
   },
   category_text: {
     fontSize: 14,
@@ -105,7 +104,7 @@ const styles = StyleSheet.create({
     paddingVertical: heightPixel(2),
   },
   price_text: {
-    fontSize: 40,
+    fontSize: 25,
     fontWeight: 'bold',
     color: colors.black,
   },
@@ -134,14 +133,14 @@ const styles = StyleSheet.create({
   },
   detail_label: {
     fontSize: 16,
-    color: colors.dark_gray,
+    color: '#333333',
     marginBottom: heightPixel(4),
     fontWeight: 'bold',
   },
   detail_value: {
     fontSize: 14,
     fontWeight: '600',
-    color: colors.black,
+    color: '#666666',
   },
   location_row: {
     flexDirection: 'row',
@@ -164,7 +163,7 @@ const styles = StyleSheet.create({
   requested_title: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: colors.black,
+    color: '#22282C',
     marginBottom: heightPixel(10),
   },
   requested_details_row: {
@@ -196,12 +195,12 @@ const styles = StyleSheet.create({
   service_provider_detail_item: {
     flex: 1,
   },
-   service_provider_item: {
+  service_provider_item: {
     width: '48%',
   },
   service_provider_item_full: {
     width: '50%',
-  marginTop: heightPixel(10),
+    marginTop: heightPixel(10),
   },
   button_container: {
     position: 'absolute',
@@ -359,9 +358,9 @@ const styles = StyleSheet.create({
     marginTop: heightPixel(20),
   },
   reviews_title: {
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: 'bold',
-    color: colors.black,
+    color: '#333333',
     marginBottom: heightPixel(7),
   },
   review_item: {
@@ -369,7 +368,7 @@ const styles = StyleSheet.create({
   },
   review_text: {
     fontSize: 14,
-    color: colors.black,
+    color: '#666666',
   },
   files_list: {
     marginBottom: heightPixel(15),

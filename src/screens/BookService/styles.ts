@@ -6,13 +6,22 @@ const styles = StyleSheet.create({
   scroll_content: {
     paddingBottom: heightPixel(30),
   },
+  price_text: {
+    fontSize: 25,
+    fontWeight: 'bold',
+    color: colors.black,
+  },
+  price_type: {
+    fontSize: 12,
+    color: colors.dark_gray,
+  },
   service_image: {
     height: heightPixel(180),
     borderRadius: heightPixel(8),
     marginBottom: heightPixel(15),
   },
   header_row: {
-    marginBottom: heightPixel(5),
+    marginBottom: heightPixel(10),
   },
   price_label: {
     marginBottom: heightPixel(20),
@@ -36,7 +45,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
   },
   address_preview: {
-    marginTop: heightPixel(15),
+    marginTop: heightPixel(5),
     marginBottom: heightPixel(15),
   },
   map_preview: {

@@ -22,7 +22,7 @@ type BookServiceNavigationProp = StackNavigationProp<
 const useServiceDetailsController = () => {
   const authorize = useAppSelector(selectLoggedIn);
   const { params } = useRoute<ServiceDetailsRouteProp>();
-  
+
   const { showOkModal } = useModal();
 
   const [selected, setSelected] = useState<number>(0);
@@ -40,7 +40,6 @@ const useServiceDetailsController = () => {
         message: 'You have to login first',
       });
     } else if (data?.data) {
-     
       navigate(ROUTES.BOOK_SERVICE, {
         service: data.data,
         selectedTier: selected,
@@ -55,6 +54,17 @@ const useServiceDetailsController = () => {
     [selected],
   );
 
+  const onViewReviews = useCallback(() => {
+    if (data?.data && data.data.reviews && data.data.reviews.length > 0) {
+      navigate(ROUTES.RATE_AND_REVIEW, {
+        serviceId: data.data._id,
+        reviews: data.data.reviews,
+        avgRating: data.data.avg_rating || data.data.rating || 0,
+        reviewCount: data.data.review_count || 0,
+      });
+    }
+  }, [data]);
+
   return {
     values: {
       data: data?.data || null,
@@ -64,6 +74,7 @@ const useServiceDetailsController = () => {
     functions: {
       onBookAppointment,
       onSelectTier,
+      onViewReviews,
     },
   };
 };

@@ -5,6 +5,42 @@ import colors from "../../utils/colors"
 import { font, widthPixel } from "../../utils/helper"
 import styles from "./styles"
 
+// const Text: FC<IText> = ({
+//     children,
+//     weight = "regular",
+//     size = 14,
+//     style,
+//     color = colors.black,
+//     line_height = 20,
+//     underline = false,
+//     onPress,
+//     position,
+//     lines,
+//     capitalize = false
+// }) => {
+
+//     let default_style: TextStyle = {
+//         fontSize: font(size),
+//         color: color,
+//         lineHeight: font(line_height),
+//         textDecorationLine: underline ? "underline" : "none",
+//         textAlign: position,
+//         textTransform: capitalize ? "capitalize" : "none",
+//         letterSpacing: -widthPixel(0.5)
+//     }
+
+//     return (
+//         <RNText
+//             allowFontScaling={false}
+//             style={[style, styles[weight], default_style]}
+//             onPress={onPress}
+//             numberOfLines={lines}
+//         >
+//             {children}
+//         </RNText>
+//     )
+// }
+
 const Text: FC<IText> = ({
     children,
     weight = "regular",
@@ -32,7 +68,7 @@ const Text: FC<IText> = ({
     return (
         <RNText
             allowFontScaling={false}
-            style={[style, styles[weight], default_style]}
+            style={[default_style, styles[weight], style]}
             onPress={onPress}
             numberOfLines={lines}
         >

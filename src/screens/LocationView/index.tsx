@@ -32,6 +32,8 @@ const LocationView = () => {
         }
     } = useLocationViewController()
 
+    console.log(isConfirmed, 'isConfirmed')
+
     return (
         <Wrapper>
             {/* Search Input at Top - Only show if not in view-only mode */}
@@ -49,7 +51,7 @@ const LocationView = () => {
 
             {/* Title */}
             <Text size={18} weight="bold" position="center" style={styles.title}>
-                {viewOnly ? 'Your Selected Location' : 'Is This Your Exact Location'}
+                {viewOnly ? '' : (isConfirmed ? 'Is This Your Exact Location' : '')}
             </Text>
 
             {/* Map Container */}

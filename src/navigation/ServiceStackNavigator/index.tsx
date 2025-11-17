@@ -4,6 +4,7 @@ import { ServiceStackParamList } from '../../interfaces';
 import { selectLoggedIn } from '../../redux/Slices/AuthSlice';
 import Services from '../../screens/Services';
 import ServiceDetails from '../../screens/ServiceDetails';
+import RateAndReview from '../../screens/RateAndReview';
 import BookService from '../../screens/BookService';
 import LocationView from '../../screens/LocationView';
 import ServiceDateTime from '../../screens/ServiceDateTime';
@@ -21,6 +22,7 @@ const ServiceStackNavigator = () => {
         <Stack.Navigator initialRouteName={ROUTES.SERVICES} screenOptions={props => Options(props, authorized)}>
             <Stack.Screen name={ROUTES.SERVICES} component={Services} />
             <Stack.Screen name={ROUTES.SERVICE_DETAILS} component={ServiceDetails} />
+            <Stack.Screen name={ROUTES.RATE_AND_REVIEW} component={RateAndReview} />
             <Stack.Screen name={ROUTES.BOOK_SERVICE} component={BookService} />
             <Stack.Screen name={ROUTES.LOCATION_VIEW} component={LocationView} />
             <Stack.Screen name={ROUTES.SERVICE_DATE_TIME} component={ServiceDateTime} />

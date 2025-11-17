@@ -30,6 +30,7 @@ const ROUTES = {
   HOME: 'Home',
   SERVICES: 'Services',
   SERVICE_DETAILS: 'ServiceDetails',
+  RATE_AND_REVIEW: 'RateAndReview',
   BOOK_SERVICE: 'BookService',
   LOCATION_VIEW: 'LocationView',
   SERVICE_DATE_TIME: 'ServiceDateTime',
@@ -79,6 +80,13 @@ const ROUTES_OPTIONS = [
     right: null,
     profile: false,
     title: 'Service Details',
+  },
+  {
+    route_name: ROUTES.RATE_AND_REVIEW,
+    left: 'back',
+    right: null,
+    profile: false,
+    title: 'Rate and Review',
   },
   {
     route_name: ROUTES.BOOK_SERVICE,

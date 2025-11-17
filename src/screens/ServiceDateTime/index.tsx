@@ -238,16 +238,16 @@ const ServiceDateTime = () => {
                             width: 70,
                             height: 70,
                             borderRadius: 35,
-                            backgroundColor: "#FF4D4D20",
+                            backgroundColor: "#FF4444",
                             justifyContent: "center",
                             alignItems: "center",
                             marginBottom: 15
                         }}>
-                            <Text size={40} color={colors.danger}>!</Text>
+                            <Text size={32} weight="bold" color='white'>!</Text>
                         </View>
 
                         {/* Title */}
-                        <Text size={20} weight="bold" style={{ marginBottom: 8 }}>
+                        <Text size={23} weight="bold" style={{ marginBottom: 8 }}>
                             Booking
                         </Text>
 

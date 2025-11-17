@@ -41,6 +41,7 @@ interface SlotData {
   end_time: string;
   is_active: boolean;
   time_range: string;
+  time_range_new: string;
   id: string;
   is_booked: boolean;
   booking_info?: {
@@ -168,10 +169,7 @@ const useBookServiceController = () => {
       console.log('Slots API Error:', JSON.stringify(slotsError, null, 2));
     }
 
-    console.log(
-      'API Response received:',
-      JSON.stringify(slotsData, null, 2),
-    );
+    console.log('API Response received:', JSON.stringify(slotsData, null, 2));
 
     if (slotsData?.success && slotsData?.data) {
       setSlots(slotsData.data);
@@ -292,7 +290,6 @@ const useBookServiceController = () => {
   );
 
   const onSelectDate = useCallback((date: string, dayName: string) => {
-
     // Prevent selecting Sundays
     if (dayName === 'SUN') {
       return;
