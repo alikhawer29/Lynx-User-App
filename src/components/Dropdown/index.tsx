@@ -21,6 +21,7 @@ const Dropdown = props => {
     zIndex,
     zIndexInverse,
     height = 54,
+    required = false,
   } = props;
 
   useEffect(() => {
@@ -41,14 +42,16 @@ const Dropdown = props => {
           style={styles.label}
         >
           {label}{' '}
-          <Text
-            size={12}
-            weight="semibold"
-            color={colors.danger}
-            style={styles.label}
-          >
-            *
-          </Text>
+          {required && (
+            <Text
+              size={12}
+              weight="semibold"
+              color={colors.danger}
+              style={styles.label}
+            >
+              *
+            </Text>
+          )}
         </Text>
       )}
       <DropDownPicker
@@ -57,7 +60,7 @@ const Dropdown = props => {
         items={options}
         style={[styles.inputContainer, { height: heightPixel(height) }]}
         placeholder={placeholder}
-        value={value}
+        value={value || null}
         placeholderStyle={styles.placeholder}
         onSelectItem={onChangeText}
         dropDownContainerStyle={styles.dropdown}

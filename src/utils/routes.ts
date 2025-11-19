@@ -215,7 +215,7 @@ const ROUTES_OPTIONS = [
   {
     route_name: ROUTES.FAQS,
     left: 'drawer',
-    right: null,
+    right: 'notifications',
     profile: false,
     title: 'FAQs',
     bottom_tab: false,

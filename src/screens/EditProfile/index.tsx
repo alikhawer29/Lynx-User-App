@@ -59,7 +59,7 @@ const EditProfile = () => {
                                     onChangeText={handleChange("first_name")}
                                     error={touched?.first_name ? errors?.first_name : ""}
                                 />
-                            </View>
+                            </View>*
                             <View style={{ flex: 0.5 }}>
                                 <Input
                                     label="Last Name"
@@ -80,9 +80,10 @@ const EditProfile = () => {
                             onChangeText={handleChange("phone")}
                             error={touched?.phone ? errors?.phone : ""}
                             country={data?.country_code}
-                            onChangeCountry={e => {
-                                setFieldValue("country_code", e?.cca2)
-                                setFieldValue("dialing_code", e?.callingCode?.[0])
+                            onChangeCountry={(c) => {
+                                if (!c) return;
+                                setFieldValue("country_code", c.cca2);
+                                setFieldValue("dialing_code", c.callingCode?.[0] || "");
                             }}
                         />
                         <Dropdown

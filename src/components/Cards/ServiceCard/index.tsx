@@ -41,7 +41,7 @@ const ServiceCard: FC<IServiceCard> = ({ data, onPress, onFavorite }) => {
                 <Row align="center" justify="space-between">
                     <Row align="center" gap={8}>
                         <Text size={20} weight="bold" line_height={22}>{name}</Text>
-                        <Badge text={`Category Type: ${category.name}`} />
+                        {category && <Badge text={`Category Type: ${category.name}`} />}
                     </Row>
                     {
                         authorized &&
@@ -62,10 +62,10 @@ const ServiceCard: FC<IServiceCard> = ({ data, onPress, onFavorite }) => {
                 <Row align="center" justify="space-between">
                     <Row gap={15} align="center">
                         <Text size={16} weight="bold" color={colors.primary}>
-                            Normal: ${category.price.normal}
+                            Normal: ${category?.price?.normal || 0}
                         </Text>
                         <Text size={16} weight="bold" color={colors.primary}>
-                            Premium: ${category.price.premium}
+                            Premium: ${category?.price?.premium || 0}
                         </Text>
                     </Row>
                     <Ratings review_count={review_count} rating={rating} />
