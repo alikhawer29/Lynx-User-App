@@ -1,28 +1,41 @@
-import { useState } from 'react';
-import { SectionList, View } from 'react-native';
+import { SectionList, View, ActivityIndicator } from 'react-native';
 import NotificationCard from '../../components/Cards/NotificationCard';
 import Dropdown from '../../components/Dropdown';
 import Row from '../../components/Row';
 import Text from '../../components/Text';
 import Wrapper from '../../components/Wrapper';
+import useNotificationsController from './useNotificationController';
 import colors from '../../utils/colors';
-import { NOTIFICATIONS } from '../../utils/data';
 import {
   GLOBAL_HORIZONTAL_PADDING,
-  groupNotifications,
   heightPixel,
 } from '../../utils/helper';
 
 const Notifications = () => {
-  const [showing, setShowing] = useState('all');
+  const {
+    values: {
+      notificationData,
+      contentLoading,
+      error,
+      notificationsTotal,
+    },
+    refs: {
+      statusRef,
+    },
+    actions: {
+      markAsRead,
+      markAllAsRead,
+      setStatus,
+    },
+  } = useNotificationsController();
 
-  const filtered = NOTIFICATIONS.filter(item => {
-    if (showing === 'read') return item.read;
-    if (showing === 'unread') return !item.read;
-    return true;
-  });
+  const handleStatusChange = (value: any) => {
+    if (value?.value === 'all' || value?.value === 'read' || value?.value === 'unread') {
+      setStatus(value.value);
+    }
+  };
 
-  const sections = groupNotifications(filtered);
+  console.log(notificationData, 'notificationData')
 
   return (
     <Wrapper paddingHorizontal={false}>
@@ -43,34 +56,88 @@ const Notifications = () => {
               { label: 'Read', value: 'read' },
               { label: 'Unread', value: 'unread' },
             ]}
-            value={showing}
-            onChangeText={e => setShowing(e?.value)}
+            value={statusRef.current}
+            onChangeText={handleStatusChange}
           />
         </Row>
         <Row style={{ width: '50%' }} justify="flex-end">
-          <Text underline color={colors.primary}>
+          <Text
+            underline
+            color={colors.primary}
+            onPress={markAllAsRead}
+          >
             Mark All As Read
           </Text>
         </Row>
       </Row>
 
-      <SectionList
-        sections={sections}
-        keyExtractor={item => item.id.toString()}
-        renderItem={({ item }) => <NotificationCard data={item} />}
-        renderSectionHeader={({ section: { title } }) => (
-          <View
-            style={{
-              backgroundColor: colors.light_primary,
-              paddingHorizontal: GLOBAL_HORIZONTAL_PADDING,
-              paddingVertical: heightPixel(5),
-            }}
-          >
-            <Text size={16}>{title}</Text>
-          </View>
-        )}
-        showsVerticalScrollIndicator={false}
-      />
+      {error && (
+        <View
+          style={{
+            backgroundColor: colors.danger,
+            paddingHorizontal: GLOBAL_HORIZONTAL_PADDING,
+            paddingVertical: heightPixel(10),
+            marginBottom: heightPixel(10),
+            borderRadius: heightPixel(5),
+          }}
+        >
+          <Text color={colors.white} size={14}>
+            {error?.message || 'Failed to load notifications'}
+          </Text>
+        </View>
+      )}
+
+      {contentLoading && notificationData.length === 0 ? (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            paddingVertical: heightPixel(50),
+          }}
+        >
+          <ActivityIndicator size="large" color={colors.primary} />
+        </View>
+      ) : (
+        <SectionList
+          sections={notificationData}
+          keyExtractor={item => item._id}
+          renderItem={({ item }) => (
+            <NotificationCard
+              data={item}
+              onPress={() => markAsRead(item._id)}
+            />
+          )}
+          renderSectionHeader={({ section: { title } }) => (
+            <View
+              style={{
+                backgroundColor: colors.light_primary,
+                paddingHorizontal: GLOBAL_HORIZONTAL_PADDING,
+                paddingVertical: heightPixel(5),
+              }}
+            >
+              <Text size={16} weight="semibold">{title}</Text>
+            </View>
+          )}
+          showsVerticalScrollIndicator={false}
+          ListEmptyComponent={
+            !contentLoading ? (
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  paddingVertical: heightPixel(50),
+                }}
+              >
+                <Text size={16} color={colors.dark_gray}>
+                  No {statusRef.current !== 'all' ? statusRef.current : ''} notifications
+                </Text>
+              </View>
+            ) : null
+          }
+        />
+      )}
     </Wrapper>
   );
 };
