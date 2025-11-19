@@ -47,13 +47,13 @@ const DRAWER_ROUTES = [
         key: "faqs",
         title: "FAQ’s",
         icon: images.drawer_icons.faqs,
-        route: NAVIGATORS.BOTTOM,
+        route: NAVIGATORS.FAQS_STACK,
     },
     {
         key: "about",
         title: "About Us",
         icon: images.drawer_icons.about,
-        route: NAVIGATORS.BOTTOM,
+        route: NAVIGATORS.ABOUT_US_STACK,
     },
     {
         key: "contact",

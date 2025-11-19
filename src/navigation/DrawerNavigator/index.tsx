@@ -15,6 +15,8 @@ import OfflineContentStackNavigator from '../OfflineContentStackNavigator';
 import MyAppointmentsStackNavigator from '../MyAppointmentsStackNavigator';
 import Options from '../Options';
 import WishlistStackNavigator from '../WishlistStackNavigator';
+import AboutUsStackNavigator from '../AboutUsStackNavigator';
+import FaqsStackNavigator from '../FaqsStackNavigator';
 
 const Drawer = createDrawerNavigator();
 
@@ -31,6 +33,8 @@ const DrawerNavigator = () => {
             <Drawer.Screen name={NAVIGATORS.MY_APPOINTMENTS_STACK} component={MyAppointmentsStackNavigator} />
             <Drawer.Screen name={NAVIGATORS.NOTIFICATION_STACK} component={NotificationStackNavigator} />
             <Drawer.Screen name={NAVIGATORS.CONTACT_STACK} component={ContactStackNavigator} />
+            <Drawer.Screen name={NAVIGATORS.ABOUT_US_STACK} component={AboutUsStackNavigator} />
+            <Drawer.Screen name={NAVIGATORS.FAQS_STACK} component={FaqsStackNavigator} />
             <Drawer.Screen name={ROUTES.SERVICE_DETAILS} component={ServiceDetails} options={(props) => Options(props, authorized)} />
             <Drawer.Screen name={ROUTES.CHANGE_PASSWORD} component={ChangePassword} options={(props) => Options(props, authorized)} />
             <Drawer.Screen name={ROUTES.EDIT_PROFILE} component={EditProfile} options={(props) => Options(props, authorized)} />

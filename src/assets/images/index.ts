@@ -34,6 +34,8 @@ const images = {
   play: require('./play.png'),
   play_rounded: require('./play_rounded.png'),
   pause_rounded: require('./pause_rounded.png'),
+  down_arrow: require('./down_arrow.png'),
+  up_arrow: require('./up_arrow.png'),
   service: {
     one: require('./service_one.png'),
   },

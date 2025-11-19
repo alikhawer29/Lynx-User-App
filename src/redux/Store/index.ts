@@ -14,6 +14,7 @@ import { slotApi } from '../Apis/Slot';
 import { userApi } from '../Apis/User';
 import authReducer from '../Slices/AuthSlice';
 import spotifyReducer from '../Slices/SpotifySlice';
+import { faqsApi } from '../Apis/Faqs';
 
 const persistConfig = {
   key: 'lynx',
@@ -30,6 +31,7 @@ const rootReducer = combineReducers({
   [serviceApi.reducerPath]: serviceApi.reducer,
   [feedbackApi.reducerPath]: feedbackApi.reducer,
   [generalApi.reducerPath]: generalApi.reducer,
+  [faqsApi.reducerPath]: faqsApi.reducer,
   [contentApi.reducerPath]: contentApi.reducer,
   [slotApi.reducerPath]: slotApi.reducer,
   [bookingApi.reducerPath]: bookingApi.reducer,
@@ -49,6 +51,7 @@ export const store = configureStore({
       .concat(serviceApi.middleware)
       .concat(feedbackApi.middleware)
       .concat(generalApi.middleware)
+      .concat(faqsApi.middleware)
       .concat(contentApi.middleware)
       .concat(slotApi.middleware)
       .concat(bookingApi.middleware)

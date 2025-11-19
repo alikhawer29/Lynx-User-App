@@ -97,6 +97,14 @@ export type MyProfileStackParamList = {
     MyProfile: undefined;
 }
 
+export type AboutUsStackParamList = {
+    AboutUs: undefined;
+}
+
+export type FaqsStackParamList = {
+    Faqs: undefined;
+}
+
 export type ContactUsStackParamList = {
     ContactUs: undefined;
 }

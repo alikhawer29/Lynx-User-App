@@ -36,7 +36,7 @@ const ContactUs = () => {
                 {({ values: data, handleSubmit, handleChange, errors, touched }) => (
                     <KeyboardAvoidingWrapper>
                         <View style={styles.container}>
-                            <Text weight="bold" size={23} style={styles.item} position="left">Contact Us</Text>
+                            {/* <Text weight="bold" size={23} style={styles.item} position="left">Contact Us</Text> */}
                             <Text color={colors.dark_gray} style={styles.item}>Please let us know how we can improve your experience.</Text>
                             <Input
                                 label="Full Name"

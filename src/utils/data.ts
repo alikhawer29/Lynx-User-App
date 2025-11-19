@@ -1,8 +1,7 @@
 import images from '../assets/images';
 
-export const BASE_URL =
-  'http://custom-dev.onlinetestingserver.com:15413/lynx/v1/api';
-// export const BASE_URL = 'http://10.0.2.2:5000/lynx/v1/api';
+// export const BASE_URL =  'http://custom-dev.onlinetestingserver.com:15413/lynx/v1/api';
+export const BASE_URL = 'http://10.0.2.2:5000/lynx/v1/api';
 
 export const USER = {
   first_name: 'John',
