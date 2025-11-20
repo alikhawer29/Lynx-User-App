@@ -13,6 +13,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#C2C2C2',
     borderRadius: widthPixel(8),
+    marginBottom: heightPixel(10),
   },
   avatar: {
     width: widthPixel(50),

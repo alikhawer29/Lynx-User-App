@@ -12,15 +12,23 @@ import { persistor, store } from './src/redux/Store';
 import colors from './src/utils/colors';
 import { navigationRef } from './src/utils/navigation';
 import { StripeProvider } from '@stripe/stripe-react-native';
+import { useSocket } from './src/hooks';
 
 // Replace with your actual Stripe publishable key
 const STRIPE_PUBLISHABLE_KEY = 'pk_test_51OHpI2EN9IooQZRaU3MAJ8mKTWdFhvI7vequEoOlA9qlEOP1gdLKSB01ec6GeJkfAjHgQjipR85UligbuLBs5UaI00aoghaww7';
+
+// Component to initialize socket
+const SocketInitializer = () => {
+  useSocket();
+  return null;
+};
 
 function App() {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <StripeProvider publishableKey={STRIPE_PUBLISHABLE_KEY}>
+          <SocketInitializer />
           <View style={styles.container}>
             <StatusBar
               barStyle={'dark-content'}

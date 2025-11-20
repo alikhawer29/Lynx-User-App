@@ -195,6 +195,10 @@ export type MyAppointmentsStackParamList = {
         floor?: string;
         viewOnly?: boolean;
     };
+    ChatRoom: {
+        chatRoom: any;
+        bookingId?: string;
+    };
 }
 
 export type WishlistStackParamList = {

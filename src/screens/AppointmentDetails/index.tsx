@@ -143,12 +143,7 @@ const AppointmentDetails = () => {
   const subStatus = booking.booking_status || 'upcoming';
   const subStatusColors = getSubStatusColor(subStatus);
 
-  // 1. Review and Report buttons - should show when booking_status is "approved"
   const canShowReviewAndReport = booking.booking_status?.toLowerCase() === 'completed';
-
-  // 2. Refund button - show when:
-  //    - status is "pending" OR
-  //    - status is "approved" AND booking_status is "upcoming"
   const canRefund =
     booking.status?.toLowerCase() === 'pending' ||
     (booking.status?.toLowerCase() === 'approved' &&
@@ -157,9 +152,7 @@ const AppointmentDetails = () => {
   // 3. Reschedule approve/reject buttons - show when status is "requested"
   const hasRescheduleRequest = booking.status?.toLowerCase() === 'requested';
 
-  const canChat = booking.status?.toLowerCase() === 'approved' &&
-    (booking.booking_status?.toLowerCase() === 'upcoming' ||
-      booking.booking_status?.toLowerCase() === 'in_progress');
+  const canChat = booking.status?.toLowerCase() === 'approved' && booking.booking_status?.toLowerCase() === 'in_progress';
 
   return (
     <Wrapper>
@@ -177,7 +170,6 @@ const AppointmentDetails = () => {
         {/* Service Image */}
         <Image
           source={{ uri: booking?.service_id?.image_url || 'https://via.placeholder.com/400x200' }}
-          // source={{ uri: 'https://img1.hscicdn.com/image/upload/f_auto,t_ds_wide_w_1200,q_60/lsci/db/PICTURES/CMS/409100/409144.6.jpg' }}
           style={styles.service_image}
           resize="cover"
         />
@@ -187,7 +179,6 @@ const AppointmentDetails = () => {
           <View style={styles.provider_info}>
             <Image
               source={{ uri: booking?.provider_id?.image_url || 'https://via.placeholder.com/400x200' }}
-              // source={{ uri: 'https://img1.hscicdn.com/image/upload/f_auto,t_ds_wide_w_1200,q_60/lsci/db/PICTURES/CMS/409100/409144.6.jpg' }}
               style={styles.provider_avatar}
               resize="cover"
             />

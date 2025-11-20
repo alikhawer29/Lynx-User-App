@@ -55,7 +55,12 @@ const ChatRoom = () => {
         </View>
       );
     }
-    return <Empty label="No messages yet. Start the conversation!" />;
+    // Wrap in a View with scaleY: -1 to counter the inverted FlatList
+    return (
+      <View style={{ transform: [{ scaleY: -1 }] }}>
+        <Empty label="" />
+      </View>
+    );
   };
 
   const renderFooter = () => {

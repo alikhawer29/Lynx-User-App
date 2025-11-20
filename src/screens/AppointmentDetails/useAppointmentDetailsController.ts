@@ -12,7 +12,6 @@ import {
 import { useCreateAppointmentChatMutation } from '../../redux/Apis/Chat';
 import { openMultipleImagePicker } from '../../utils/picker';
 import { formHandler } from '../../utils/helper';
-import { navigate } from '../../utils/navigation';
 import { ROUTES } from '../../utils/routes';
 
 type AppointmentDetailsRouteProp = RouteProp<
@@ -288,12 +287,15 @@ const useAppointmentDetailsController = () => {
         booking_id: booking._id,
       }).unwrap();
       if (response?.data) {
-        navigate(ROUTES.CHAT_ROOM, { chatRoom: response.data });
+        // Navigate to ChatRoom screen (now registered in MyAppointmentsStackNavigator)
+        navigation.navigate(ROUTES.CHAT_ROOM, {
+          chatRoom: response.data,
+        });
       }
     } catch (error) {
       console.error('Failed to create chat:', error);
     }
-  }, [booking, createAppointmentChat]);
+  }, [booking, createAppointmentChat, navigation]);
 
   return {
     values: {
