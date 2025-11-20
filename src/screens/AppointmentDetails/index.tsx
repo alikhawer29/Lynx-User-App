@@ -20,6 +20,7 @@ import Ratings from '../../components/Ratings';
 import Badge from '../../components/Badge';
 import Icon from '../../components/Icon';
 import images from '../../assets/images';
+import Touchable from '../../components/Touchable';
 
 const AppointmentDetails = () => {
   const {
@@ -76,6 +77,7 @@ const AppointmentDetails = () => {
       onCloseReviewSuccess,
       setReviewText,
       setRating,
+      onPressChat,
     },
   } = useAppointmentDetailsController();
 
@@ -233,14 +235,31 @@ const AppointmentDetails = () => {
           </View>
         </View>
 
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-          <Icon
-            source={images.chat}
-            size={30}
-          />
-          <Text size={18} style={styles.chat_text}>Start Chat</Text>
-        </View>
-
+        {canChat &&
+          <Touchable
+            onPress={onPressChat}
+            disabled={!canChat}
+            style={[
+              styles.chat_button,
+              !canChat && styles.chat_button_disabled
+            ]}
+          >
+            <Icon
+              source={images.chat}
+              size={30}
+              tint_color={canChat ? colors.primary : colors.medium_gray}
+            />
+            <Text
+              size={18}
+              style={[
+                styles.chat_text,
+                !canChat && styles.chat_text_disabled
+              ]}
+            >
+              Start Chat
+            </Text>
+          </Touchable>
+        }
 
         {/* Booking Details Section */}
         <Text style={styles.section_title}>Booking Details</Text>

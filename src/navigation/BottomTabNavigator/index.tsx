@@ -1,4 +1,5 @@
 import { BottomTabBarProps, createBottomTabNavigator } from "@react-navigation/bottom-tabs"
+import { getFocusedRouteNameFromRoute } from "@react-navigation/native"
 import React from "react"
 import { TouchableOpacity, View } from "react-native"
 import images from "../../assets/images"
@@ -7,7 +8,7 @@ import Text from "../../components/Text"
 import { useAppSelector } from "../../hooks"
 import { selectLoggedIn } from "../../redux/Slices/AuthSlice"
 import colors from "../../utils/colors"
-import { NAVIGATORS } from "../../utils/routes"
+import { NAVIGATORS, ROUTES } from "../../utils/routes"
 import ChatStackNavigator from "../ChatStackNavigator"
 import HomeStackNavigator from "../HomeStackNavigator"
 import ProfileStackNavigator from "../ProfileStackNavigator"
@@ -107,7 +108,7 @@ const BottomTabNavigator: React.FC = () => {
                     <Tab.Screen
                         name={NAVIGATORS.CHAT_STACK}
                         component={ChatStackNavigator}
-                        options={{
+                        options={({ route }) => ({
                             tabBarIcon: ({ focused }) => (
                                 <Icon
                                     size={24}
@@ -116,7 +117,14 @@ const BottomTabNavigator: React.FC = () => {
                                 />
                             ),
                             tabBarLabel: "Chats",
-                        }}
+                            tabBarStyle: ((route) => {
+                                const routeName = getFocusedRouteNameFromRoute(route) ?? '';
+                                if (routeName === ROUTES.CHAT_ROOM) {
+                                    return { display: 'none' };
+                                }
+                                return styles.tab_bar;
+                            })(route),
+                        })}
                     />
                     <Tab.Screen
                         name={NAVIGATORS.MY_PROFILE_STACK}

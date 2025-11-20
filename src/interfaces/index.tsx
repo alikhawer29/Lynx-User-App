@@ -91,6 +91,11 @@ export type NotificationStackParamList = {
 
 export type ChatStackParamList = {
     Chat: undefined;
+    ChatList: undefined;
+    ChatRoom: {
+        chatRoom: any;
+        bookingId?: string;
+    };
 }
 
 export type MyProfileStackParamList = {

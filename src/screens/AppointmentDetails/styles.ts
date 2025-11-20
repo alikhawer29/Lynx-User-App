@@ -109,10 +109,25 @@ const styles = StyleSheet.create({
     color: colors.black,
   },
 
+  chat_button: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingVertical: heightPixel(12),
+    paddingHorizontal: widthPixel(16),
+    borderRadius: widthPixel(8),
+    backgroundColor: '#F5F5F5',
+  },
+  chat_button_disabled: {
+    opacity: 0.5,
+  },
   chat_text: {
     fontSize: 18,
     color: colors.primary,
     fontWeight: 'bold',
+  },
+  chat_text_disabled: {
+    color: colors.medium_gray,
   },
   price_type: {
     fontSize: 12,

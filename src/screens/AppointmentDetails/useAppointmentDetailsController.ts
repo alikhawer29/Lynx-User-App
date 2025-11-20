@@ -9,8 +9,11 @@ import {
   useReportBookingMutation,
   useReviewBookingMutation,
 } from '../../redux/Apis/Booking';
+import { useCreateAppointmentChatMutation } from '../../redux/Apis/Chat';
 import { openMultipleImagePicker } from '../../utils/picker';
 import { formHandler } from '../../utils/helper';
+import { navigate } from '../../utils/navigation';
+import { ROUTES } from '../../utils/routes';
 
 type AppointmentDetailsRouteProp = RouteProp<
   MyAppointmentsStackParamList,
@@ -35,6 +38,8 @@ const useAppointmentDetailsController = () => {
     useReportBookingMutation();
   const [reviewBooking, { isLoading: isReviewLoading }] =
     useReviewBookingMutation();
+  const [createAppointmentChat, { isLoading: isChatLoading }] =
+    useCreateAppointmentChatMutation();
 
   const [showRefundPolicyModal, setShowRefundPolicyModal] = useState(false);
   const [showRefundReasonModal, setShowRefundReasonModal] = useState(false);
@@ -274,6 +279,22 @@ const useAppointmentDetailsController = () => {
     onRefreshDetails();
   }, [onRefreshDetails]);
 
+  // Chat function
+  const onPressChat = useCallback(async () => {
+    if (!booking?._id) return;
+
+    try {
+      const response = await createAppointmentChat({
+        booking_id: booking._id,
+      }).unwrap();
+      if (response?.data) {
+        navigate(ROUTES.CHAT_ROOM, { chatRoom: response.data });
+      }
+    } catch (error) {
+      console.error('Failed to create chat:', error);
+    }
+  }, [booking, createAppointmentChat]);
+
   return {
     values: {
       booking,
@@ -334,6 +355,8 @@ const useAppointmentDetailsController = () => {
       onCloseReviewSuccess,
       setReviewText,
       setRating,
+      // Chat function
+      onPressChat,
     },
   };
 };

@@ -51,6 +51,8 @@ const ROUTES = {
   // old
   PROGRESS_TRACKING: 'ProgressTracking',
   CHAT: 'Chat',
+  CHAT_LIST: 'ChatList',
+  CHAT_ROOM: 'ChatRoom',
   MY_PROFILE: 'MyProfile',
   EDIT_PROFILE: 'EditProfile',
   CHANGE_PASSWORD: 'ChangePassword',
@@ -236,6 +238,24 @@ const ROUTES_OPTIONS = [
     profile: false,
     title: 'View Video',
     bottom_tab: false,
+  },
+  {
+    route_name: ROUTES.CHAT_LIST,
+    left: 'drawer',
+    right: 'notifications',
+    profile: false,
+    title: 'Chats',
+    bottom_tab: true,
+    auth: true,
+  },
+  {
+    route_name: ROUTES.CHAT_ROOM,
+    left: 'back',
+    right: null,
+    profile: false,
+    title: 'Chat',
+    bottom_tab: false,
+    auth: true,
   },
 ] as const;
 

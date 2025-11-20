@@ -11,6 +11,7 @@ import {
   MyAppointmentsStackParamList,
   RootStackParamList,
   ServiceStackParamList,
+  ChatStackParamList,
 } from '../interfaces';
 
 // Add navigator types for cross-stack navigation
@@ -32,6 +33,7 @@ type CombinedParamList = RootStackParamList &
   EducationalContentStackParamList &
   OfflineContentStackParamList &
   MyAppointmentsStackParamList &
+  ChatStackParamList &
   NavigatorParamList;
 
 export const navigationRef = createNavigationContainerRef<CombinedParamList>();

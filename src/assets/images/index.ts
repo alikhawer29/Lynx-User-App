@@ -1,4 +1,5 @@
 const images = {
+  default_profile: require('./user-profile-pic.png'),
   chat: require('./main_chat.png'),
   logo: require('./logo.png'),
   calendar: require('./calendar.png'),
@@ -36,6 +37,8 @@ const images = {
   pause_rounded: require('./pause_rounded.png'),
   down_arrow: require('./down_arrow.png'),
   up_arrow: require('./up_arrow.png'),
+  send: require('./send.png'),
+  attachment: require('./attachment.png'),
   service: {
     one: require('./service_one.png'),
   },
