@@ -25,6 +25,15 @@ export type BottomTabParamList = {
 const Tab = createBottomTabNavigator<BottomTabParamList>()
 
 const CustomTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, navigation }) => {
+    // Check if we're on ChatRoom screen
+    const currentRoute = state.routes[state.index];
+    const routeName = getFocusedRouteNameFromRoute(currentRoute);
+
+    // Hide tab bar on ChatRoom screen
+    if (routeName === ROUTES.CHAT_ROOM) {
+        return null;
+    }
+
     return (
         <View style={[styles.tab_bar, { justifyContent: "space-between" }]}>
             {state.routes.map((route, index) => {
@@ -108,7 +117,7 @@ const BottomTabNavigator: React.FC = () => {
                     <Tab.Screen
                         name={NAVIGATORS.CHAT_STACK}
                         component={ChatStackNavigator}
-                        options={({ route }) => ({
+                        options={{
                             tabBarIcon: ({ focused }) => (
                                 <Icon
                                     size={24}
@@ -117,14 +126,7 @@ const BottomTabNavigator: React.FC = () => {
                                 />
                             ),
                             tabBarLabel: "Chats",
-                            tabBarStyle: ((route) => {
-                                const routeName = getFocusedRouteNameFromRoute(route) ?? '';
-                                if (routeName === ROUTES.CHAT_ROOM) {
-                                    return { display: 'none' };
-                                }
-                                return styles.tab_bar;
-                            })(route),
-                        })}
+                        }}
                     />
                     <Tab.Screen
                         name={NAVIGATORS.MY_PROFILE_STACK}
