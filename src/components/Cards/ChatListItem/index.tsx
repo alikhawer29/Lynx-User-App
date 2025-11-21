@@ -22,8 +22,6 @@ const ChatListItem: React.FC<ChatListItemProps> = ({ chat, onPress }) => {
     ? 'Customer Support'
     : `${otherUser?.first_name || ''} ${otherUser?.last_name || ''}`.trim();
 
-  console.log(displayName, 'displayName')
-
   const avatarUrl = otherUser?.image_url;
   const lastMessageText = chat.last_message_text || '?';
   const lastMessageTime = chat.last_message_time

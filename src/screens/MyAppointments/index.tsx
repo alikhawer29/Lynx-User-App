@@ -47,7 +47,7 @@ const MyAppointments = () => {
         return { bg: 'rgba(129, 159, 45, 0.2)', text: '#819F2D' };
       case 'in_progress':
         return { bg: 'rgba(248, 100, 0, 0.2)', text: '#F86400' };
-      case 'completed':
+      case 'past':
         return { bg: 'rgba(0, 225, 15, 0.2)', text: '#00E10F' };
       default:
         return { bg: '#F5F5F5', text: '#757575' };

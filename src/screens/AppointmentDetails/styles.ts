@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scroll_content: {
-    paddingHorizontal: GLOBAL_HORIZONTAL_PADDING,
+    // paddingHorizontal: GLOBAL_HORIZONTAL_PADDING,
     paddingBottom: heightPixel(100),
   },
   loading_container: {
@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#333333',
     marginBottom: heightPixel(4),
-    fontWeight: 'bold',
+    fontWeight: 'medium',
   },
   detail_value: {
     fontSize: 14,

@@ -41,7 +41,7 @@ export interface ChatMessage {
 }
 
 export interface ChatRoom {
-  is_chat_active: any;
+  is_chat_active: boolean;
   _id: string;
   chat_type: 'support' | 'appointment';
   participants: string[];
@@ -92,4 +92,3 @@ export interface ChatRoomResponse {
   success: boolean;
   data: ChatRoom;
 }
-

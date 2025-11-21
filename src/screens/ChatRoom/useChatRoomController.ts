@@ -79,8 +79,15 @@ const useChatRoomController = () => {
       return true; // Support chat is always available
     }
 
+    console.log(chatRoom, 'chatRoomchatRoom');
+    console.log('is_chat_active value:', chatRoom?.is_chat_active);
+    console.log('is_chat_active type:', typeof chatRoom?.is_chat_active);
+
     // For appointment chat, check if booking exists and is completed
-    return chatRoom?.is_chat_active;
+    // If is_chat_active is undefined, default to true (allow chat)
+    return chatRoom?.is_chat_active !== undefined
+      ? chatRoom.is_chat_active
+      : true;
   }, [chatRoom]);
 
   const disabledMessage = useMemo(() => {

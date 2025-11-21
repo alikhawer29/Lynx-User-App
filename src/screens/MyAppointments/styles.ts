@@ -5,19 +5,20 @@ import { heightPixel, widthPixel } from '../../utils/helper';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    // width: '100%',
   },
   filter_container: {
     paddingVertical: heightPixel(15),
   },
   filter_scroll: {
-    paddingHorizontal: widthPixel(20),
+    // paddingHorizontal: widthPixel(20),
   },
   filter_tab: {
     paddingHorizontal: widthPixel(16),
-    paddingVertical: heightPixel(8),
+    paddingVertical: heightPixel(5),
     borderRadius: heightPixel(20),
     marginRight: widthPixel(10),
-    backgroundColor: colors.white,
+    // backgroundColor: colors.white,
     borderWidth: 1,
     borderColor: colors.medium_gray,
   },
@@ -34,24 +35,14 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   list_container: {
-    paddingHorizontal: widthPixel(20),
     paddingBottom: heightPixel(20),
   },
   booking_card: {
-    backgroundColor: colors.white,
     borderRadius: heightPixel(12),
     padding: heightPixel(15),
     marginBottom: heightPixel(15),
     borderWidth: 1,
-    borderColor: colors.light_gray,
-    shadowColor: colors.black,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-    elevation: 3,
+    borderColor: '#C2C2C2',
   },
   label_text: {
     fontSize: 14,

@@ -81,14 +81,6 @@ const BookService = () => {
             </Wrapper>
         )
     }
-
-    console.log('editMode', editMode)
-    console.log('showAddress', showAddress)
-    console.log('showContact', showContact)
-    console.log('showServiceDetails', showServiceDetails)
-
-
-
     const price = selectedTier === 0 ? service.category.price.normal : service.category.price.premium
     const priceType = selectedTier === 0 ? 'Normal' : 'Premium'
 
@@ -124,24 +116,11 @@ const BookService = () => {
 
 
                 {/* Address Details Section */}
-                {/* Show form when: (normal mode AND not completed) OR (edit mode AND editing address) */}
-                {/* Show summary when: (normal mode AND completed) OR (edit mode AND NOT editing address) */}
                 {(!showAddress && !editMode) || (editMode === 'address') ? (
                     // ADDRESS FORM
                     <View style={styles.section} >
                         <Row align="center" justify="space-between">
                             <Text size={20} weight="bold" line_height={22}>Address Details</Text>
-                            {/* {address && (
-                                <Text
-                                    size={14}
-                                    weight="bold"
-                                    color={colors.primary}
-                                    underline
-                                    onPress={onEditLocation}
-                                >
-                                    Edit
-                                </Text>
-                            )} */}
                         </Row>
 
                         {address ? (

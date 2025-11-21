@@ -35,8 +35,6 @@ const Notifications = () => {
     }
   };
 
-  console.log(notificationData, 'notificationData')
-
   return (
     <Wrapper paddingHorizontal={false}>
       <Row

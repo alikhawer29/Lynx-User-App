@@ -69,12 +69,6 @@ const useBookServiceController = () => {
   );
   const hasService = !!(params?.selectedTimeSlot && params?.selectedDate);
 
-  // State logic:
-  // showAddress: false = show form, true = show summary
-  // showContact: false = show form, true = show summary
-  // showContactDetails: true = expand contact form fields
-  // showServiceDetails: true = expand service form fields
-
   const [showContactDetails, setShowContactDetails] = useState(
     editMode === 'contact' ? true : !hasContact,
   );
@@ -313,11 +307,6 @@ const useBookServiceController = () => {
   );
 
   const onSelectDate = useCallback((date: string, dayName: string) => {
-    // Prevent selecting Sundays
-    // if (dayName === 'SUN') {
-    //   return;
-    // }
-
     setSelectedDate(date);
     setSelectedTimeSlot(''); // Reset selected time slot when date changes
     setSelectedSlotId(''); // Reset selected slot ID when date changes

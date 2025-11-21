@@ -27,6 +27,8 @@ const ChatRoom = () => {
     },
   } = useChatRoomController();
 
+  console.log(canSendMessages, 'canSendMessages')
+
   const renderMessage = ({ item, index }: { item: ChatMessage; index: number }) => {
     const previousMessage = index > 0 ? messages[index - 1] : null;
     const showDateSeparator =

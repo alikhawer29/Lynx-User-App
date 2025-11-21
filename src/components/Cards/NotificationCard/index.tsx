@@ -145,19 +145,6 @@ const NotificationCard: FC<NotificationCardProps> = ({ data, onPress }) => {
                             </Text>
                         </View>
                     </Row>
-
-                    {/* Unread Indicator */}
-                    {!read && (
-                        <View
-                            style={{
-                                width: 8,
-                                height: 8,
-                                borderRadius: 4,
-                                backgroundColor: colors.primary,
-                                marginTop: 8,
-                            }}
-                        />
-                    )}
                 </View>
             </Row>
         </TouchableOpacity>

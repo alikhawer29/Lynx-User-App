@@ -18,8 +18,8 @@ type FilterType =
   | 'rejected'
   | 'requested'
   | 'upcoming'
-  | 'in-progress'
-  | 'completed';
+  | 'in_progress'
+  | 'past';
 
 const FILTER_TABS: { key: FilterType; label: string }[] = [
   { key: 'all', label: 'All' },
@@ -27,10 +27,9 @@ const FILTER_TABS: { key: FilterType; label: string }[] = [
   { key: 'cancelled', label: 'Cancelled' },
   { key: 'approved', label: 'Approved' },
   { key: 'rejected', label: 'Rejected' },
-  { key: 'requested', label: 'Requested' },
   { key: 'upcoming', label: 'Upcoming' },
-  { key: 'in-progress', label: 'In-Progress' },
-  { key: 'completed', label: 'Past' },
+  { key: 'in_progress', label: 'In-Progress' },
+  { key: 'past', label: 'Past' },
 ];
 
 const useMyAppointmentsController = () => {
@@ -56,21 +55,21 @@ const useMyAppointmentsController = () => {
 
         // Add filter params based on selected filter
         if (filterType !== 'all') {
-          if (
-            filterType === 'pending' ||
-            filterType === 'approved' ||
-            filterType === 'rejected'
-          ) {
+          // Status filters
+          const statusFilters = [
+            'pending',
+            'approved',
+            'rejected',
+            'cancelled',
+          ];
+          if (statusFilters.includes(filterType)) {
             params.status = filterType;
-          } else if (
-            filterType === 'upcoming' ||
-            filterType === 'in-progress'
-          ) {
+          }
+
+          // Booking status filters
+          const bookingFilters = ['upcoming', 'in_progress', 'past'];
+          if (bookingFilters.includes(filterType)) {
             params.booking_status = filterType;
-          } else if (filterType === 'completed') {
-            params.booking_status = 'completed';
-          } else if (filterType === 'cancelled') {
-            params.status = 'cancelled';
           }
         }
 

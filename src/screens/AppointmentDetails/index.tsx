@@ -105,7 +105,7 @@ const AppointmentDetails = () => {
         return { bg: 'rgba(129, 159, 45, 0.2)', text: '#819F2D' };
       case 'in_progress':
         return { bg: 'rgba(248, 100, 0, 0.2)', text: '#F86400' };
-      case 'completed':
+      case 'past':
         return { bg: 'rgba(0, 225, 15, 0.2)', text: '#00E10F' };
       default:
         return { bg: '#F5F5F5', text: '#757575' };
@@ -143,7 +143,9 @@ const AppointmentDetails = () => {
   const subStatus = booking.booking_status || 'upcoming';
   const subStatusColors = getSubStatusColor(subStatus);
 
-  const canShowReviewAndReport = booking.booking_status?.toLowerCase() === 'completed';
+  const canShowReviewAndReport = booking.booking_status?.toLowerCase() === 'past';
+
+  console.log(canShowReviewAndReport, 'canShowReviewAndReport')
   const canRefund =
     booking.status?.toLowerCase() === 'pending' ||
     (booking.status?.toLowerCase() === 'approved' &&

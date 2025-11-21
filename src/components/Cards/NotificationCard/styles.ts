@@ -4,7 +4,6 @@ import colors from '../../../utils/colors';
 
 const styles = StyleSheet.create({
   container: {
-    height: heightPixel(95),
     width: '100%',
     paddingHorizontal: GLOBAL_HORIZONTAL_PADDING,
     marginVertical: heightPixel(10),
@@ -21,7 +20,6 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 0.84,
-    height: '100%',
     justifyContent: 'space-between',
     paddingVertical: heightPixel(6),
   },
