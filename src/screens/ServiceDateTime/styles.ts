@@ -109,6 +109,39 @@ const styles = StyleSheet.create({
   continue_button: {
     marginTop: heightPixel(20),
   },
+  modal_overlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  blur: {
+    ...StyleSheet.absoluteFillObject,
+  },
+  modal_content: {
+    width: '70%',
+    backgroundColor: colors.white,
+    borderRadius: heightPixel(10),
+    padding: heightPixel(20),
+    paddingBottom: heightPixel(30),
+    alignItems: 'center',
+  },
+  close_icon: {
+    alignSelf: 'flex-end',
+    marginBottom: heightPixel(10),
+  },
+  modal_icon: {
+    height: heightPixel(78),
+    width: heightPixel(78),
+    resizeMode: 'contain',
+    marginBottom: heightPixel(20),
+  },
+  modal_title: {
+    marginBottom: heightPixel(10),
+  },
+  modal_message: {
+    marginBottom: heightPixel(30),
+    width: '80%',
+  },
 });
 
 export default styles;

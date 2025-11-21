@@ -7,9 +7,17 @@ import {
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useCallback, useState } from 'react';
 import { ServiceStackParamList } from '../../interfaces';
-import { ROUTES } from '../../utils/routes';
-import { useCreateBookingMutation } from '../../redux/Apis/Booking';
+import { ROUTES, NAVIGATORS } from '../../utils/routes';
+import {
+  useCreateBookingMutation,
+  useCreatePaymentIntentMutation,
+  useUpdatePaymentStatusMutation,
+} from '../../redux/Apis/Booking';
 import dayjs from 'dayjs';
+import { useStripe } from '@stripe/stripe-react-native';
+import { Alert } from 'react-native';
+import { navigationRef } from '../../utils/navigation';
+import { CommonActions } from '@react-navigation/native';
 
 type ServiceDateTimeRouteProp = RouteProp<
   ServiceStackParamList,
@@ -25,6 +33,10 @@ const useServiceDateTimeController = () => {
   const navigation = useNavigation<ServiceDateTimeNavigationProp>();
   const [createBooking, { isLoading: isBookingLoading }] =
     useCreateBookingMutation();
+  const { initPaymentSheet, presentPaymentSheet } = useStripe();
+  const [createPaymentIntent, { isLoading: isCreatingIntent }] =
+    useCreatePaymentIntentMutation();
+  const [updatePaymentStatus] = useUpdatePaymentStatusMutation();
 
   const [sessionTime, setSessionTime] = useState<'AM' | 'PM'>('AM');
   const [sessionDate, setSessionDate] = useState<string>(
@@ -36,6 +48,14 @@ const useServiceDateTimeController = () => {
   const [selectedSlotId, setSelectedSlotId] = useState<string>(
     params?.selectedSlotId || '',
   );
+
+  // Payment-related state
+  const [bookingId, setBookingId] = useState<string>('');
+  const [bookingNumber, setBookingNumber] = useState<string>('');
+  const [paymentId, setPaymentId] = useState<string>('');
+  const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
+  const [paymentSheetReady, setPaymentSheetReady] = useState<boolean>(false);
 
   // State for address, contact, and other details
   const [address, setAddress] = useState<string>(params?.address || '');
@@ -204,18 +224,21 @@ const useServiceDateTimeController = () => {
     sessionDate,
   ]);
 
+  // Create booking and initialize payment
   const onContinue = useCallback(async () => {
+    if (isProcessing) return;
+
+    setIsProcessing(true);
+
     try {
-      // Extract time from selectedTimeSlot (e.g., "06:00 AM - 06:30 AM" -> "06:00")
+      // Step 1: Create booking
       const timeMatch = selectedTimeSlot.match(/(\d{2}:\d{2})/);
       const sessionTimeFormatted = timeMatch ? timeMatch[1] : '00:00';
-
-      // Format date to YYYY-MM-DD
       const sessionDateFormatted = dayjs(sessionDate, 'DD/MM/YYYY').format(
         'YYYY-MM-DD',
       );
 
-      const payload = {
+      const bookingPayload = {
         service_id: params.service._id,
         category_id: params.service.category._id || params.service._id,
         price_type: params.selectedTier === 0 ? 'normal' : 'premium',
@@ -241,31 +264,90 @@ const useServiceDateTimeController = () => {
         slot_id: selectedSlotId,
       };
 
-      const result = await createBooking(payload).unwrap();
+      const bookingResult = await createBooking(bookingPayload).unwrap();
 
-      // Navigate to payment screen with booking_id
-      if (result?.data?._id) {
-        navigation.navigate(ROUTES.PAYMENT_DETAILS, {
-          service: params.service,
-          selectedTier: params.selectedTier,
-          address: address,
-          floor: floor,
-          firstName: firstName || '',
-          lastName: lastName || '',
-          phone: phone || '',
-          email: email || '',
-          sessionTime,
-          sessionDate,
-          availableHours: selectedTimeSlot,
-          bookingId: result.data._id,
-          bookingNumber: result.data.booking_id || result.data._id,
-        });
+      if (!bookingResult?.data?._id) {
+        throw new Error('Failed to create booking');
+      }
+
+      const createdBookingId = bookingResult.data._id;
+      const createdBookingNumber =
+        bookingResult.data.booking_id || bookingResult.data._id;
+
+      setBookingId(createdBookingId);
+      setBookingNumber(createdBookingNumber);
+
+      // Step 2: Create payment intent
+      const paymentIntentResult = await createPaymentIntent({
+        booking_id: createdBookingId,
+      }).unwrap();
+
+      if (!paymentIntentResult?.data?.clientSecret) {
+        throw new Error('Failed to create payment intent');
+      }
+
+      setPaymentId(paymentIntentResult.data.paymentId);
+
+      // Step 3: Initialize payment sheet
+      const { error: initError } = await initPaymentSheet({
+        merchantDisplayName: 'Lynx Consultancy',
+        paymentIntentClientSecret: paymentIntentResult.data.clientSecret,
+        defaultBillingDetails: {
+          name: params?.service?.category?.name || 'Customer',
+        },
+        returnURL: 'lynx://payment-complete',
+      });
+
+      if (initError) {
+        console.error('Error initializing payment sheet:', initError);
+        Alert.alert('Error', 'Failed to initialize payment. Please try again.');
+        setIsProcessing(false);
+        return;
+      }
+
+      setPaymentSheetReady(true);
+
+      // Step 4: Present payment sheet
+      const { error: presentError } = await presentPaymentSheet();
+
+      if (presentError) {
+        console.error('Payment failed:', presentError);
+        setIsProcessing(false);
+
+        if (presentError.code === 'Canceled') {
+          console.log('Payment canceled by user');
+        } else {
+          Alert.alert(
+            'Payment Failed',
+            presentError.message || 'Something went wrong. Please try again.',
+          );
+        }
+      } else {
+        // Payment successful
+        console.log('Payment successful!');
+
+        // Update payment status in backend
+        try {
+          await updatePaymentStatus({
+            id: paymentIntentResult.data.paymentId,
+            payment_status: 'succeeded',
+            payment_method: 'card',
+          }).unwrap();
+        } catch (updateError) {
+          console.error('Failed to update payment status:', updateError);
+        }
+
+        setIsProcessing(false);
+        setShowSuccessModal(true);
       }
     } catch (error) {
-      console.error('Booking error:', error);
+      console.error('Booking/Payment error:', error);
       console.error('Error details:', JSON.stringify(error, null, 2));
+      setIsProcessing(false);
+      Alert.alert('Error', 'Failed to process booking. Please try again.');
     }
   }, [
+    isProcessing,
     params.service,
     params.selectedTier,
     address,
@@ -275,15 +357,16 @@ const useServiceDateTimeController = () => {
     firstName,
     lastName,
     phone,
-    phoneCountry,
     phoneDialingCode,
     email,
-    sessionTime,
     sessionDate,
     selectedTimeSlot,
     selectedSlotId,
-    navigation,
     createBooking,
+    createPaymentIntent,
+    initPaymentSheet,
+    presentPaymentSheet,
+    updatePaymentStatus,
   ]);
 
   const onViewAddress = useCallback(() => {
@@ -334,6 +417,25 @@ const useServiceDateTimeController = () => {
     sessionDate,
   ]);
 
+  // Handle success modal OK button - navigate to My Appointments
+  const onSuccessOk = useCallback(() => {
+    setShowSuccessModal(false);
+
+    // Reset navigation to My Appointments to prevent going back to payment screen
+    if (navigationRef.isReady()) {
+      navigationRef.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [
+            {
+              name: NAVIGATORS.MY_APPOINTMENTS_STACK,
+            },
+          ],
+        }),
+      );
+    }
+  }, []);
+
   return {
     values: {
       service: params?.service,
@@ -353,6 +455,9 @@ const useServiceDateTimeController = () => {
       selectedTimeSlot,
       availableHours: selectedTimeSlot,
       isBookingLoading,
+      isProcessing,
+      showSuccessModal,
+      bookingNumber,
     },
     functions: {
       onSelectSessionTime,
@@ -363,6 +468,7 @@ const useServiceDateTimeController = () => {
       onEditContact,
       onViewAddress,
       onEditService,
+      onSuccessOk,
     },
   };
 };

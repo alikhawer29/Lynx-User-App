@@ -12,6 +12,7 @@ import useServiceDateTimeController from "./useServiceDateTimeController"
 import images from "../../assets/images"
 import Icon from "../../components/Icon"
 import CountryPicker from 'react-native-country-picker-modal'
+import { BlurView } from "@react-native-community/blur"
 import { useState } from "react"
 
 const ServiceDateTime = () => {
@@ -35,7 +36,10 @@ const ServiceDateTime = () => {
             sessionDate,
             selectedTimeSlot,
             availableHours,
-            isBookingLoading
+            isBookingLoading,
+            isProcessing,
+            showSuccessModal,
+            bookingNumber
         },
         functions: {
             onSelectSessionTime,
@@ -44,7 +48,8 @@ const ServiceDateTime = () => {
             onEditAddress,
             onEditContact,
             onViewAddress,
-            onEditService
+            onEditService,
+            onSuccessOk
         }
     } = useServiceDateTimeController()
 
@@ -201,16 +206,15 @@ const ServiceDateTime = () => {
 
 
                 <Button
-                    text="Book Service"
+                    text={isProcessing ? "Processing Payment..." : "Book Service"}
                     type="primary"
                     style={styles.continue_button}
-                    // onPress={onContinue}
                     onPress={() => setShowConfirm(true)}
-
-                    loading={isBookingLoading}
+                    loading={isBookingLoading || isProcessing}
                 />
             </ScrollView>
 
+            {/* Confirmation Modal */}
             <Modal
                 visible={showConfirm}
                 transparent={true}
@@ -296,6 +300,51 @@ const ServiceDateTime = () => {
                     </View>
                 </View>
             </Modal>
+
+            {/* Success Modal */}
+            {showSuccessModal && (
+                <Modal
+                    transparent
+                    visible={showSuccessModal}
+                    animationType="fade"
+                    statusBarTranslucent
+                >
+                    <Touchable style={styles.modal_overlay} onPress={onSuccessOk}>
+                        <BlurView
+                            style={styles.blur}
+                            blurType="dark"
+                            blurRadius={2}
+                        />
+                        <Touchable style={styles.modal_content} onPress={() => { }}>
+                            <View style={styles.close_icon}>
+                                <Icon
+                                    rounded
+                                    source={images.cross}
+                                    size={30}
+                                    onPress={onSuccessOk}
+                                    color={colors.primary}
+                                    border={colors.medium_primary}
+                                />
+                            </View>
+                            <Image
+                                source={images.modal_check}
+                                style={styles.modal_icon}
+                            />
+                            <Text size={24} weight="bold" position="center" style={styles.modal_title}>
+                                Successfully
+                            </Text>
+                            <Text size={14} color={colors.dark_gray} position="center" style={styles.modal_message}>
+                                Booking {bookingNumber ? `#${bookingNumber}` : ''} Has Been Done Successfully
+                            </Text>
+                            <Button
+                                text="Ok"
+                                height={40}
+                                onPress={onSuccessOk}
+                            />
+                        </Touchable>
+                    </Touchable>
+                </Modal>
+            )}
 
         </Wrapper>
     )
