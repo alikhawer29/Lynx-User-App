@@ -41,6 +41,7 @@ export interface ChatMessage {
 }
 
 export interface ChatRoom {
+  is_chat_active: any;
   _id: string;
   chat_type: 'support' | 'appointment';
   participants: string[];

@@ -9,6 +9,7 @@ import {
 } from '../../redux/Apis/Booking';
 import { navigationRef } from '../../utils/navigation';
 import { CommonActions } from '@react-navigation/native';
+import { Alert } from 'react-native';
 
 type PaymentDetailsRouteProp = RouteProp<
   ServiceStackParamList,
@@ -17,7 +18,7 @@ type PaymentDetailsRouteProp = RouteProp<
 
 const usePaymentDetailsController = () => {
   const { params } = useRoute<PaymentDetailsRouteProp>();
-  const { confirmPayment } = useStripe();
+  const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const [createPaymentIntent, { isLoading: isCreatingIntent }] =
     useCreatePaymentIntentMutation();
   const [updatePaymentStatus] = useUpdatePaymentStatusMutation();
@@ -28,8 +29,9 @@ const usePaymentDetailsController = () => {
   const [bookingNumber, setBookingNumber] = useState<string>('');
   const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
+  const [paymentSheetReady, setPaymentSheetReady] = useState<boolean>(false);
 
-  // Create payment intent when component mounts
+  // Create payment intent and initialize payment sheet when component mounts
   useEffect(() => {
     const initPayment = async () => {
       try {
@@ -44,6 +46,27 @@ const usePaymentDetailsController = () => {
             setClientSecret(result.data.clientSecret);
             setAmount(result.data.amount);
             setPaymentId(result.data.paymentId);
+
+            // Initialize the payment sheet
+            const { error } = await initPaymentSheet({
+              merchantDisplayName: 'Lynx Consultancy',
+              paymentIntentClientSecret: result.data.clientSecret,
+              defaultBillingDetails: {
+                name: params?.service?.category?.name || 'Customer',
+              },
+              returnURL: 'lynx://payment-complete',
+            });
+
+            if (error) {
+              console.error('Error initializing payment sheet:', error);
+              Alert.alert(
+                'Error',
+                'Failed to initialize payment. Please try again.',
+              );
+            } else {
+              console.log('Payment sheet initialized successfully');
+              setPaymentSheetReady(true);
+            }
           }
         }
 
@@ -53,38 +76,54 @@ const usePaymentDetailsController = () => {
         }
       } catch (error) {
         console.error('Failed to create payment intent:', error);
+        Alert.alert('Error', 'Failed to prepare payment. Please try again.');
       }
     };
 
     initPayment();
-  }, [params?.bookingId, params?.bookingNumber, createPaymentIntent]);
+  }, [
+    params?.bookingId,
+    params?.bookingNumber,
+    params?.service,
+    createPaymentIntent,
+    initPaymentSheet,
+  ]);
 
   const onPayNow = useCallback(async () => {
-    if (!clientSecret) {
-      console.error('No client secret available');
+    if (!paymentSheetReady) {
+      Alert.alert('Please wait', 'Payment is being prepared...');
       return;
     }
 
     setIsProcessing(true);
 
     try {
-      const { error, paymentIntent } = await confirmPayment(clientSecret, {
-        paymentMethodType: 'Card',
-      });
+      // Present the payment sheet
+      const { error } = await presentPaymentSheet();
 
       if (error) {
         console.error('Payment failed:', error);
         setIsProcessing(false);
-        // You can show an error toast here
-      } else if (paymentIntent) {
-        console.log('Payment successful:', paymentIntent);
+
+        // Show error message based on error code
+        if (error.code === 'Canceled') {
+          // User canceled the payment
+          console.log('Payment canceled by user');
+        } else {
+          Alert.alert(
+            'Payment Failed',
+            error.message || 'Something went wrong. Please try again.',
+          );
+        }
+      } else {
+        // Payment successful
+        console.log('Payment successful!');
 
         // Update payment status in backend
         try {
           await updatePaymentStatus({
             id: paymentId,
             payment_status: 'succeeded',
-            transaction_id: paymentIntent.id,
             payment_method: 'card',
           }).unwrap();
         } catch (updateError) {
@@ -97,8 +136,9 @@ const usePaymentDetailsController = () => {
     } catch (err) {
       console.error('Payment error:', err);
       setIsProcessing(false);
+      Alert.alert('Error', 'An unexpected error occurred. Please try again.');
     }
-  }, [clientSecret, confirmPayment, paymentId, updatePaymentStatus]);
+  }, [paymentSheetReady, presentPaymentSheet, paymentId, updatePaymentStatus]);
 
   const onSuccessOk = useCallback(() => {
     setShowSuccessModal(false);
@@ -128,6 +168,7 @@ const usePaymentDetailsController = () => {
       showSuccessModal,
       isProcessing,
       isCreatingIntent,
+      paymentSheetReady,
     },
     functions: {
       onPayNow,

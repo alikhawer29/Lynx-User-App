@@ -69,8 +69,13 @@ const ServiceDateTime = () => {
 
                 <Row align="center" justify="space-between" style={styles.header_row}>
                     <View>
-                        <Text size={20} weight="bold" line_height={24}>{service.name}</Text>
-                        <Badge text={`Category Type: ${service.category.name}`} size={13} />
+                        <Text size={25} weight="bold" color="#22282C" line_height={24}>
+                            {service.name}
+                        </Text>
+
+                        <View style={{ marginTop: 8 }}>
+                            <Badge text={`Category Type: ${service.category.name}`} size={13} />
+                        </View>
                     </View>
                     <View style={{ alignItems: 'flex-end' }}>
                         <Text style={styles.price_text}>${price}</Text>
@@ -98,11 +103,10 @@ const ServiceDateTime = () => {
                     {address ? (
                         <View>
                             <Text size={16} color='#333333'>
-                                {address.split(',')[0]}
-                                {floor && `, ${floor}`}
+                                {address}
                             </Text>
                             <Text size={16} color='#333333' style={{ marginTop: 2 }}>
-                                {address.split(',').slice(1).join(',').trim()}
+                                {floor && `Floor: ${floor}`}
                             </Text>
                         </View>
                     ) : (

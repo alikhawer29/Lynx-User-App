@@ -10,7 +10,6 @@ import images from "../../assets/images"
 import Icon from "../../components/Icon"
 import Touchable from "../../components/Touchable"
 import { BlurView } from "@react-native-community/blur"
-import { CardField } from '@stripe/stripe-react-native'
 
 const PaymentDetails = () => {
 
@@ -19,11 +18,11 @@ const PaymentDetails = () => {
             service,
             selectedTier,
             amount,
-            clientSecret,
             bookingNumber,
             showSuccessModal,
             isProcessing,
-            isCreatingIntent
+            isCreatingIntent,
+            paymentSheetReady
         },
         functions: {
             onPayNow,
@@ -43,8 +42,9 @@ const PaymentDetails = () => {
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={styles.scroll_content}
             >
-                <Text size={18} weight="bold" style={styles.amount_label}>Amount: ${amount || price}.00</Text>
-
+                <View style={styles.amount_container}>
+                    <Text size={23} weight="bold" style={styles.amount_label}>Amount: ${amount || price}.00</Text>
+                </View>
                 {isCreatingIntent ? (
                     <View style={styles.loading_container}>
                         <ActivityIndicator size="large" color={colors.primary} />
@@ -54,75 +54,62 @@ const PaymentDetails = () => {
                     </View>
                 ) : (
                     <>
-                        <View style={styles.form_section}>
-                            <CardField
-                                postalCodeEnabled={false}
-                                placeholders={{
-                                    number: '4242 4242 4242 4242',
-                                }}
-                                cardStyle={{
-                                    backgroundColor: '#FFFFFF',
-                                    textColor: '#000000',
-                                }}
-                                style={styles.card_field}
-                            />
-                        </View>
-
                         <Button
                             text={isProcessing ? "Processing..." : "Pay Now"}
-                            type="secondary"
                             style={styles.pay_button}
-                            onPress={!clientSecret || isProcessing ? undefined : onPayNow}
+                            onPress={!paymentSheetReady || isProcessing ? undefined : onPayNow}
                         />
                     </>
                 )}
             </ScrollView>
 
             {/* Success Modal */}
-            {showSuccessModal && (
-                <Modal
-                    transparent
-                    visible={showSuccessModal}
-                    animationType="fade"
-                    statusBarTranslucent
-                >
-                    <Touchable style={styles.modal_overlay} onPress={onSuccessOk}>
-                        <BlurView
-                            style={styles.blur}
-                            blurType="dark"
-                            blurRadius={2}
-                        />
-                        <Touchable style={styles.modal_content} onPress={() => { }}>
-                            <View style={styles.close_icon}>
-                                <Icon
-                                    rounded
-                                    source={images.cross}
-                                    size={30}
-                                    onPress={onSuccessOk}
-                                    color={colors.primary}
-                                    border={colors.medium_primary}
+            {
+                showSuccessModal && (
+                    <Modal
+                        transparent
+                        visible={showSuccessModal}
+                        animationType="fade"
+                        statusBarTranslucent
+                    >
+                        <Touchable style={styles.modal_overlay} onPress={onSuccessOk}>
+                            <BlurView
+                                style={styles.blur}
+                                blurType="dark"
+                                blurRadius={2}
+                            />
+                            <Touchable style={styles.modal_content} onPress={() => { }}>
+                                <View style={styles.close_icon}>
+                                    <Icon
+                                        rounded
+                                        source={images.cross}
+                                        size={30}
+                                        onPress={onSuccessOk}
+                                        color={colors.primary}
+                                        border={colors.medium_primary}
+                                    />
+                                </View>
+                                <Image
+                                    source={images.modal_check}
+                                    style={styles.modal_icon}
                                 />
-                            </View>
-                            <Image
-                                source={images.modal_check}
-                                style={styles.modal_icon}
-                            />
-                            <Text size={24} weight="bold" position="center" style={styles.modal_title}>
-                                Successfully
-                            </Text>
-                            <Text size={14} color={colors.dark_gray} position="center" style={styles.modal_message}>
-                                Booking {bookingNumber ? `#${bookingNumber}` : ''} Has Been Done Successfully
-                            </Text>
-                            <Button
-                                text="Ok"
-                                height={40}
-                                onPress={onSuccessOk}
-                            />
+                                <Text size={24} weight="bold" position="center" style={styles.modal_title}>
+                                    Successfully
+                                </Text>
+                                <Text size={14} color={colors.dark_gray} position="center" style={styles.modal_message}>
+                                    Booking {bookingNumber ? `#${bookingNumber}` : ''} Has Been Done Successfully
+                                </Text>
+                                <Button
+                                    text="Ok"
+                                    height={40}
+                                    onPress={onSuccessOk}
+                                />
+                            </Touchable>
                         </Touchable>
-                    </Touchable>
-                </Modal>
-            )}
-        </Wrapper>
+                    </Modal>
+                )
+            }
+        </Wrapper >
     )
 }
 

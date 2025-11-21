@@ -2,9 +2,8 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useCallback, useEffect, useState } from 'react';
 import { ServiceStackParamList } from '../../interfaces';
-import { ROUTES } from '../../utils/routes';
 import { useLazyGetSlotsByDateQuery } from '../../redux/Apis/Slot';
-import { BASE_URL } from '../../utils/data';
+import { ROUTES } from '../../utils/routes';
 
 type BookServiceRouteProp = RouteProp<ServiceStackParamList, 'BookService'>;
 type BookServiceNavigationProp = StackNavigationProp<
@@ -56,11 +55,40 @@ interface SlotData {
 }
 
 const useBookServiceController = () => {
-  const [showContactDetails, setShowContactDetails] = useState(false);
-  const [showServiceDetails, setShowServiceDetails] = useState(false);
-
   const { params } = useRoute<BookServiceRouteProp>();
   const navigation = useNavigation<BookServiceNavigationProp>();
+
+  // Determine initial state based on editMode
+  const editMode = params?.editMode;
+  const hasAddress = !!params?.confirmedAddress;
+  const hasContact = !!(
+    params?.firstName &&
+    params?.lastName &&
+    params?.phone &&
+    params?.email
+  );
+  const hasService = !!(params?.selectedTimeSlot && params?.selectedDate);
+
+  // State logic:
+  // showAddress: false = show form, true = show summary
+  // showContact: false = show form, true = show summary
+  // showContactDetails: true = expand contact form fields
+  // showServiceDetails: true = expand service form fields
+
+  const [showContactDetails, setShowContactDetails] = useState(
+    editMode === 'contact' ? true : !hasContact,
+  );
+  const [showServiceDetails, setShowServiceDetails] = useState(
+    editMode === 'service' ? true : !hasService,
+  );
+  const [showAddress, setShowAddress] = useState(
+    editMode === 'address' ? false : editMode ? true : hasAddress,
+  );
+  const [showFloor, setShowFloor] = useState(false);
+  const [showTimeSlot, setShowTimeSlot] = useState(false);
+  const [showContact, setShowContact] = useState(
+    editMode === 'contact' ? false : editMode ? true : hasContact,
+  );
 
   const [address, setAddress] = useState<string>(
     params?.confirmedAddress || '',
@@ -138,10 +166,13 @@ const useBookServiceController = () => {
 
     setWeekDates(nextSevenDays);
     setCurrentMonth(monthNames[today.getMonth()]);
-    // Auto-select today's date
-    const todayFormatted = today.toISOString().split('T')[0];
-    setSelectedDate(todayFormatted);
-  }, []);
+
+    // Only auto-select today's date if no date is already selected (not in edit mode)
+    if (!params?.selectedDate) {
+      const todayFormatted = today.toISOString().split('T')[0];
+      setSelectedDate(todayFormatted);
+    }
+  }, [params?.selectedDate]);
 
   // Fetch slots when date is selected
   useEffect(() => {
@@ -255,6 +286,7 @@ const useBookServiceController = () => {
   }, [params, address, floor, navigation]);
 
   const onEditLocation = useCallback(() => {
+    setShowAddress(false);
     navigation.navigate(ROUTES.LOCATION_VIEW, {
       service: params.service,
       selectedTier: params.selectedTier,
@@ -262,6 +294,10 @@ const useBookServiceController = () => {
       floor,
     });
   }, [params, address, floor, navigation]);
+
+  const onEditAddress = useCallback(() => {
+    setShowAddress(false);
+  }, []);
 
   const onSelectTimeSlot = useCallback(
     (timeSlot: string, slotId: string, isBooked: boolean) => {
@@ -289,26 +325,49 @@ const useBookServiceController = () => {
 
   const onContinue = useCallback(() => {
     if (validateForm()) {
-      navigation.navigate(ROUTES.SERVICE_DATE_TIME, {
-        service: params.service,
-        selectedTier: params.selectedTier,
-        address,
-        floor,
-        lat,
-        lng,
-        firstName,
-        lastName,
-        phone,
-        phoneCountry,
-        phoneDialingCode,
-        email,
-        selectedTimeSlot,
-        selectedSlotId,
-        selectedDate,
-      });
+      if (editMode) {
+        // When editing, navigate back to ServiceDateTime with updated data
+        navigation.navigate(ROUTES.SERVICE_DATE_TIME, {
+          service: params.service,
+          selectedTier: params.selectedTier,
+          address,
+          floor,
+          lat,
+          lng,
+          firstName,
+          lastName,
+          phone,
+          phoneCountry,
+          phoneDialingCode,
+          email,
+          selectedTimeSlot,
+          selectedSlotId,
+          selectedDate,
+        });
+      } else {
+        // Normal flow: navigate to ServiceDateTime
+        navigation.navigate(ROUTES.SERVICE_DATE_TIME, {
+          service: params.service,
+          selectedTier: params.selectedTier,
+          address,
+          floor,
+          lat,
+          lng,
+          firstName,
+          lastName,
+          phone,
+          phoneCountry,
+          phoneDialingCode,
+          email,
+          selectedTimeSlot,
+          selectedSlotId,
+          selectedDate,
+        });
+      }
     }
   }, [
     validateForm,
+    editMode,
     params,
     address,
     floor,
@@ -325,6 +384,14 @@ const useBookServiceController = () => {
     selectedDate,
     navigation,
   ]);
+
+  const onEditContact = useCallback(() => {
+    setShowContact(false);
+  }, []);
+
+  const onEditService = useCallback(() => {
+    setShowServiceDetails(false);
+  }, []);
 
   return {
     values: {
@@ -351,6 +418,11 @@ const useBookServiceController = () => {
       slotsLoading,
       showContactDetails,
       showServiceDetails,
+      showAddress,
+      showFloor,
+      showTimeSlot,
+      showContact,
+      editMode,
     },
     functions: {
       onViewLocation,
@@ -364,6 +436,13 @@ const useBookServiceController = () => {
       setPhoneDialingCode,
       setShowContactDetails,
       setShowServiceDetails,
+      setShowAddress,
+      onEditAddress,
+      setShowFloor,
+      setShowTimeSlot,
+      setShowContact,
+      onEditContact,
+      onEditService,
     },
   };
 };

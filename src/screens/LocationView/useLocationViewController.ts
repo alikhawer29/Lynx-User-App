@@ -1,7 +1,10 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { ServiceStackParamList, MyAppointmentsStackParamList } from '../../interfaces';
+import {
+  ServiceStackParamList,
+  MyAppointmentsStackParamList,
+} from '../../interfaces';
 import { ROUTES } from '../../utils/routes';
 import MapView from 'react-native-maps';
 
@@ -32,15 +35,16 @@ const useLocationViewController = () => {
   const [selectedCity, setSelectedCity] = useState<string>('');
 
   // Initialize with provided lat/lng if available, otherwise use default
-  const initialCoords = (params as any)?.lat && (params as any)?.lng
-    ? {
-        latitude: (params as any).lat,
-        longitude: (params as any).lng,
-      }
-    : {
-        latitude: 37.78825,
-        longitude: -122.4324,
-      };
+  const initialCoords =
+    (params as any)?.lat && (params as any)?.lng
+      ? {
+          latitude: (params as any).lat,
+          longitude: (params as any).lng,
+        }
+      : {
+          latitude: 25.2048,
+          longitude: 55.2708,
+        };
 
   const [markerCoords, setMarkerCoords] = useState<Coordinates>(initialCoords);
   const [floor, setFloor] = useState<string>(params?.floor || '');

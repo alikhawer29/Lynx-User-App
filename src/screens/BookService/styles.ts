@@ -4,7 +4,7 @@ import { heightPixel } from '../../utils/helper';
 
 const styles = StyleSheet.create({
   scroll_content: {
-    paddingBottom: heightPixel(30),
+    // paddingBottom: heightPixel(30),
   },
   price_text: {
     fontSize: 25,
@@ -27,18 +27,17 @@ const styles = StyleSheet.create({
     marginBottom: heightPixel(20),
   },
   section: {
-    marginBottom: heightPixel(25),
-    paddingBottom: heightPixel(20),
+    marginBottom: heightPixel(15),
     borderBottomWidth: 1,
     borderBottomColor: colors.light_gray,
-    backgroundColor: colors.white,
+    backgroundColor: '#FFFFFF',
     borderRadius: heightPixel(8),
-    padding: heightPixel(20),
+    padding: heightPixel(15),
     borderWidth: 1,
     borderColor: colors.light_gray,
   },
   section_title: {
-    marginBottom: heightPixel(15),
+    marginBottom: heightPixel(0),
   },
   view_button: {
     marginTop: heightPixel(15),
@@ -166,6 +165,25 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: heightPixel(10),
+  },
+  contact_grid: {
+    marginTop: heightPixel(15),
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: heightPixel(15),
+  },
+  contact_item: {
+    width: '55%',
+    gap: heightPixel(5),
+  },
+  summary_section: {
+    marginTop: heightPixel(15),
+    paddingTop: heightPixel(15),
+    borderTopWidth: 1,
+    borderTopColor: colors.light_gray,
+  },
+  service_detail_item: {
+    flex: 1,
   },
 });
 

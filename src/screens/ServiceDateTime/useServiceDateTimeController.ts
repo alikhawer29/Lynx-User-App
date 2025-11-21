@@ -1,4 +1,9 @@
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import {
+  RouteProp,
+  useNavigation,
+  useRoute,
+  useFocusEffect,
+} from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useCallback, useState } from 'react';
 import { ServiceStackParamList } from '../../interfaces';
@@ -32,6 +37,81 @@ const useServiceDateTimeController = () => {
     params?.selectedSlotId || '',
   );
 
+  // State for address, contact, and other details
+  const [address, setAddress] = useState<string>(params?.address || '');
+  const [floor, setFloor] = useState<string>(params?.floor || '');
+  const [lat, setLat] = useState<number | undefined>(params?.lat);
+  const [lng, setLng] = useState<number | undefined>(params?.lng);
+  const [firstName, setFirstName] = useState<string>(params?.firstName || '');
+  const [lastName, setLastName] = useState<string>(params?.lastName || '');
+  const [phone, setPhone] = useState<string>(params?.phone || '');
+  const [phoneCountry, setPhoneCountry] = useState<string>(
+    params?.phoneCountry || '',
+  );
+  const [phoneDialingCode, setPhoneDialingCode] = useState<string>(
+    params?.phoneDialingCode || '',
+  );
+  const [email, setEmail] = useState<string>(params?.email || '');
+
+  // Update ALL state when screen comes into focus (e.g., when coming back from edit)
+  useFocusEffect(
+    useCallback(() => {
+      if (params?.selectedDate) {
+        setSessionDate(params.selectedDate);
+      }
+      if (params?.selectedTimeSlot) {
+        setSelectedTimeSlot(params.selectedTimeSlot);
+      }
+      if (params?.selectedSlotId) {
+        setSelectedSlotId(params.selectedSlotId);
+      }
+      if (params?.address !== undefined) {
+        setAddress(params.address);
+      }
+      if (params?.floor !== undefined) {
+        setFloor(params.floor);
+      }
+      if (params?.lat !== undefined) {
+        setLat(params.lat);
+      }
+      if (params?.lng !== undefined) {
+        setLng(params.lng);
+      }
+      if (params?.firstName !== undefined) {
+        setFirstName(params.firstName);
+      }
+      if (params?.lastName !== undefined) {
+        setLastName(params.lastName);
+      }
+      if (params?.phone !== undefined) {
+        setPhone(params.phone);
+      }
+      if (params?.phoneCountry !== undefined) {
+        setPhoneCountry(params.phoneCountry);
+      }
+      if (params?.phoneDialingCode !== undefined) {
+        setPhoneDialingCode(params.phoneDialingCode);
+      }
+      if (params?.email !== undefined) {
+        setEmail(params.email);
+      }
+    }, [
+      params?.selectedDate,
+      params?.selectedTimeSlot,
+      params?.selectedSlotId,
+      params?.address,
+      params?.floor,
+      params?.lat,
+      params?.lng,
+      params?.firstName,
+      params?.lastName,
+      params?.phone,
+      params?.phoneCountry,
+      params?.phoneDialingCode,
+      params?.email,
+    ]),
+  );
+
   const onSelectSessionTime = useCallback((time: 'AM' | 'PM') => {
     setSessionTime(time);
   }, []);
@@ -52,41 +132,77 @@ const useServiceDateTimeController = () => {
     navigation.navigate(ROUTES.BOOK_SERVICE, {
       service: params.service,
       selectedTier: params.selectedTier,
-      confirmedAddress: params.address,
-      confirmedFloor: params.floor,
-      confirmedLat: params.lat,
-      confirmedLng: params.lng,
-      firstName: params.firstName,
-      lastName: params.lastName,
-      phone: params.phone,
-      phoneCountry: params.phoneCountry,
-      phoneDialingCode: params.phoneDialingCode,
-      email: params.email,
+      confirmedAddress: address,
+      confirmedFloor: floor,
+      confirmedLat: lat,
+      confirmedLng: lng,
+      firstName: firstName,
+      lastName: lastName,
+      phone: phone,
+      phoneCountry: phoneCountry,
+      phoneDialingCode: phoneDialingCode,
+      email: email,
       selectedTimeSlot: selectedTimeSlot,
       selectedSlotId: selectedSlotId,
       selectedDate: sessionDate,
+      editMode: 'address',
     });
-  }, [params, navigation, selectedTimeSlot, selectedSlotId, sessionDate]);
+  }, [
+    params.service,
+    params.selectedTier,
+    address,
+    floor,
+    lat,
+    lng,
+    firstName,
+    lastName,
+    phone,
+    phoneCountry,
+    phoneDialingCode,
+    email,
+    navigation,
+    selectedTimeSlot,
+    selectedSlotId,
+    sessionDate,
+  ]);
 
   const onEditContact = useCallback(() => {
     navigation.navigate(ROUTES.BOOK_SERVICE, {
       service: params.service,
       selectedTier: params.selectedTier,
-      confirmedAddress: params.address,
-      confirmedFloor: params.floor,
-      confirmedLat: params.lat,
-      confirmedLng: params.lng,
-      firstName: params.firstName,
-      lastName: params.lastName,
-      phone: params.phone,
-      phoneCountry: params.phoneCountry,
-      phoneDialingCode: params.phoneDialingCode,
-      email: params.email,
+      confirmedAddress: address,
+      confirmedFloor: floor,
+      confirmedLat: lat,
+      confirmedLng: lng,
+      firstName: firstName,
+      lastName: lastName,
+      phone: phone,
+      phoneCountry: phoneCountry,
+      phoneDialingCode: phoneDialingCode,
+      email: email,
       selectedTimeSlot: selectedTimeSlot,
       selectedSlotId: selectedSlotId,
       selectedDate: sessionDate,
+      editMode: 'contact',
     });
-  }, [params, navigation, selectedTimeSlot, selectedSlotId, sessionDate]);
+  }, [
+    params.service,
+    params.selectedTier,
+    address,
+    floor,
+    lat,
+    lng,
+    firstName,
+    lastName,
+    phone,
+    phoneCountry,
+    phoneDialingCode,
+    email,
+    navigation,
+    selectedTimeSlot,
+    selectedSlotId,
+    sessionDate,
+  ]);
 
   const onContinue = useCallback(async () => {
     try {
@@ -108,17 +224,17 @@ const useServiceDateTimeController = () => {
             ? params.service.category.price.normal
             : params.service.category.price.premium,
         address: {
-          full_address: params.address,
-          lat: params.lat || 0,
-          lng: params.lng || 0,
-          floor: params.floor || '',
+          full_address: address,
+          lat: lat || 0,
+          lng: lng || 0,
+          floor: floor || '',
         },
         contact_details: {
-          first_name: params.firstName || '',
-          last_name: params.lastName || '',
-          country_code: params.phoneDialingCode || '+971',
-          phone_number: params.phone || '',
-          email: params.email || '',
+          first_name: firstName || '',
+          last_name: lastName || '',
+          country_code: phoneDialingCode || '+971',
+          phone_number: phone || '',
+          email: email || '',
         },
         session_date: sessionDateFormatted,
         session_time: sessionTimeFormatted,
@@ -132,12 +248,12 @@ const useServiceDateTimeController = () => {
         navigation.navigate(ROUTES.PAYMENT_DETAILS, {
           service: params.service,
           selectedTier: params.selectedTier,
-          address: params.address,
-          floor: params.floor,
-          firstName: params.firstName || '',
-          lastName: params.lastName || '',
-          phone: params.phone || '',
-          email: params.email || '',
+          address: address,
+          floor: floor,
+          firstName: firstName || '',
+          lastName: lastName || '',
+          phone: phone || '',
+          email: email || '',
           sessionTime,
           sessionDate,
           availableHours: selectedTimeSlot,
@@ -150,10 +266,22 @@ const useServiceDateTimeController = () => {
       console.error('Error details:', JSON.stringify(error, null, 2));
     }
   }, [
-    params,
+    params.service,
+    params.selectedTier,
+    address,
+    floor,
+    lat,
+    lng,
+    firstName,
+    lastName,
+    phone,
+    phoneCountry,
+    phoneDialingCode,
+    email,
     sessionTime,
     sessionDate,
     selectedTimeSlot,
+    selectedSlotId,
     navigation,
     createBooking,
   ]);
@@ -162,46 +290,64 @@ const useServiceDateTimeController = () => {
     navigation.navigate(ROUTES.LOCATION_VIEW, {
       service: params.service,
       selectedTier: params.selectedTier,
-      address: params.address,
-      floor: params.floor,
+      address: address,
+      floor: floor,
       viewOnly: true,
     });
-  }, [params, navigation]);
+  }, [params.service, params.selectedTier, address, floor, navigation]);
 
   const onEditService = useCallback(() => {
     navigation.navigate(ROUTES.BOOK_SERVICE, {
       service: params.service,
       selectedTier: params.selectedTier,
-      confirmedAddress: params.address,
-      confirmedFloor: params.floor,
-      confirmedLat: params.lat,
-      confirmedLng: params.lng,
-      firstName: params.firstName,
-      lastName: params.lastName,
-      phone: params.phone,
-      phoneCountry: params.phoneCountry,
-      phoneDialingCode: params.phoneDialingCode,
-      email: params.email,
+      confirmedAddress: address,
+      confirmedFloor: floor,
+      confirmedLat: lat,
+      confirmedLng: lng,
+      firstName: firstName,
+      lastName: lastName,
+      phone: phone,
+      phoneCountry: phoneCountry,
+      phoneDialingCode: phoneDialingCode,
+      email: email,
       selectedTimeSlot: selectedTimeSlot,
       selectedSlotId: selectedSlotId,
       selectedDate: sessionDate,
+      editMode: 'service',
     });
-  }, [params, navigation, selectedTimeSlot, selectedSlotId, sessionDate]);
+  }, [
+    params.service,
+    params.selectedTier,
+    address,
+    floor,
+    lat,
+    lng,
+    firstName,
+    lastName,
+    phone,
+    phoneCountry,
+    phoneDialingCode,
+    email,
+    navigation,
+    selectedTimeSlot,
+    selectedSlotId,
+    sessionDate,
+  ]);
 
   return {
     values: {
       service: params?.service,
       selectedTier: params?.selectedTier ?? 0,
-      address: params?.address,
-      floor: params?.floor,
-      lat: params?.lat,
-      lng: params?.lng,
-      firstName: params?.firstName,
-      lastName: params?.lastName,
-      phone: params?.phone,
-      phoneCountry: params?.phoneCountry,
-      phoneDialingCode: params?.phoneDialingCode,
-      email: params?.email,
+      address,
+      floor,
+      lat,
+      lng,
+      firstName,
+      lastName,
+      phone,
+      phoneCountry,
+      phoneDialingCode,
+      email,
       sessionTime,
       sessionDate,
       selectedTimeSlot,

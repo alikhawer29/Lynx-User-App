@@ -24,6 +24,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  amount_container: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   card_field: {
     width: '100%',
     height: heightPixel(50),

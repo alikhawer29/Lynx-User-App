@@ -4,7 +4,7 @@ import { heightPixel } from '../../utils/helper';
 
 const styles = StyleSheet.create({
   scroll_content: {
-    paddingBottom: heightPixel(30),
+    // paddingBottom: heightPixel(30),
   },
   price_text: {
     fontSize: 25,
@@ -27,8 +27,8 @@ const styles = StyleSheet.create({
     marginBottom: heightPixel(20),
   },
   section: {
-    marginBottom: heightPixel(25),
-    padding: heightPixel(20),
+    marginBottom: heightPixel(15),
+    padding: heightPixel(15),
     backgroundColor: colors.white,
     borderRadius: heightPixel(8),
     borderWidth: 1,

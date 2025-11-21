@@ -1,13 +1,12 @@
 
 import { View } from "react-native"
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps'
 import Button from "../../components/Button"
 import Input from "../../components/Input"
 import Text from "../../components/Text"
 import Wrapper from "../../components/Wrapper"
-import colors from "../../utils/colors"
 import styles from "./styles"
 import useLocationViewController from "./useLocationViewController"
-import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 const LocationView = () => {
 
     const {
@@ -32,8 +31,6 @@ const LocationView = () => {
         }
     } = useLocationViewController()
 
-    console.log(isConfirmed, 'isConfirmed')
-
     return (
         <Wrapper>
             {/* Search Input at Top - Only show if not in view-only mode */}
@@ -50,9 +47,14 @@ const LocationView = () => {
             )}
 
             {/* Title */}
-            <Text size={18} weight="bold" position="center" style={styles.title}>
+            {!viewOnly && (
+                <Text size={18} weight="bold" position="center" style={styles.title}>
+                    {isConfirmed ? 'Is This Your Exact Location' : 'Select Your Location'}
+                </Text>
+            )}
+            {/* <Text size={18} weight="bold" position="center" style={styles.title}>
                 {viewOnly ? '' : (isConfirmed ? 'Is This Your Exact Location' : '')}
-            </Text>
+            </Text> */}
 
             {/* Map Container */}
             <View style={styles.map_container}>

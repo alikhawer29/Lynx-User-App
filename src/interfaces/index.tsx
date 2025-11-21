@@ -43,6 +43,7 @@ export type HomeStackParamList = {
         selectedTimeSlot?: string;
         selectedSlotId?: string;
         selectedDate?: string;
+        editMode?: 'address' | 'contact' | 'service';
     };
     LocationView: {
         service: ServiceData;
@@ -139,6 +140,7 @@ export type ServiceStackParamList = {
         selectedTimeSlot?: string;
         selectedSlotId?: string;
         selectedDate?: string;
+        editMode?: 'address' | 'contact' | 'service';
     };
     LocationView: {
         service: ServiceData;

@@ -22,6 +22,8 @@ const useChatRoomController = () => {
   const route = useRoute<RouteProp<ChatRoomRouteParams, 'ChatRoom'>>();
   const navigation = useNavigation();
   const { chatRoom, bookingId } = route.params;
+
+  console.log(chatRoom, 'chatRoomchatRoom');
   const currentUserId = useAppSelector(
     state => state.auth.user?._id || state.auth.user?.id,
   );
@@ -76,8 +78,9 @@ const useChatRoomController = () => {
     if (chatRoom.chat_type === 'support') {
       return true; // Support chat is always available
     }
-    // For appointment chat, check if it's active
-    return chatRoom.is_active;
+
+    // For appointment chat, check if booking exists and is completed
+    return chatRoom?.is_chat_active;
   }, [chatRoom]);
 
   const disabledMessage = useMemo(() => {
