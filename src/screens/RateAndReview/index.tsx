@@ -17,16 +17,13 @@ const RateAndReview = () => {
       displayedReviews,
       hasMoreReviews,
     },
-    functions: {
-      onSelectFilter,
-      onLoadMore,
-    },
+    functions: { onSelectFilter, onLoadMore },
   } = useRateAndReviewController();
 
   const renderStars = (rating: number) => {
     return (
       <View style={styles.review_stars}>
-        {[1, 2, 3, 4, 5].map((star) => (
+        {[1, 2, 3, 4, 5].map(star => (
           <Text key={star} style={styles.star}>
             {star <= rating ? '⭐' : ''}
           </Text>
@@ -36,7 +33,9 @@ const RateAndReview = () => {
   };
 
   const renderReviewCard = ({ item }: { item: any }) => {
-    const userName = `${item.user?.first_name || ''} ${item.user?.last_name || ''}`.trim() || 'Anonymous';
+    const userName =
+      `${item.user?.first_name || ''} ${item.user?.last_name || ''}`.trim() ||
+      'Anonymous';
     const userInitial = userName.charAt(0).toUpperCase();
     const reviewDate = dayjs(item.createdAt).format('DD-MMM-YYYY');
 
@@ -50,18 +49,31 @@ const RateAndReview = () => {
               resize="cover"
             />
           ) : (
-            <View style={[styles.user_avatar, { justifyContent: 'center', alignItems: 'center' }]}>
-              <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#999999' }}>
+            <View
+              style={[
+                styles.user_avatar,
+                { justifyContent: 'center', alignItems: 'center' },
+              ]}
+            >
+              <Text
+                style={{ fontSize: 20, fontWeight: 'bold', color: '#999999' }}
+              >
                 {userInitial}
               </Text>
             </View>
           )}
           <View style={styles.review_user_info}>
-            <Text size={16} weight='bold' style={styles.review_user_name}>{userName}</Text>
+            <Text size={16} weight="bold" style={styles.review_user_name}>
+              {userName}
+            </Text>
             {renderStars(item.rating)}
-            <Text size={12} color='#666666' style={styles.review_text}>{item.review}</Text>
+            <Text size={12} color="#666666" style={styles.review_text}>
+              {item.review}
+            </Text>
           </View>
-          <Text size={12} color='#666666' style={styles.review_date}>{reviewDate}</Text>
+          <Text size={12} color="#666666" style={styles.review_date}>
+            {reviewDate}
+          </Text>
         </View>
       </View>
     );
@@ -74,14 +86,20 @@ const RateAndReview = () => {
         <View style={styles.header_section}>
           {/* Rating Bars */}
           <View style={styles.rating_bars_container}>
-            {[5, 4, 3, 2, 1].map((star) => (
+            {[5, 4, 3, 2, 1].map(star => (
               <View key={star} style={styles.rating_bar_row}>
                 <Text style={styles.rating_label}>{star} star</Text>
                 <View style={styles.rating_bar_background}>
                   <View
                     style={[
                       styles.rating_bar_fill,
-                      { width: `${ratingPercentages[star as keyof typeof ratingPercentages]}%` },
+                      {
+                        width: `${
+                          ratingPercentages[
+                            star as keyof typeof ratingPercentages
+                          ]
+                        }%`,
+                      },
                     ]}
                   />
                 </View>
@@ -92,32 +110,45 @@ const RateAndReview = () => {
           {/* Rating Title */}
           <View style={styles.rating_title_container}>
             <Text style={styles.rating_title}>
-              {avgRating.toFixed(1)}<Text style={styles.rating_count_text}>/5</Text> <Text style={styles.rating_count_text}>({reviewCount})</Text>
+              {avgRating.toFixed(1)}
+              <Text style={styles.rating_count_text}>/5</Text>{' '}
+              <Text style={styles.rating_count_text}>({reviewCount})</Text>
             </Text>
           </View>
         </View>
 
         {/* Filter Section */}
         <View style={styles.filter_section}>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filter_scroll}>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            style={styles.filter_scroll}
+          >
             <TouchableOpacity
-              style={[styles.filter_button, selectedFilter === 'All' && styles.filter_button_active]}
+              style={[
+                styles.filter_button,
+                selectedFilter === 'All' && styles.filter_button_active,
+              ]}
               onPress={() => onSelectFilter('All')}
             >
-              <Text
-                color={selectedFilter === 'All' ? '#FFFFFF' : '#B0B3C7'}
-              >
+              <Text color={selectedFilter === 'All' ? '#FFFFFF' : '#B0B3C7'}>
                 All
               </Text>
             </TouchableOpacity>
-            {[5, 4, 3, 2, 1].map((star) => (
+            {[5, 4, 3, 2, 1].map(star => (
               <TouchableOpacity
                 key={star}
-                style={[styles.filter_button, selectedFilter === star.toString() && styles.filter_button_active]}
+                style={[
+                  styles.filter_button,
+                  selectedFilter === star.toString() &&
+                    styles.filter_button_active,
+                ]}
                 onPress={() => onSelectFilter(star.toString())}
               >
                 <Text
-                  color={selectedFilter === star.toString() ? '#FFFFFF' : '#B0B3C7'}
+                  color={
+                    selectedFilter === star.toString() ? '#FFFFFF' : '#B0B3C7'
+                  }
                   style={styles.filter_button_text}
                 >
                   ⭐ {star}
@@ -134,11 +165,14 @@ const RateAndReview = () => {
               <FlatList
                 data={displayedReviews}
                 renderItem={renderReviewCard}
-                keyExtractor={(item) => item._id || item.id}
+                keyExtractor={item => item._id || item.id}
                 scrollEnabled={false}
               />
               {hasMoreReviews && (
-                <TouchableOpacity style={styles.load_more_button} onPress={onLoadMore}>
+                <TouchableOpacity
+                  style={styles.load_more_button}
+                  onPress={onLoadMore}
+                >
                   <Text style={styles.load_more_text}>Load More</Text>
                 </TouchableOpacity>
               )}
@@ -150,9 +184,8 @@ const RateAndReview = () => {
           )}
         </View>
       </ScrollView>
-    </Wrapper >
+    </Wrapper>
   );
 };
 
 export default RateAndReview;
-

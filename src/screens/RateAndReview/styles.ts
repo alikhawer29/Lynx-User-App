@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     marginBottom: heightPixel(5),
   },
   rating_title: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
     color: colors.black,
   },
@@ -55,12 +55,12 @@ const styles = StyleSheet.create({
     borderRadius: 3,
   },
   rating_count_text: {
-    fontSize: 17,
+    fontSize: 16,
     color: '#333333',
   },
   filter_section: {
-    paddingHorizontal: widthPixel(20),
-    paddingVertical: heightPixel(20),
+    // paddingHorizontal: widthPixel(20),
+    // paddingVertical: heightPixel(20),
     // backgroundColor: colors.white,
   },
   filter_scroll: {

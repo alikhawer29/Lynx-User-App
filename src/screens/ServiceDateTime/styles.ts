@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
     // paddingBottom: heightPixel(30),
   },
   price_text: {
-    fontSize: 25,
+    fontSize: 19,
     fontWeight: 'bold',
     color: colors.black,
   },

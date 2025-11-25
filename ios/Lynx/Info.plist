@@ -26,13 +26,16 @@
 	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<false/>
-		<key>NSAllowsLocalNetworking</key>
-		<true/>
-	</dict>
+        <key>NSAllowsArbitraryLoads</key>
+        <false/>
+        <key>NSAllowsLocalNetworking</key>
+        <true/>
+    </dict>
+	
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+    <string>This app requires location access to show maps</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+     <string>This app requires location access</string>
 	<key>RCTNewArchEnabled</key>
 	<true/>
 	<key>UIAppFonts</key>

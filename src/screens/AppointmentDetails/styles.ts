@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
   },
 
   service_name: {
-    fontSize: 20,
+    fontSize: 19,
     fontWeight: 'bold',
     color: colors.black,
     // marginBottom: heightPixel(5),
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     paddingVertical: heightPixel(2),
   },
   price_text: {
-    fontSize: 25,
+    fontSize: 19,
     fontWeight: 'bold',
     color: colors.black,
   },
@@ -134,10 +134,10 @@ const styles = StyleSheet.create({
     color: colors.dark_gray,
   },
   section_title: {
-    fontSize: 23,
+    fontSize: 19,
     fontWeight: 'bold',
     color: colors.black,
-    marginBottom: heightPixel(15),
+    marginBottom: heightPixel(10),
     marginTop: heightPixel(10),
   },
   details_grid: {
@@ -154,6 +154,7 @@ const styles = StyleSheet.create({
     marginBottom: heightPixel(15),
   },
   detail_label: {
+    fontWeight: 'bold',
     fontSize: 16,
     color: '#333333',
     marginBottom: heightPixel(4),
@@ -205,7 +206,7 @@ const styles = StyleSheet.create({
     borderColor: colors.light_gray,
   },
   service_provider_title: {
-    fontSize: 20,
+    fontSize: 19,
     fontWeight: 'bold',
     color: colors.black,
     marginBottom: heightPixel(10),
@@ -287,7 +288,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   modal_title: {
-    fontSize: 23,
+    fontSize: 19,
     fontWeight: 'bold',
     color: colors.black,
     textAlign: 'center',
