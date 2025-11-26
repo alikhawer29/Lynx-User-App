@@ -26,22 +26,25 @@
 	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
-        <key>NSAllowsArbitraryLoads</key>
-        <false/>
-        <key>NSAllowsLocalNetworking</key>
-        <true/>
-    </dict>
-	
+		<key>NSAllowsArbitraryLoads</key>
+		<false/>
+		<key>NSAllowsLocalNetworking</key>
+		<true/>
+	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-    <string>Lynx consultancy requires location access to show maps</string>
-    <key>NSLocationAlwaysUsageDescription</key>
-     <string>Lynx consultancy requires location access for better usage of the app to show services area-wise</string>
+	<string>Lynx consultancy requires location access to show maps and provide location-based services</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Lynx consultancy requires location access for better usage of the app to show services area-wise</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Lynx consultancy requires location access to show maps and provide location-based services</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Lynx consultancy requires camera access to take photos for your profile and service bookings</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Lynx consultancy requires photo library access to select images for your profile and service bookings</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Lynx consultancy requires permission to save photos to your photo library</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Lynx consultancy requires microphone access for video recordings</string>
 	<key>RCTNewArchEnabled</key>
 	<true/>
 	<key>UIAppFonts</key>
