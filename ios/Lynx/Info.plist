@@ -33,15 +33,15 @@
     </dict>
 	
 	<key>NSLocationWhenInUseUsageDescription</key>
-    <string>This app requires location access to show maps</string>
+    <string>Lynx consultancy requires location access to show maps</string>
     <key>NSLocationAlwaysUsageDescription</key>
-     <string>This app requires location access</string>
+     <string>Lynx consultancy requires location access for better usage of the app to show services area-wise</string>
 	<key>NSCameraUsageDescription</key>
-	<string>This app requires camera access to take photos for your profile and service bookings</string>
+	<string>Lynx consultancy requires camera access to take photos for your profile and service bookings</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This app requires photo library access to select images for your profile and service bookings</string>
+	<string>Lynx consultancy requires photo library access to select images for your profile and service bookings</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>This app requires permission to save photos to your photo library</string>
+	<string>Lynx consultancy requires permission to save photos to your photo library</string>
 	<key>RCTNewArchEnabled</key>
 	<true/>
 	<key>UIAppFonts</key>
