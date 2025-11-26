@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		01AB12E7189EFC9D6B0E36DA /* libPods-Lynx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68EC31B1A3C5C7EE84EB4532 /* libPods-Lynx.a */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		1990D4190AB642DF8809EC01 /* SF-Pro-Display-Semibold.otf in Resources */ = {isa = PBXBuildFile; fileRef = E9A9098F0D2E4AB6AF22B705 /* SF-Pro-Display-Semibold.otf */; };
+		1B3EE98B938A3E1BC22DD344 /* libPods-Lynx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E2AA4E5F2E36FE485E7621CB /* libPods-Lynx.a */; };
 		44E413F51D24A7680E49040B /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
 		632015DFDF264ACA87E9C2E0 /* SF-Pro-Display-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 5DAC02F6C4F0429C8332AEEC /* SF-Pro-Display-Regular.otf */; };
 		656693FE9B074C0B93253630 /* index.ts in Resources */ = {isa = PBXBuildFile; fileRef = 21BD94EB39F84409B62F064D /* index.ts */; };
@@ -25,12 +25,12 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Lynx/Info.plist; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = Lynx/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		21BD94EB39F84409B62F064D /* index.ts */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = index.ts; path = ../src/assets/fonts/index.ts; sourceTree = "<group>"; };
+		4F28F44D0AEA8FA227CF7F6C /* Pods-Lynx.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Lynx.debug.xcconfig"; path = "Target Support Files/Pods-Lynx/Pods-Lynx.debug.xcconfig"; sourceTree = "<group>"; };
 		5DAC02F6C4F0429C8332AEEC /* SF-Pro-Display-Regular.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SF-Pro-Display-Regular.otf"; path = "../src/assets/fonts/SF-Pro-Display-Regular.otf"; sourceTree = "<group>"; };
-		68EC31B1A3C5C7EE84EB4532 /* libPods-Lynx.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Lynx.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = Lynx/AppDelegate.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Lynx/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		8420A4920A8CB55BA7083660 /* Pods-Lynx.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Lynx.debug.xcconfig"; path = "Target Support Files/Pods-Lynx/Pods-Lynx.debug.xcconfig"; sourceTree = "<group>"; };
-		AF3198662B79076C05B8D382 /* Pods-Lynx.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Lynx.release.xcconfig"; path = "Target Support Files/Pods-Lynx/Pods-Lynx.release.xcconfig"; sourceTree = "<group>"; };
+		D27ED694DBFB2AE734362AE2 /* Pods-Lynx.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Lynx.release.xcconfig"; path = "Target Support Files/Pods-Lynx/Pods-Lynx.release.xcconfig"; sourceTree = "<group>"; };
+		E2AA4E5F2E36FE485E7621CB /* libPods-Lynx.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Lynx.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9A9098F0D2E4AB6AF22B705 /* SF-Pro-Display-Semibold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SF-Pro-Display-Semibold.otf"; path = "../src/assets/fonts/SF-Pro-Display-Semibold.otf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -40,7 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				01AB12E7189EFC9D6B0E36DA /* libPods-Lynx.a in Frameworks */,
+				1B3EE98B938A3E1BC22DD344 /* libPods-Lynx.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -63,7 +63,7 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				68EC31B1A3C5C7EE84EB4532 /* libPods-Lynx.a */,
+				E2AA4E5F2E36FE485E7621CB /* libPods-Lynx.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -112,8 +112,8 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				8420A4920A8CB55BA7083660 /* Pods-Lynx.debug.xcconfig */,
-				AF3198662B79076C05B8D382 /* Pods-Lynx.release.xcconfig */,
+				4F28F44D0AEA8FA227CF7F6C /* Pods-Lynx.debug.xcconfig */,
+				D27ED694DBFB2AE734362AE2 /* Pods-Lynx.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -125,13 +125,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Lynx" */;
 			buildPhases = (
-				1344DD45541C16F878A4BE58 /* [CP] Check Pods Manifest.lock */,
+				B100FA8748D151CCE1954C29 /* [CP] Check Pods Manifest.lock */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				EEE730E9E57AA1FADB45204E /* [CP] Embed Pods Frameworks */,
-				A6F83773C1D5C29F75176B11 /* [CP] Copy Pods Resources */,
+				79B17470B0474CDC78A84BDD /* [CP] Embed Pods Frameworks */,
+				CB441FED66A50BDDF9D2AEC1 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -207,7 +207,24 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"$REACT_NATIVE_PATH/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"$REACT_NATIVE_PATH/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
-		1344DD45541C16F878A4BE58 /* [CP] Check Pods Manifest.lock */ = {
+		79B17470B0474CDC78A84BDD /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Lynx/Pods-Lynx-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Lynx/Pods-Lynx-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Lynx/Pods-Lynx-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B100FA8748D151CCE1954C29 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -229,7 +246,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		A6F83773C1D5C29F75176B11 /* [CP] Copy Pods Resources */ = {
+		CB441FED66A50BDDF9D2AEC1 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -244,23 +261,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Lynx/Pods-Lynx-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		EEE730E9E57AA1FADB45204E /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Lynx/Pods-Lynx-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Lynx/Pods-Lynx-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Lynx/Pods-Lynx-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -279,7 +279,7 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8420A4920A8CB55BA7083660 /* Pods-Lynx.debug.xcconfig */;
+			baseConfigurationReference = 4F28F44D0AEA8FA227CF7F6C /* Pods-Lynx.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -314,7 +314,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AF3198662B79076C05B8D382 /* Pods-Lynx.release.xcconfig */;
+			baseConfigurationReference = D27ED694DBFB2AE734362AE2 /* Pods-Lynx.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
