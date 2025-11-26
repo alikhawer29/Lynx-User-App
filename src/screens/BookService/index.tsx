@@ -1,4 +1,4 @@
-import { ScrollView, View } from 'react-native';
+import { ScrollView, View, Platform } from 'react-native';
 import Badge from '../../components/Badge';
 import Button from '../../components/Button';
 import Image from '../../components/Image';
@@ -132,7 +132,7 @@ const BookService = () => {
               <View style={styles.address_preview}>
                 <MapView
                   onPress={onViewLocation}
-                  provider={PROVIDER_GOOGLE}
+                  provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : undefined}
                   style={styles.map_preview}
                   region={{
                     latitude: lat || 25.2048,
@@ -172,7 +172,7 @@ const BookService = () => {
             ) : (
               <View style={styles.address_preview}>
                 <MapView
-                  provider={PROVIDER_GOOGLE}
+                  provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : undefined}
                   style={styles.map_preview}
                   region={{
                     latitude: lat || 25.2048,
@@ -504,8 +504,8 @@ const BookService = () => {
                           style={[
                             styles.time_slot,
                             isSelected &&
-                              !isBooked &&
-                              styles.time_slot_selected,
+                            !isBooked &&
+                            styles.time_slot_selected,
                             isBooked && styles.time_slot_booked,
                           ]}
                           onPress={() =>

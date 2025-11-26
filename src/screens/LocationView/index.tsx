@@ -1,5 +1,5 @@
 
-import { View } from "react-native"
+import { View, Platform } from "react-native"
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps'
 import Button from "../../components/Button"
 import Input from "../../components/Input"
@@ -60,7 +60,7 @@ const LocationView = () => {
             <View style={styles.map_container}>
                 <MapView
                     ref={mapRef}
-                    provider={PROVIDER_GOOGLE}
+                    provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : undefined}
                     style={styles.map_placeholder}
                     initialRegion={{
                         latitude: markerCoords.latitude,
