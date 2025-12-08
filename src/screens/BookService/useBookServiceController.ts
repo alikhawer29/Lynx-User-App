@@ -58,6 +58,18 @@ const useBookServiceController = () => {
   const { params } = useRoute<BookServiceRouteProp>();
   const navigation = useNavigation<BookServiceNavigationProp>();
 
+  // Get visitType from params or determine from service_type
+  const visitType =
+    params?.visitType ||
+    (params?.service?.service_type === 'provider_visits_user'
+      ? 'provider_visits_user'
+      : params?.service?.service_type === 'user_visits_provider'
+      ? 'user_visits_provider'
+      : 'provider_visits_user'); // default
+
+  // Check if location is required based on visitType
+  const isLocationRequired = visitType === 'provider_visits_user';
+
   // Determine initial state based on editMode
   const editMode = params?.editMode;
   const hasAddress = !!params?.confirmedAddress;
@@ -235,7 +247,8 @@ const useBookServiceController = () => {
   const validateForm = useCallback((): boolean => {
     const newErrors: FormErrors = {};
 
-    if (!address.trim()) {
+    // Only validate address if location is required
+    if (isLocationRequired && !address.trim()) {
       newErrors.address = 'Address is required';
     }
 
@@ -268,26 +281,28 @@ const useBookServiceController = () => {
     });
 
     return Object.keys(newErrors).length === 0;
-  }, [address, firstName, lastName, phone, email]);
+  }, [isLocationRequired, address, firstName, lastName, phone, email]);
 
   const onViewLocation = useCallback(() => {
     navigation.navigate(ROUTES.LOCATION_VIEW, {
       service: params.service,
       selectedTier: params.selectedTier,
+      visitType,
       address,
       floor,
     });
-  }, [params, address, floor, navigation]);
+  }, [params, visitType, address, floor, navigation]);
 
   const onEditLocation = useCallback(() => {
     setShowAddress(false);
     navigation.navigate(ROUTES.LOCATION_VIEW, {
       service: params.service,
       selectedTier: params.selectedTier,
+      visitType,
       address,
       floor,
     });
-  }, [params, address, floor, navigation]);
+  }, [params, visitType, address, floor, navigation]);
 
   const onEditAddress = useCallback(() => {
     setShowAddress(false);
@@ -319,10 +334,11 @@ const useBookServiceController = () => {
         navigation.navigate(ROUTES.SERVICE_DATE_TIME, {
           service: params.service,
           selectedTier: params.selectedTier,
-          address,
-          floor,
-          lat,
-          lng,
+          visitType,
+          address: isLocationRequired ? address : undefined,
+          floor: isLocationRequired ? floor : undefined,
+          lat: isLocationRequired ? lat : undefined,
+          lng: isLocationRequired ? lng : undefined,
           firstName,
           lastName,
           phone,
@@ -338,10 +354,11 @@ const useBookServiceController = () => {
         navigation.navigate(ROUTES.SERVICE_DATE_TIME, {
           service: params.service,
           selectedTier: params.selectedTier,
-          address,
-          floor,
-          lat,
-          lng,
+          visitType,
+          address: isLocationRequired ? address : undefined,
+          floor: isLocationRequired ? floor : undefined,
+          lat: isLocationRequired ? lat : undefined,
+          lng: isLocationRequired ? lng : undefined,
           firstName,
           lastName,
           phone,
@@ -358,6 +375,8 @@ const useBookServiceController = () => {
     validateForm,
     editMode,
     params,
+    visitType,
+    isLocationRequired,
     address,
     floor,
     lat,
@@ -386,6 +405,8 @@ const useBookServiceController = () => {
     values: {
       service: params?.service,
       selectedTier: params?.selectedTier ?? 0,
+      visitType,
+      isLocationRequired,
       isLoading: false,
       address,
       floor,

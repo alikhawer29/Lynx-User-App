@@ -22,6 +22,8 @@ const BookService = () => {
     values: {
       service,
       selectedTier,
+      visitType,
+      isLocationRequired,
       isLoading,
       address,
       floor,
@@ -118,8 +120,8 @@ const BookService = () => {
           </View>
         </Row>
 
-        {/* Address Details Section */}
-        {(!showAddress && !editMode) || editMode === 'address' ? (
+        {/* Address Details Section - Only show if location is required */}
+        {isLocationRequired && ((!showAddress && !editMode) || editMode === 'address') ? (
           // ADDRESS FORM
           <View style={styles.section}>
             <Row align="center" justify="space-between">
@@ -217,7 +219,7 @@ const BookService = () => {
               </>
             )}
           </View>
-        ) : showAddress || (editMode && editMode !== 'address') ? (
+        ) : isLocationRequired && (showAddress || (editMode && editMode !== 'address')) ? (
           // ADDRESS SUMMARY
           <View style={styles.section}>
             <Row

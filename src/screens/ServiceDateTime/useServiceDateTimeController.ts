@@ -38,6 +38,18 @@ const useServiceDateTimeController = () => {
     useCreatePaymentIntentMutation();
   const [updatePaymentStatus] = useUpdatePaymentStatusMutation();
 
+  // Get visitType from params or determine from service_type
+  const visitType =
+    params?.visitType ||
+    (params?.service?.service_type === 'provider_visits_user'
+      ? 'provider_visits_user'
+      : params?.service?.service_type === 'user_visits_provider'
+      ? 'user_visits_provider'
+      : 'provider_visits_user'); // default
+
+  // Check if location is required based on visitType
+  const isLocationRequired = visitType === 'provider_visits_user';
+
   const [sessionTime, setSessionTime] = useState<'AM' | 'PM'>('AM');
   const [sessionDate, setSessionDate] = useState<string>(
     params?.selectedDate || '',
@@ -152,6 +164,7 @@ const useServiceDateTimeController = () => {
     navigation.navigate(ROUTES.BOOK_SERVICE, {
       service: params.service,
       selectedTier: params.selectedTier,
+      visitType,
       confirmedAddress: address,
       confirmedFloor: floor,
       confirmedLat: lat,
@@ -170,6 +183,7 @@ const useServiceDateTimeController = () => {
   }, [
     params.service,
     params.selectedTier,
+    visitType,
     address,
     floor,
     lat,
@@ -190,6 +204,7 @@ const useServiceDateTimeController = () => {
     navigation.navigate(ROUTES.BOOK_SERVICE, {
       service: params.service,
       selectedTier: params.selectedTier,
+      visitType,
       confirmedAddress: address,
       confirmedFloor: floor,
       confirmedLat: lat,
@@ -208,6 +223,7 @@ const useServiceDateTimeController = () => {
   }, [
     params.service,
     params.selectedTier,
+    visitType,
     address,
     floor,
     lat,
@@ -238,7 +254,7 @@ const useServiceDateTimeController = () => {
         'YYYY-MM-DD',
       );
 
-      const bookingPayload = {
+      const bookingPayload: any = {
         service_id: params.service._id,
         category_id: params.service.category._id || params.service._id,
         price_type: params.selectedTier === 0 ? 'normal' : 'premium',
@@ -246,12 +262,7 @@ const useServiceDateTimeController = () => {
           params.selectedTier === 0
             ? params.service.category.price.normal
             : params.service.category.price.premium,
-        address: {
-          full_address: address,
-          lat: lat || 0,
-          lng: lng || 0,
-          floor: floor || '',
-        },
+        visit_type: visitType,
         contact_details: {
           first_name: firstName || '',
           last_name: lastName || '',
@@ -263,6 +274,18 @@ const useServiceDateTimeController = () => {
         session_time: sessionTimeFormatted,
         slot_id: selectedSlotId,
       };
+
+      console.log(bookingPayload, 'bookingPayload');
+
+      // Only include address if location is required
+      if (isLocationRequired) {
+        bookingPayload.address = {
+          full_address: address,
+          lat: lat || 0,
+          lng: lng || 0,
+          floor: floor || '',
+        };
+      }
 
       const bookingResult = await createBooking(bookingPayload).unwrap();
 
@@ -373,16 +396,25 @@ const useServiceDateTimeController = () => {
     navigation.navigate(ROUTES.LOCATION_VIEW, {
       service: params.service,
       selectedTier: params.selectedTier,
+      visitType,
       address: address,
       floor: floor,
       viewOnly: true,
     });
-  }, [params.service, params.selectedTier, address, floor, navigation]);
+  }, [
+    params.service,
+    params.selectedTier,
+    visitType,
+    address,
+    floor,
+    navigation,
+  ]);
 
   const onEditService = useCallback(() => {
     navigation.navigate(ROUTES.BOOK_SERVICE, {
       service: params.service,
       selectedTier: params.selectedTier,
+      visitType,
       confirmedAddress: address,
       confirmedFloor: floor,
       confirmedLat: lat,
@@ -401,6 +433,7 @@ const useServiceDateTimeController = () => {
   }, [
     params.service,
     params.selectedTier,
+    visitType,
     address,
     floor,
     lat,
@@ -440,6 +473,8 @@ const useServiceDateTimeController = () => {
     values: {
       service: params?.service,
       selectedTier: params?.selectedTier ?? 0,
+      visitType,
+      isLocationRequired,
       address,
       floor,
       lat,

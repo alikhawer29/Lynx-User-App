@@ -166,6 +166,7 @@ const useLocationViewController = () => {
     navigation.navigate(ROUTES.BOOK_SERVICE, {
       service: params.service,
       selectedTier: params.selectedTier,
+      visitType: params.visitType,
       confirmedAddress: searchAddress,
       confirmedFloor: floor,
       confirmedLat: markerCoords.latitude,

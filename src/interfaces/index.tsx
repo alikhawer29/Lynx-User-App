@@ -30,6 +30,7 @@ export type HomeStackParamList = {
     BookService: {
         service: ServiceData;
         selectedTier: number;
+        visitType?: 'provider_visits_user' | 'user_visits_provider';
         confirmedAddress?: string;
         confirmedFloor?: string;
         confirmedLat?: number;
@@ -48,6 +49,7 @@ export type HomeStackParamList = {
     LocationView: {
         service: ServiceData;
         selectedTier: number;
+        visitType?: 'provider_visits_user' | 'user_visits_provider';
         address?: string;
         floor?: string;
         viewOnly?: boolean;
@@ -55,7 +57,8 @@ export type HomeStackParamList = {
     ServiceDateTime: {
         service: ServiceData;
         selectedTier: number;
-        address: string;
+        visitType?: 'provider_visits_user' | 'user_visits_provider';
+        address?: string;
         floor?: string;
         lat?: number;
         lng?: number;
@@ -127,6 +130,7 @@ export type ServiceStackParamList = {
     BookService: {
         service: ServiceData;
         selectedTier: number;
+        visitType?: 'provider_visits_user' | 'user_visits_provider';
         confirmedAddress?: string;
         confirmedFloor?: string;
         confirmedLat?: number;
@@ -145,6 +149,7 @@ export type ServiceStackParamList = {
     LocationView: {
         service: ServiceData;
         selectedTier: number;
+        visitType?: 'provider_visits_user' | 'user_visits_provider';
         address?: string;
         floor?: string;
         viewOnly?: boolean;
@@ -152,7 +157,8 @@ export type ServiceStackParamList = {
     ServiceDateTime: {
         service: ServiceData;
         selectedTier: number;
-        address: string;
+        visitType?: 'provider_visits_user' | 'user_visits_provider';
+        address?: string;
         floor?: string;
         lat?: number;
         lng?: number;
@@ -519,6 +525,7 @@ export interface ServiceData {
     image_url?: any
     is_favorite?: boolean,
     avg_rating?: number
+    service_type?: 'provider_visits_user' | 'user_visits_provider' | 'both'
 }
 
 export interface ContentData {

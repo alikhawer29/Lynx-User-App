@@ -22,6 +22,8 @@ const ServiceDateTime = () => {
     values: {
       service,
       selectedTier,
+      visitType,
+      isLocationRequired,
       address,
       floor,
       lat,
@@ -96,57 +98,59 @@ const ServiceDateTime = () => {
           </View>
         </Row>
 
-        {/* Address Details Section */}
-        <View style={styles.section}>
-          <Row
-            align="center"
-            justify="space-between"
-            style={{ marginBottom: 15 }}
-          >
-            <Text size={20} weight="bold" line_height={22}>
-              Address Details
-            </Text>
-            {address && (
-              <Row gap={5}>
-                <Text
-                  size={16}
-                  weight="bold"
-                  color="#22282C"
-                  underline
-                  onPress={onViewAddress}
-                >
-                  View
+        {/* Address Details Section - Only show if location is required */}
+        {isLocationRequired && (
+          <View style={styles.section}>
+            <Row
+              align="center"
+              justify="space-between"
+              style={{ marginBottom: 15 }}
+            >
+              <Text size={20} weight="bold" line_height={22}>
+                Address Details
+              </Text>
+              {address && (
+                <Row gap={5}>
+                  <Text
+                    size={16}
+                    weight="bold"
+                    color="#22282C"
+                    underline
+                    onPress={onViewAddress}
+                  >
+                    View
+                  </Text>
+                  <Text size={16} color="#22282C">
+                    /
+                  </Text>
+                  <Text
+                    size={16}
+                    weight="bold"
+                    color="#22282C"
+                    underline
+                    onPress={onEditAddress}
+                  >
+                    Edit
+                  </Text>
+                </Row>
+              )}
+            </Row>
+            {address ? (
+              <View>
+                <Text size={16} color="#333333">
+                  {address}
                 </Text>
-                <Text size={16} color="#22282C">
-                  /
+                <Text size={16} color="#333333" style={{ marginTop: 2 }}>
+                  {floor && `Floor: ${floor}`}
                 </Text>
-                <Text
-                  size={16}
-                  weight="bold"
-                  color="#22282C"
-                  underline
-                  onPress={onEditAddress}
-                >
-                  Edit
-                </Text>
-              </Row>
+              </View>
+            ) : (
+              <Text size={16} color="#22282C">
+                No address selected
+              </Text>
             )}
-          </Row>
-          {address ? (
-            <View>
-              <Text size={16} color="#333333">
-                {address}
-              </Text>
-              <Text size={16} color="#333333" style={{ marginTop: 2 }}>
-                {floor && `Floor: ${floor}`}
-              </Text>
-            </View>
-          ) : (
-            <Text size={16} color="#22282C">
-              No address selected
-            </Text>
-          )}
-        </View>
+          </View>
+        )}
 
         {/* Contact Details Section */}
         <Touchable style={styles.section} onPress={onEditContact}>
@@ -386,7 +390,7 @@ const ServiceDateTime = () => {
         >
           <Touchable style={styles.modal_overlay} onPress={onSuccessOk}>
             <BlurView style={styles.blur} blurType="dark" blurRadius={2} />
-            <Touchable style={styles.modal_content} onPress={() => {}}>
+            <Touchable style={styles.modal_content} onPress={() => { }}>
               <View style={styles.close_icon}>
                 <Icon
                   rounded

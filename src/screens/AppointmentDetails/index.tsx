@@ -247,7 +247,7 @@ const AppointmentDetails = () => {
                     {subStatus === 'in_progress'
                       ? 'In-Progress'
                       : subStatus?.charAt(0).toUpperCase() +
-                        subStatus?.slice(1)}
+                      subStatus?.slice(1)}
                   </Text>
                 </View>
               </View>
@@ -331,23 +331,29 @@ const AppointmentDetails = () => {
             </Text>
           </View>
 
-          <View style={styles.detail_item}>
-            <Text style={styles.detail_label}>Location:</Text>
-            <View style={styles.location_row}>
-              <Text style={styles.detail_value}>{'Maplink'}</Text>
-              <TouchableOpacity onPress={onViewLocation}>
-                <Text style={styles.view_location_text}>View Location</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
+          {booking?.visit_type === 'user_visits_provider' && (
+            <>
+              <View style={styles.detail_item}>
+                <Text style={styles.detail_label}>Location:</Text>
+                <View style={styles.location_row}>
+                  <Text style={styles.detail_value}>{'Maplink'}</Text>
+                  <TouchableOpacity onPress={onViewLocation}>
+                    <Text style={styles.view_location_text}>View Location</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
 
-          <View style={styles.detail_item_full}>
-            <Text style={styles.detail_label}>Address:</Text>
-            <Text style={styles.detail_value}>
-              {booking.address?.full_address ||
-                '1234, Business St #567, State, Country.'}
-            </Text>
-          </View>
+
+              <View style={styles.detail_item_full}>
+                <Text style={styles.detail_label}>Address:</Text>
+                <Text style={styles.detail_value}>
+                  {booking.address?.full_address ||
+                    '1234, Business St #567, State, Country.'}
+                </Text>
+              </View>
+            </>
+
+          )}
 
           <View style={styles.detail_item}>
             <Text style={styles.detail_label}>Service Date:</Text>

@@ -19,11 +19,13 @@ const ServiceDetails = () => {
         values: {
             data,
             isLoading,
-            selected
+            selected,
+            visitType
         },
         functions: {
             onBookAppointment,
             onSelectTier,
+            onSelectVisitType,
             onViewReviews
         }
     } = useServiceDetailsController()
@@ -85,6 +87,46 @@ const ServiceDetails = () => {
                         <Text color={colors.dark_gray} style={styles.premium_text}>
                             <Text weight="bold" color={colors.dark_gray}>Premium:</Text> More experienced or highly qualified providers at a premium rate.
                         </Text>
+
+                        {/* Visit Type Selection - Only show when service_type is 'both' */}
+                        {service?.service_type === 'both' && (
+                            <View style={styles.visit_type_section}>
+                                <Text size={16} weight="bold" color={colors.black} style={styles.visit_type_title}>
+                                    Select Visit Type
+                                </Text>
+                                <Row gap={10} justify="space-evenly" style={styles.visit_type_container}>
+                                    <Touchable
+                                        onPress={() => onSelectVisitType('provider_visits_user')}
+                                        style={[styles.visit_type_card, visitType === 'provider_visits_user' && styles.selected_visit_card]}
+                                    >
+                                        <Text
+                                            color={visitType === 'provider_visits_user' ? colors.white : colors.black}
+                                            size={14}
+                                            weight="semibold"
+                                            line_height={18}
+                                            position="center"
+                                        >
+                                            Provider Visits You
+                                        </Text>
+                                    </Touchable>
+                                    <Touchable
+                                        onPress={() => onSelectVisitType('user_visits_provider')}
+                                        style={[styles.visit_type_card, visitType === 'user_visits_provider' && styles.selected_visit_card]}
+                                    >
+                                        <Text
+                                            color={visitType === 'user_visits_provider' ? colors.white : colors.black}
+                                            size={14}
+                                            weight="semibold"
+                                            line_height={18}
+                                            position="center"
+                                        >
+                                            You Visit Provider
+                                        </Text>
+                                    </Touchable>
+                                </Row>
+                            </View>
+                        )}
+
                         <Button text="Book an Appointment" type="secondary" style={styles.button} onPress={onBookAppointment} />
 
                     </ScrollView>
