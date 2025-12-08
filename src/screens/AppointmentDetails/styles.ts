@@ -10,6 +10,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  service_type: {
+    fontSize: 13,
+    fontWeight: 'bold',
+    color: colors.black,
+    marginBottom: heightPixel(3),
+    alignSelf: 'flex-start',
+  },
   scroll_content: {
     // paddingHorizontal: GLOBAL_HORIZONTAL_PADDING,
     paddingBottom: heightPixel(100),
