@@ -176,12 +176,12 @@ const useAppointmentDetailsController = () => {
   }, [onRefreshDetails]);
 
   const onViewLocation = useCallback(() => {
-    if (booking?.address) {
+    if (booking?.provider_id?.provider_address) {
       navigation.navigate('LocationView', {
-        lat: booking.address.lat,
-        lng: booking.address.lng,
-        address: booking.address.full_address,
-        floor: booking.address.floor,
+        lat: booking.provider_id.provider_lat,
+        lng: booking.provider_id.provider_lng,
+        address: booking.provider_id.provider_address,
+        floor: booking?.address?.floor || 'ABC Floor',
         viewOnly: true,
       });
     }

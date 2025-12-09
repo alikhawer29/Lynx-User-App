@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
   view_location_text: {
     fontSize: 14,
     color: '#B69D74',
-    marginLeft: widthPixel(5),
+    // marginLeft: widthPixel(5),
     textDecorationLine: 'underline',
   },
   requested_section: {

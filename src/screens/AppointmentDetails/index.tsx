@@ -132,7 +132,7 @@ const AppointmentDetails = () => {
   const categoryName = booking.category_id?.name || '';
   const providerName = booking.provider_id
     ? `${booking.provider_id.first_name} ${booking.provider_id.last_name}`
-    : 'Josh Elbert';
+    : 'Unassigned';
 
   const providerPhoneNumber =
     booking.provider_id?.dialing_code + booking.provider_id?.phone || '';
@@ -147,7 +147,6 @@ const AppointmentDetails = () => {
   const canShowReviewAndReport =
     booking.booking_status?.toLowerCase() === 'past';
 
-  console.log(canShowReviewAndReport, 'canShowReviewAndReport');
   const canRefund =
     booking.status?.toLowerCase() === 'pending' ||
     (booking.status?.toLowerCase() === 'approved' &&
@@ -390,14 +389,21 @@ const AppointmentDetails = () => {
                   {booking.provider_id.email}
                 </Text>
               </View>
+              <View style={styles.service_provider_item}>
+                <View style={styles.service_provider_item_full}>
+                  <Text style={styles.detail_label}>Location:</Text>
+                  <TouchableOpacity onPress={onViewLocation}>
+                    <Text style={styles.view_location_text}>View Location</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
             </View>
-            <View style={styles.detail_item}>
-              <Text style={styles.detail_label}>Location:</Text>
-              <View style={styles.location_row}>
-                <Text style={styles.detail_value}>{'Maplink'}</Text>
-                <TouchableOpacity onPress={onViewLocation}>
-                  <Text style={styles.view_location_text}>View Location</Text>
-                </TouchableOpacity>
+            <View style={styles.service_provider_details_row}>
+              <View style={styles.service_provider_item_full}>
+                <Text style={styles.detail_label}>Address:</Text>
+                <Text style={styles.detail_value}>
+                  {booking.provider_id.provider_address}
+                </Text>
               </View>
             </View>
           </View>
@@ -447,53 +453,57 @@ const AppointmentDetails = () => {
       </ScrollView>
 
       {/* Bottom Buttons - Refund or Reschedule Actions */}
-      {(canRefund || hasRescheduleRequest) && (
-        <View style={styles.button_container}>
-          {canRefund && !hasRescheduleRequest && (
-            <Button text="Refund" onPress={onPressRefund} />
-          )}
-
-          {hasRescheduleRequest && (
-            <View style={styles.button_row}>
-              <View style={styles.button_half}>
-                <Button
-                  text="Approve"
-                  type="secondary"
-                  onPress={onPressApprove}
-                />
-              </View>
-              <View style={styles.button_half}>
-                <Button text="Reject" onPress={onPressReject} />
-              </View>
-            </View>
-          )}
-        </View>
-      )}
-
-      {/* Review and Report Buttons - Show only when booking_status is "approved" */}
-      {canShowReviewAndReport && (
-        <View style={styles.button_container}>
-          <View style={styles.button_row}>
-            {/* Show Review button only if NO reviews */}
-            {!hasReviews && (
-              <View style={styles.button_half}>
-                <Button
-                  text="Review Service"
-                  type="secondary"
-                  onPress={onPressReviewService}
-                />
-              </View>
+      {
+        (canRefund || hasRescheduleRequest) && (
+          <View style={styles.button_container}>
+            {canRefund && !hasRescheduleRequest && (
+              <Button text="Refund" onPress={onPressRefund} />
             )}
 
-            {/* Show Report button only if NOT reported */}
-            {!canReportService && (
-              <View style={styles.button_half}>
-                <Button text="Report Service" onPress={onPressReportService} />
+            {hasRescheduleRequest && (
+              <View style={styles.button_row}>
+                <View style={styles.button_half}>
+                  <Button
+                    text="Approve"
+                    type="secondary"
+                    onPress={onPressApprove}
+                  />
+                </View>
+                <View style={styles.button_half}>
+                  <Button text="Reject" onPress={onPressReject} />
+                </View>
               </View>
             )}
           </View>
-        </View>
-      )}
+        )
+      }
+
+      {/* Review and Report Buttons - Show only when booking_status is "approved" */}
+      {
+        canShowReviewAndReport && (
+          <View style={styles.button_container}>
+            <View style={styles.button_row}>
+              {/* Show Review button only if NO reviews */}
+              {!hasReviews && (
+                <View style={styles.button_half}>
+                  <Button
+                    text="Review Service"
+                    type="secondary"
+                    onPress={onPressReviewService}
+                  />
+                </View>
+              )}
+
+              {/* Show Report button only if NOT reported */}
+              {!canReportService && (
+                <View style={styles.button_half}>
+                  <Button text="Report Service" onPress={onPressReportService} />
+                </View>
+              )}
+            </View>
+          </View>
+        )
+      }
 
       {/* Refund Policy Modal */}
       <Modal
@@ -994,7 +1004,7 @@ const AppointmentDetails = () => {
           </View>
         </View>
       </Modal>
-    </Wrapper>
+    </Wrapper >
   );
 };
 
