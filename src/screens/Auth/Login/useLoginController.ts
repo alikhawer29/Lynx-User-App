@@ -1,11 +1,13 @@
 import { FormikProps } from "formik";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { Platform } from "react-native";
 import images from "../../../assets/images";
 import useKeychain from "../../../hooks/useKeychain";
 import { useLoginMutation } from "../../../redux/Apis/Auth";
 import { navigate, navigateAndSimpleReset } from "../../../utils/navigation";
 import { NAVIGATORS, ROUTES } from "../../../utils/routes";
 import { LOGIN_SCHEMA } from "../../../utils/validators";
+import { getDeviceTimezone, getDeviceId } from "../../../utils/helper";
 
 interface LoginFormValues {
     email: string;
@@ -59,8 +61,17 @@ const useLoginController = () => {
         }
     }, [credentials, formik_ref])
 
-    const onSubmit = useCallback((data: any) => {
-        submit(data)
+    const onSubmit = useCallback(async (data: any) => {
+        const device_id = await getDeviceId();
+        
+        const payload = {
+            ...data,
+            device_type: Platform.OS, // 'android' or 'ios'
+            timezone: getDeviceTimezone(),
+            device_id: device_id, // Unique device ID
+        };
+        
+        submit(payload);
     }, [])
 
     const onPressRegister = useCallback(() => {

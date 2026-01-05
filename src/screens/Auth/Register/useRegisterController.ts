@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useRef } from "react";
+import { Platform } from "react-native";
 import { useModal } from "../../../contexts/ModalContext";
 import useImage from "../../../hooks/useImage";
 import { useSignupMutation } from "../../../redux/Apis/Auth";
 import { LANGUAGES } from "../../../utils/data";
-import { formHandler } from "../../../utils/helper";
+import { formHandler, getDeviceTimezone, getDeviceId } from "../../../utils/helper";
 import { navigateAndSimpleReset } from "../../../utils/navigation";
 import { ROUTES } from "../../../utils/routes";
 import { SIGNUP_SCHEMA } from "../../../utils/validators";
@@ -38,13 +39,19 @@ const useRegisterController = () => {
         }
     }, [isSuccess])
 
-    const onSubmit = useCallback((data: any) => {
+    const onSubmit = useCallback(async (data: any) => {
+        const device_id = await getDeviceId();
 
         let payload = { ...data }
 
         if (image) {
             payload.image = image
         }
+
+        // Add device information
+        payload.device_type = Platform.OS; // 'android' or 'ios'
+        payload.timezone = getDeviceTimezone();
+        payload.device_id = device_id; // Unique device ID
 
         payload = formHandler(payload)
         submit(payload)

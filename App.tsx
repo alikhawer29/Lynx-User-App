@@ -5,6 +5,7 @@ import ErrorBoundary from 'react-native-error-boundary';
 import Toast from 'react-native-toast-message';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
+import { useEffect } from 'react';
 import ErrorFallback from './src/components/ErrorFallback';
 import { ModalProvider } from './src/contexts/ModalContext';
 import AppStackNavigator from './src/navigation/AppStackNavigator';
@@ -13,6 +14,7 @@ import colors from './src/utils/colors';
 import { navigationRef } from './src/utils/navigation';
 import { StripeProvider } from '@stripe/stripe-react-native';
 import { useSocket } from './src/hooks';
+import { initializeNotifications } from './src/services/notification';
 
 // Replace with your actual Stripe publishable key
 const STRIPE_PUBLISHABLE_KEY = 'pk_test_51OHpI2EN9IooQZRaU3MAJ8mKTWdFhvI7vequEoOlA9qlEOP1gdLKSB01ec6GeJkfAjHgQjipR85UligbuLBs5UaI00aoghaww7';
@@ -23,12 +25,21 @@ const SocketInitializer = () => {
   return null;
 };
 
+// Component to initialize notifications
+const NotificationInitializer = () => {
+  useEffect(() => {
+    initializeNotifications();
+  }, []);
+  return null;
+};
+
 function App() {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <StripeProvider publishableKey={STRIPE_PUBLISHABLE_KEY}>
           <SocketInitializer />
+          <NotificationInitializer />
           <View style={styles.container}>
             <StatusBar
               barStyle={'dark-content'}

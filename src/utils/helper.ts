@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import { Dimensions, Insets, PixelRatio, Platform, StatusBar } from 'react-native';
 import { initialWindowMetrics } from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -135,6 +136,55 @@ export const getGreetingText = () => {
         return "Good Night";
     }
 
+}
+
+export const getDeviceTimezone = (): string => {
+    try {
+        // Get timezone using Intl API (works on React Native)
+        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        return timezone || 'UTC';
+    } catch (error) {
+        console.error('Error getting timezone:', error);
+        return 'UTC';
+    }
+}
+
+/**
+ * Get or generate a unique device ID
+ * Uses FCM token if available, otherwise generates a unique ID
+ * Stores the ID in AsyncStorage so it persists across app restarts
+ */
+export const getDeviceId = async (): Promise<string> => {
+    try {
+        const DEVICE_ID_KEY = '@lynx_user_device_id';
+        const FCM_TOKEN_KEY = '@lynx_fcm_token';
+        
+        // First, try to get FCM token (preferred)
+        let deviceId = await AsyncStorage.getItem(FCM_TOKEN_KEY);
+        
+        // If no FCM token, try to get existing device ID
+        if (!deviceId) {
+            deviceId = await AsyncStorage.getItem(DEVICE_ID_KEY);
+        }
+        
+        // If still no device ID, generate a new unique ID
+        if (!deviceId) {
+            // Generate a new unique ID
+            // Format: timestamp-randomstring
+            const timestamp = Date.now().toString(36);
+            const randomStr = Math.random().toString(36).substring(2, 15);
+            deviceId = `${timestamp}-${randomStr}`;
+            
+            // Store it for future use
+            await AsyncStorage.setItem(DEVICE_ID_KEY, deviceId);
+        }
+        
+        return deviceId;
+    } catch (error) {
+        console.error('Error getting device ID:', error);
+        // Fallback: generate a temporary ID
+        return `device-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+    }
 }
 
 export const chunkArray = <T,>(arr: T[], size: number): T[][] => {

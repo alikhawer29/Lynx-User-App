@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "118186717702",
+    "project_id": "lynx-provider",
+    "storage_bucket": "lynx-provider.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:118186717702:android:13af93393e2b35ec508987",
+        "android_client_info": {
+          "package_name": "com.blitzapp.lynx"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDhWemIy010NEQo2vq-4P69SR7P0IaUDCU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:118186717702:android:80ac1a17c1206bd6508987",
+        "android_client_info": {
+          "package_name": "com.blitzapp.lynx.provider"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDhWemIy010NEQo2vq-4P69SR7P0IaUDCU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
