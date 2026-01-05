@@ -24,6 +24,12 @@ const styles = StyleSheet.create({
     },
     text_content_wrapper: {
         paddingTop: heightPixel(5)
+    },
+    name_wrapper: {
+        flex: 1,
+        flexShrink: 1,
+        marginRight: heightPixel(4),
+        minWidth: 0,
     }
 })
 

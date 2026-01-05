@@ -38,9 +38,11 @@ const ServiceCard: FC<IServiceCard> = ({ data, onPress, onFavorite }) => {
                 />
             </View>
             <View style={styles.content}>
-                <Row align="center" justify="space-between">
-                    <Row align="center" gap={8}>
-                        <Text size={20} weight="bold" line_height={22}>{name}</Text>
+                <Row align="center" justify="space-between" gap={8}>
+                    <Row align="center" gap={8} style={styles.name_row}>
+                        <View style={styles.name_wrapper}>
+                            <Text size={20} weight="bold" line_height={22} lines={1}>{name}</Text>
+                        </View>
                         {category && <Badge text={`Category Type: ${category.name}`} />}
                     </Row>
                     {

@@ -2,8 +2,32 @@ import messaging from '@react-native-firebase/messaging';
 import notifee, { AndroidImportance, EventType } from '@notifee/react-native';
 import { Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { navigate } from '../utils/navigation';
+import { NAVIGATORS } from '../utils/routes';
 
 const FCM_TOKEN_KEY = '@lynx_fcm_token';
+
+/**
+ * Navigate to notifications screen
+ */
+const navigateToNotifications = () => {
+  try {
+    // Use a small delay to ensure navigation is ready, especially when app is opened from quit state
+    setTimeout(() => {
+      navigate(NAVIGATORS.NOTIFICATION_STACK as any);
+    }, 300);
+  } catch (error) {
+    console.error('Error navigating to notifications:', error);
+    // Retry after a longer delay if first attempt fails
+    setTimeout(() => {
+      try {
+        navigate(NAVIGATORS.NOTIFICATION_STACK as any);
+      } catch (retryError) {
+        console.error('Error navigating to notifications (retry):', retryError);
+      }
+    }, 1000);
+  }
+};
 
 /**
  * Request notification permissions
@@ -152,28 +176,28 @@ export const initializeNotifications = async (): Promise<void> => {
       .then(remoteMessage => {
         if (remoteMessage) {
           console.log('Notification opened app from quit state:', remoteMessage);
-          // Handle navigation or other actions
+          navigateToNotifications();
         }
       });
 
     // Handle notification opened from background
     messaging().onNotificationOpenedApp(remoteMessage => {
       console.log('Notification opened app from background:', remoteMessage);
-      // Handle navigation or other actions
+      navigateToNotifications();
     });
 
     // Setup Notifee event handlers
     notifee.onForegroundEvent(({ type, detail }) => {
       if (type === EventType.PRESS) {
         console.log('Notification pressed:', detail.notification);
-        // Handle notification press
+        navigateToNotifications();
       }
     });
 
     notifee.onBackgroundEvent(async ({ type, detail }) => {
       if (type === EventType.PRESS) {
         console.log('Background notification pressed:', detail.notification);
-        // Handle notification press
+        navigateToNotifications();
       }
     });
 

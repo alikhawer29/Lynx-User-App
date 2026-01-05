@@ -21,11 +21,26 @@ export const serviceApi = createApi({
     }),
     endpoints: (builder) => ({
         getServices: builder.query({
-            query: (params) => ({
-                url: params?.id ? `get/${params?.id}` : `get`,
-                method: "GET",
-                params
-            }),
+            query: (params) => {
+                const queryParams: any = {};
+                
+                if (params?.search) {
+                    queryParams.search = params.search;
+                }
+                
+                // Format categories as categories[0]=id1&categories[1]=id2
+                if (params?.categories && Array.isArray(params.categories) && params.categories.length > 0) {
+                    params.categories.forEach((categoryId: string, index: number) => {
+                        queryParams[`categories[${index}]`] = categoryId;
+                    });
+                }
+                
+                return {
+                    url: params?.id ? `get/${params?.id}` : `get`,
+                    method: "GET",
+                    params: queryParams
+                };
+            },
             keepUnusedDataFor: 0
         }),
         handleFavorite: builder.mutation({

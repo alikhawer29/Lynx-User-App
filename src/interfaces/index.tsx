@@ -576,6 +576,6 @@ export interface IEmpty {
 export interface IFilterModal {
     open: boolean
     handleClose: () => void
-    filters: number[]
-    onApply: (selected: number[]) => void
+    filters: string[]
+    onApply: (selected: string[]) => void
 }

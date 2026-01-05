@@ -37,8 +37,10 @@ const FeaturedServiceCard: FC<IServiceCard> = ({ data, onPress, onFavorite }) =>
             </View>
             <View style={styles.content}>
                 <View style={styles.text_content_wrapper}>
-                    <Row align="center" justify="space-between">
-                        <Text size={15} weight="bold">{name}</Text>
+                    <Row align="center" justify="space-between" gap={8}>
+                        <View style={styles.name_wrapper}>
+                            <Text size={15} weight="bold" lines={1}>{name}</Text>
+                        </View>
                         {
                             authorized &&
                             <Icon

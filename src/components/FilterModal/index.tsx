@@ -3,7 +3,7 @@ import { FC, useEffect, useState } from "react"
 import { Modal, TouchableWithoutFeedback, View } from "react-native"
 import images from "../../assets/images"
 import { IFilterModal } from "../../interfaces"
-import { useGetDataQuery } from "../../redux/Apis/General"
+import { useGetAllActiveCategoriesQuery } from "../../redux/Apis/Category"
 import colors from "../../utils/colors"
 import Button from "../Button"
 import Checkbox from "../Checkbox"
@@ -14,17 +14,19 @@ import styles from "./styles"
 
 const FilterModal: FC<IFilterModal> = ({ open, filters, handleClose, onApply }) => {
 
-    const { data } = useGetDataQuery({})
+    const { data: categoriesData, isLoading } = useGetAllActiveCategoriesQuery({})
 
-    const [selected, setSelected] = useState<number[]>([])
+    const [selected, setSelected] = useState<string[]>([])
 
     useEffect(() => {
         if (filters && filters.length > 0) {
             setSelected(filters)
+        } else {
+            setSelected([])
         }
-    }, [filters])
+    }, [filters, open])
 
-    const handleSelect = (id: number) => {
+    const handleSelect = (id: string) => {
         if (selected.includes(id)) {
             setSelected(prev => prev.filter(item => item !== id))
         } else {
@@ -71,15 +73,19 @@ const FilterModal: FC<IFilterModal> = ({ open, filters, handleClose, onApply }) 
                             </Row>
                             <Row style={styles.checkbox_row} align="center" justify="space-between">
                                 {
-                                    data?.data?.categories.map((item: { label: string, value: number }) => (
-                                        <View key={item.value} style={styles.checkbox_wrapper}>
-                                            <Checkbox
-                                                label={item.label}
-                                                checked={selected.includes(item.value)}
-                                                onPress={() => handleSelect(item.value)}
-                                            />
-                                        </View>
-                                    ))
+                                    isLoading ? (
+                                        <Text>Loading categories...</Text>
+                                    ) : (
+                                        categoriesData?.data?.map((item: { _id: string, name: string }) => (
+                                            <View key={item._id} style={styles.checkbox_wrapper}>
+                                                <Checkbox
+                                                    label={item.name}
+                                                    checked={selected.includes(item._id)}
+                                                    onPress={() => handleSelect(item._id)}
+                                                />
+                                            </View>
+                                        ))
+                                    )
                                 }
                             </Row>
                             <Row style={styles.action_row} align="center" justify="space-between">

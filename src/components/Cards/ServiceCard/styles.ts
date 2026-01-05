@@ -22,6 +22,17 @@ const styles = StyleSheet.create({
         flex: 0.5,
         justifyContent: "space-between",
         paddingTop: heightPixel(15)
+    },
+    name_row: {
+        flex: 1,
+        flexShrink: 1,
+        marginRight: widthPixel(4),
+        minWidth: 0,
+    },
+    name_wrapper: {
+        flex: 1,
+        flexShrink: 1,
+        minWidth: 0,
     }
 })
 
