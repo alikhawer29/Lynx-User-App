@@ -1,6 +1,7 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import dayjs from 'dayjs';
 import { ServiceStackParamList } from '../../interfaces';
 import { useLazyGetSlotsByDateQuery } from '../../redux/Apis/Slot';
 import { ROUTES } from '../../utils/routes';
@@ -52,6 +53,24 @@ interface SlotData {
     };
     session_date: string;
   } | null;
+}
+
+/** Returns true if slot should be shown. When selectedDate is today, hide slots whose start_time is before current time. */
+function isSlotVisible(slot: SlotData, selectedDate: string): boolean {
+  const todayStr = dayjs().format('YYYY-MM-DD');
+  if (selectedDate !== todayStr) return true;
+
+  const startTime = slot.start_time;
+  if (!startTime) return true;
+
+  let slotMoment;
+  if (startTime.includes('T')) {
+    slotMoment = dayjs(startTime);
+  } else {
+    const timePart = startTime.length <= 5 ? startTime : startTime.slice(0, 5);
+    slotMoment = dayjs(`${selectedDate}T${timePart}`, 'YYYY-MM-DDTHH:mm');
+  }
+  return !slotMoment.isBefore(dayjs());
 }
 
 const useBookServiceController = () => {
@@ -180,6 +199,63 @@ const useBookServiceController = () => {
     }
   }, [params?.selectedDate]);
 
+  // Sync state from route params when returning from LocationView (preserve contact and address)
+  useEffect(() => {
+    if (params?.confirmedAddress !== undefined) {
+      setAddress(params.confirmedAddress);
+    }
+    if (params?.confirmedFloor !== undefined) {
+      setFloor(params.confirmedFloor || '');
+    }
+    if (params?.confirmedLat !== undefined) {
+      setLat(params.confirmedLat);
+    }
+    if (params?.confirmedLng !== undefined) {
+      setLng(params.confirmedLng);
+    }
+    if (params?.firstName !== undefined) {
+      setFirstName(params.firstName);
+    }
+    if (params?.lastName !== undefined) {
+      setLastName(params.lastName);
+    }
+    if (params?.phone !== undefined) {
+      setPhone(params.phone);
+    }
+    if (params?.phoneCountry !== undefined) {
+      setPhoneCountry(params.phoneCountry || 'AE');
+    }
+    if (params?.phoneDialingCode !== undefined) {
+      setPhoneDialingCode(params.phoneDialingCode || '+971');
+    }
+    if (params?.email !== undefined) {
+      setEmail(params.email);
+    }
+    if (params?.selectedTimeSlot !== undefined) {
+      setSelectedTimeSlot(params.selectedTimeSlot || '');
+    }
+    if (params?.selectedSlotId !== undefined) {
+      setSelectedSlotId(params.selectedSlotId || '');
+    }
+    if (params?.selectedDate !== undefined) {
+      setSelectedDate(params.selectedDate || '');
+    }
+  }, [
+    params?.confirmedAddress,
+    params?.confirmedFloor,
+    params?.confirmedLat,
+    params?.confirmedLng,
+    params?.firstName,
+    params?.lastName,
+    params?.phone,
+    params?.phoneCountry,
+    params?.phoneDialingCode,
+    params?.email,
+    params?.selectedTimeSlot,
+    params?.selectedSlotId,
+    params?.selectedDate,
+  ]);
+
   // Fetch slots when date is selected
   useEffect(() => {
     if (selectedDate) {
@@ -201,6 +277,11 @@ const useBookServiceController = () => {
       setSlots([]);
     }
   }, [slotsData, slotsError]);
+
+  const visibleSlots = useMemo(
+    () => slots.filter(slot => isSlotVisible(slot, selectedDate)),
+    [slots, selectedDate],
+  );
 
   const handleChange = useCallback(
     (field: string) => (value: string) => {
@@ -290,8 +371,19 @@ const useBookServiceController = () => {
       visitType,
       address,
       floor,
+      lat,
+      lng,
+      firstName,
+      lastName,
+      phone,
+      phoneCountry,
+      phoneDialingCode,
+      email,
+      selectedTimeSlot,
+      selectedSlotId,
+      selectedDate,
     });
-  }, [params, visitType, address, floor, navigation]);
+  }, [params, visitType, address, floor, lat, lng, firstName, lastName, phone, phoneCountry, phoneDialingCode, email, selectedTimeSlot, selectedSlotId, selectedDate, navigation]);
 
   const onEditLocation = useCallback(() => {
     setShowAddress(false);
@@ -301,8 +393,19 @@ const useBookServiceController = () => {
       visitType,
       address,
       floor,
+      lat,
+      lng,
+      firstName,
+      lastName,
+      phone,
+      phoneCountry,
+      phoneDialingCode,
+      email,
+      selectedTimeSlot,
+      selectedSlotId,
+      selectedDate,
     });
-  }, [params, visitType, address, floor, navigation]);
+  }, [params, visitType, address, floor, lat, lng, firstName, lastName, phone, phoneCountry, phoneDialingCode, email, selectedTimeSlot, selectedSlotId, selectedDate, navigation]);
 
   const onEditAddress = useCallback(() => {
     setShowAddress(false);
@@ -423,7 +526,7 @@ const useBookServiceController = () => {
       selectedTimeSlot,
       selectedDate,
       weekDates,
-      slots,
+      slots: visibleSlots,
       currentMonth,
       slotsLoading,
       showContactDetails,

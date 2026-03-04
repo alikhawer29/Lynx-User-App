@@ -89,6 +89,19 @@ const DrawerBar = (props) => {
             (item) => ["home", "about", "contact"].includes(item.key)
         )
 
+    const handleNavigate = (item) => {
+        if (item.key === "home") {
+            // Always go to BottomTab -> HomeStack when tapping Home in drawer
+            props?.navigation?.navigate(NAVIGATORS.BOTTOM as never, {
+                screen: NAVIGATORS.HOME_STACK,
+            } as never)
+        } else {
+            props?.navigation?.navigate(item.route as never)
+        }
+
+        props?.navigation?.closeDrawer()
+    }
+
     return (
         <DrawerContentScrollView {...props}>
             <View style={[styles.drawer_item]}>
@@ -101,7 +114,7 @@ const DrawerBar = (props) => {
                     gap={12}
                     align="center"
                     style={[styles.drawer_item]}
-                    onPress={() => navigate(item.route)}
+                    onPress={() => handleNavigate(item)}
                 >
                     <Icon
                         source={item.icon}

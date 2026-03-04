@@ -162,15 +162,28 @@ const useLocationViewController = () => {
   }, []);
 
   const onConfirm = useCallback(() => {
-    // Navigate back to BookService with the selected address, floor, and coordinates
+    // Navigate back to BookService only when we have service params (from booking flow)
+    const serviceParams = params as ServiceStackParamList['LocationView'];
+    if (!serviceParams.service || serviceParams.selectedTier === undefined) {
+      return;
+    }
     navigation.navigate(ROUTES.BOOK_SERVICE, {
-      service: params.service,
-      selectedTier: params.selectedTier,
-      visitType: params.visitType,
+      service: serviceParams.service,
+      selectedTier: serviceParams.selectedTier,
+      visitType: serviceParams.visitType,
       confirmedAddress: searchAddress,
       confirmedFloor: floor,
       confirmedLat: markerCoords.latitude,
       confirmedLng: markerCoords.longitude,
+      firstName: serviceParams.firstName,
+      lastName: serviceParams.lastName,
+      phone: serviceParams.phone,
+      phoneCountry: serviceParams.phoneCountry,
+      phoneDialingCode: serviceParams.phoneDialingCode,
+      email: serviceParams.email,
+      selectedTimeSlot: serviceParams.selectedTimeSlot,
+      selectedSlotId: serviceParams.selectedSlotId,
+      selectedDate: serviceParams.selectedDate,
     });
   }, [params, navigation, searchAddress, floor, markerCoords]);
 

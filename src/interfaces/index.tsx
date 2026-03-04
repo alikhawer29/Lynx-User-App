@@ -152,6 +152,17 @@ export type ServiceStackParamList = {
         visitType?: 'provider_visits_user' | 'user_visits_provider';
         address?: string;
         floor?: string;
+        lat?: number;
+        lng?: number;
+        firstName?: string;
+        lastName?: string;
+        phone?: string;
+        phoneCountry?: string;
+        phoneDialingCode?: string;
+        email?: string;
+        selectedTimeSlot?: string;
+        selectedSlotId?: string;
+        selectedDate?: string;
         viewOnly?: boolean;
     };
     ServiceDateTime: {

@@ -1,8 +1,21 @@
 import images from '../assets/images';
 
-export const BASE_URL =
-  'https://custom-dev.onlinetestingserver.com:15413/lynx/v1/api';
-// export const BASE_URL = 'http://10.0.2.2:5000/lynx/v1/api';
+const DEV_DEVICE_URL = 'http://109.1.1.32:5000/lynx/v1/api';
+const DEV_EMULATOR_URL = 'http://10.0.2.2:5000/lynx/v1/api';
+const PROD_URL = 'https://custom-dev.onlinetestingserver.com:15413/lynx/v1/api';
+
+export const BASE_URL = __DEV__ ? DEV_DEVICE_URL : PROD_URL;
+
+export const SERVICE_TYPE_LABELS: Record<string, string> = {
+  provider_visits_user: 'Provider Visits User',
+  user_visits_provider: 'User Visits Provider',
+  both: 'Both (Provider & User Visits)',
+};
+
+export const getServiceTypeLabel = (serviceType?: string): string => {
+  if (!serviceType) return '';
+  return SERVICE_TYPE_LABELS[serviceType] || serviceType;
+};
 
 export const USER = {
   first_name: 'John',

@@ -15,7 +15,7 @@ import {
 } from '../../redux/Apis/Booking';
 import dayjs from 'dayjs';
 import { useStripe } from '@stripe/stripe-react-native';
-import { Alert } from 'react-native';
+import { Alert, InteractionManager } from 'react-native';
 import { navigationRef } from '../../utils/navigation';
 import { CommonActions } from '@react-navigation/native';
 
@@ -305,13 +305,30 @@ const useServiceDateTimeController = () => {
         booking_id: createdBookingId,
       }).unwrap();
 
+      console.log('Payment Intent Result:', JSON.stringify(paymentIntentResult, null, 2));
+
       if (!paymentIntentResult?.data?.clientSecret) {
+        console.error('No client secret in payment intent result');
         throw new Error('Failed to create payment intent');
+      }
+
+      const clientSecret = paymentIntentResult.data.clientSecret;
+      console.log('Client Secret:', clientSecret);
+      console.log('Client Secret type:', typeof clientSecret);
+      console.log('Client Secret length:', clientSecret?.length);
+
+      // Validate client secret format (should start with pi_ for payment intent)
+      if (!clientSecret.startsWith('pi_')) {
+        console.error('Invalid client secret format:', clientSecret);
+        Alert.alert('Error', 'Invalid payment configuration. Please contact support.');
+        setIsProcessing(false);
+        return;
       }
 
       setPaymentId(paymentIntentResult.data.paymentId);
 
       // Step 3: Initialize payment sheet
+      console.log('Initializing payment sheet with client secret...');
       const { error: initError } = await initPaymentSheet({
         merchantDisplayName: 'Lynx Consultancy',
         paymentIntentClientSecret: paymentIntentResult.data.clientSecret,
@@ -319,7 +336,15 @@ const useServiceDateTimeController = () => {
           name: params?.service?.category?.name || 'Customer',
         },
         returnURL: 'lynx://payment-complete',
+        allowsDelayedPaymentMethods: true,
+        appearance: {
+          colors: {
+            primary: '#007AFF',
+          },
+        },
       });
+
+      console.log('Init payment sheet result:', { error: initError });
 
       if (initError) {
         console.error('Error initializing payment sheet:', initError);
@@ -328,41 +353,63 @@ const useServiceDateTimeController = () => {
         return;
       }
 
+      console.log('Payment sheet initialized successfully');
+      
+      // Step 4: Wait before presenting (critical for Android)
+      console.log('Waiting 2 seconds before presenting payment sheet...');
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
       setPaymentSheetReady(true);
+      
+      console.log('Presenting payment sheet now...');
+      
+      try {
+        const { error: presentError } = await presentPaymentSheet();
+        console.log('Present payment sheet result:', { error: presentError });
+        
+        if (presentError) {
+          throw presentError;
+        }
+      } catch (presentError: any) {
+        console.log('Caught present error:', presentError);
 
-      // Step 4: Present payment sheet
-      const { error: presentError } = await presentPaymentSheet();
+        setIsProcessing(false);
 
-      if (presentError) {
+        // Treat "Failed to retrieve PaymentSheetResult" as user cancellation (sheet closed/dismissed)
+        const isUserCancel =
+          presentError.code === 'Canceled' ||
+          (presentError.code === 'Failed' &&
+            presentError.message?.includes('PaymentSheetResult'));
+
+        if (isUserCancel) {
+          console.log('Payment sheet closed by user');
+          return;
+        }
+
         console.error('Payment failed:', presentError);
-        setIsProcessing(false);
-
-        if (presentError.code === 'Canceled') {
-          console.log('Payment canceled by user');
-        } else {
-          Alert.alert(
-            'Payment Failed',
-            presentError.message || 'Something went wrong. Please try again.',
-          );
-        }
-      } else {
-        // Payment successful
-        console.log('Payment successful!');
-
-        // Update payment status in backend
-        try {
-          await updatePaymentStatus({
-            id: paymentIntentResult.data.paymentId,
-            payment_status: 'succeeded',
-            payment_method: 'card',
-          }).unwrap();
-        } catch (updateError) {
-          console.error('Failed to update payment status:', updateError);
-        }
-
-        setIsProcessing(false);
-        setShowSuccessModal(true);
+        Alert.alert(
+          'Payment Failed',
+          presentError.message || 'Something went wrong. Please try again.',
+        );
+        return;
       }
+
+      // Payment successful
+      console.log('Payment successful!');
+
+      // Update payment status in backend
+      try {
+        await updatePaymentStatus({
+          id: paymentIntentResult.data.paymentId,
+          payment_status: 'succeeded',
+          payment_method: 'card',
+        }).unwrap();
+      } catch (updateError) {
+        console.error('Failed to update payment status:', updateError);
+      }
+
+      setIsProcessing(false);
+      setShowSuccessModal(true);
     } catch (error) {
       console.error('Booking/Payment error:', error);
       console.error('Error details:', JSON.stringify(error, null, 2));

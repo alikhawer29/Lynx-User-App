@@ -5,6 +5,7 @@ import images from "../../../assets/images"
 import { IServiceCard } from "../../../interfaces"
 import { selectLoggedIn } from "../../../redux/Slices/AuthSlice"
 import colors from "../../../utils/colors"
+import { getServiceTypeLabel } from "../../../utils/data"
 import Badge from "../../Badge"
 import Icon from "../../Icon"
 import Image from "../../Image"
@@ -24,7 +25,10 @@ const ServiceCard: FC<IServiceCard> = ({ data, onPress, onFavorite }) => {
         review_count,
         image_url,
         is_favorite,
+        service_type,
     } = data
+
+    const serviceTypeLabel = getServiceTypeLabel(service_type)
 
     const authorized = useSelector(selectLoggedIn)
 
@@ -58,6 +62,11 @@ const ServiceCard: FC<IServiceCard> = ({ data, onPress, onFavorite }) => {
                         />
                     }
                 </Row>
+                {serviceTypeLabel ? (
+                    <Text size={12} color={colors.primary} style={styles.service_type_text}>
+                        {serviceTypeLabel}
+                    </Text>
+                ) : null}
                 <Text size={12.5} color={colors.dark_gray} lines={3}>
                     {description}
                 </Text>

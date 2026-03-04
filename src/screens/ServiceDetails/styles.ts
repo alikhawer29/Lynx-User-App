@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     borderColor: colors.primary,
   },
   button: {
-    marginTop: heightPixel(60),
+    marginTop: heightPixel(20),
   },
   premium_text: {
     marginTop: heightPixel(10),

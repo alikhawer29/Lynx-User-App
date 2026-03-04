@@ -35,6 +35,8 @@ const MyAppointments = () => {
         return { bg: 'rgba(255, 0, 0, 0.2)', text: '#FF0000' };
       case 'requested':
         return { bg: 'rgba(169, 121, 38, 0.2)', text: '#A97926' };
+      case 'rescheduled':
+        return { bg: 'rgba(28, 65, 184, 0.2)', text: '#1C41B8' };
 
       default:
         return { bg: '#F5F5F5', text: '#757575' };
@@ -115,35 +117,54 @@ const MyAppointments = () => {
   };
 
 
-  const renderFilterTabs = () => (
-    <View style={styles.filter_container}>
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.filter_scroll}
+  const renderFilterTabs = () => {
+    const statusTabs = filterTabs.filter(tab =>
+      ['all', 'pending', 'requested', 'approved', 'rejected', 'cancelled'].includes(tab.key)
+    );
+    const timelineTabs = filterTabs.filter(tab =>
+      ['upcoming', 'in_progress', 'past'].includes(tab.key)
+    );
+
+    const renderTab = (tab: any) => (
+      <TouchableOpacity
+        key={tab.key}
+        style={[
+          styles.filter_tab,
+          selectedFilter === tab?.key && styles.filter_tab_active,
+        ]}
+        onPress={() => onChangeFilter(tab.key)}
       >
-        {filterTabs.map(tab => (
-          <TouchableOpacity
-            key={tab.key}
-            style={[
-              styles.filter_tab,
-              selectedFilter === tab.key && styles.filter_tab_active,
-            ]}
-            onPress={() => onChangeFilter(tab.key)}
-          >
-            <Text
-              style={[
-                styles.filter_text,
-                selectedFilter === tab.key && styles.filter_text_active,
-              ]}
-            >
-              {tab.label}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
-    </View>
-  );
+        <Text
+          style={[
+            styles.filter_text,
+            selectedFilter === tab?.key && styles.filter_text_active,
+          ]}
+        >
+          {tab.label}
+        </Text>
+      </TouchableOpacity>
+    );
+
+    return (
+      <View style={styles.filter_container}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.filter_scroll}
+        >
+          {statusTabs.map(renderTab)}
+        </ScrollView>
+        <View style={{ height: 10 }} />
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.filter_scroll}
+        >
+          {timelineTabs.map(renderTab)}
+        </ScrollView>
+      </View>
+    );
+  };
 
   const renderEmpty = () => {
     if (isLoading) {

@@ -8,14 +8,16 @@ const styles = StyleSheet.create({
     // width: '100%',
   },
   filter_container: {
-    paddingVertical: heightPixel(15),
+    paddingVertical: heightPixel(10),
   },
   filter_scroll: {
-    // paddingHorizontal: widthPixel(20),
+    paddingHorizontal: widthPixel(6),
+    justifyContent: 'center',
+    flexGrow: 1,
   },
   filter_tab: {
     paddingHorizontal: widthPixel(16),
-    paddingVertical: heightPixel(5),
+    paddingVertical: heightPixel(4),
     borderRadius: heightPixel(20),
     marginRight: widthPixel(10),
     // backgroundColor: colors.white,

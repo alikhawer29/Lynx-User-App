@@ -1,3 +1,4 @@
+import { useCallback, useState } from 'react';
 import { SectionList, View, ActivityIndicator } from 'react-native';
 import NotificationCard from '../../components/Cards/NotificationCard';
 import Dropdown from '../../components/Dropdown';
@@ -10,6 +11,7 @@ import {
   GLOBAL_HORIZONTAL_PADDING,
   heightPixel,
 } from '../../utils/helper';
+import { useFocusEffect } from '@react-navigation/native';
 
 const Notifications = () => {
   const {
@@ -28,6 +30,17 @@ const Notifications = () => {
       setStatus,
     },
   } = useNotificationsController();
+
+  const [dropdownKey, setDropdownKey] = useState(0);
+
+  // Reset filter and close dropdown whenever this screen gains focus
+  useFocusEffect(
+    useCallback(() => {
+      setStatus('all');
+      setDropdownKey(prev => prev + 1);
+      // no cleanup needed
+    }, []),
+  );
 
   const handleStatusChange = (value: any) => {
     if (value?.value === 'all' || value?.value === 'read' || value?.value === 'unread') {
@@ -48,6 +61,7 @@ const Notifications = () => {
         <Row style={{ width: '40%' }} align="center" gap={5}>
           <Text>Showing:</Text>
           <Dropdown
+            key={dropdownKey}
             height={40}
             options={[
               { label: 'All', value: 'all' },

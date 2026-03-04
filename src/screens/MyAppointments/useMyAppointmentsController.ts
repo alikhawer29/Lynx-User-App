@@ -24,6 +24,7 @@ type FilterType =
 const FILTER_TABS: { key: FilterType; label: string }[] = [
   { key: 'all', label: 'All' },
   { key: 'pending', label: 'Pending' },
+  { key: 'requested', label: 'Requested' },
   { key: 'cancelled', label: 'Cancelled' },
   { key: 'approved', label: 'Approved' },
   { key: 'rejected', label: 'Rejected' },
@@ -55,12 +56,13 @@ const useMyAppointmentsController = () => {
 
         // Add filter params based on selected filter
         if (filterType !== 'all') {
-          // Status filters
+          // Status filters (includes "requested" as a status)
           const statusFilters = [
             'pending',
             'approved',
             'rejected',
             'cancelled',
+            'requested',
           ];
           if (statusFilters.includes(filterType)) {
             params.status = filterType;

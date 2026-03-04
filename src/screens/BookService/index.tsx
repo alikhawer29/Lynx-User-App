@@ -104,12 +104,10 @@ const BookService = () => {
               {service.name}
             </Text>
 
-            <View style={{ marginTop: 8 }}>
-              <Badge
-                text={`Category Type: ${service.category.name}`}
-                size={13}
-              />
-            </View>
+            {service?.category && <View style={{ marginTop: 8 }}>
+              <Badge text={`Category Type: ${service.category.name}`} size={13} />
+            </View>}
+
           </View>
 
           <View style={{ alignItems: 'flex-end' }}>
@@ -278,7 +276,7 @@ const BookService = () => {
           // CONTACT FORM
           <View style={styles.section}>
             <Touchable
-              onPress={() => setShowContactDetails(!showContactDetails)}
+              // onPress={() => setShowContactDetails(!showContactDetails)}
               style={styles.collapse_header}
             >
               <Text size={20} weight="bold">
@@ -412,7 +410,7 @@ const BookService = () => {
                   <Text size={16} color="#22282C" weight="semibold">
                     Email Address*
                   </Text>
-                  <Text size={14} weight="semibold" color="#666666">
+                  <Text size={12} weight="semibold" color="#666666">
                     {email || '-'}
                   </Text>
                 </View>
@@ -426,7 +424,7 @@ const BookService = () => {
           // SERVICE FORM
           <View style={styles.section}>
             <Touchable
-              onPress={() => setShowServiceDetails(!showServiceDetails)}
+              // onPress={() => setShowServiceDetails(!showServiceDetails)}
               style={styles.collapse_header}
             >
               <Text size={20} weight="bold">

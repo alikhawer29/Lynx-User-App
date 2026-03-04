@@ -10,6 +10,7 @@ import Touchable from "../../components/Touchable"
 import Wrapper from "../../components/Wrapper"
 import { ServiceData } from "../../interfaces"
 import colors from "../../utils/colors"
+import { getServiceTypeLabel } from "../../utils/data"
 import styles from "./styles"
 import useServiceDetailsController from "./useServiceDetailsController"
 
@@ -65,6 +66,11 @@ const ServiceDetails = () => {
                                     </Text>
                                 </Touchable>
                             </Row>
+                            {getServiceTypeLabel(service?.service_type) ? (
+                                <Text size={14} weight="semibold" color={colors.primary} style={{ marginTop: 4 }}>
+                                    {getServiceTypeLabel(service?.service_type)}
+                                </Text>
+                            ) : null}
                         </View>
 
                         <Text color={colors.dark_gray}>

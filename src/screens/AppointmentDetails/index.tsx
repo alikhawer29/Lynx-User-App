@@ -93,6 +93,10 @@ const AppointmentDetails = () => {
         return { bg: 'rgba(255, 0, 0, 0.2)', text: '#FF0000' };
       case 'requested':
         return { bg: 'rgba(169, 121, 38, 0.2)', text: '#A97926' };
+      case 'rescheduled':
+        return { bg: 'rgba(28, 65, 184, 0.2)', text: '#1C41B8' };
+      case 'requested_rejected':
+        return { bg: 'rgba(248, 100, 0, 0.2)', text: '#F86400' };
 
       default:
         return { bg: '#F5F5F5', text: '#757575' };
@@ -161,11 +165,25 @@ const AppointmentDetails = () => {
 
   const serviceType = booking.visit_type === 'provider_visits_user' ? 'Provider Visits You' : 'You Visit Provider';
 
+  // format time to 12 hour format
+  const formatTime = (time: string) => {
+    if (!time) return '12:00 AM';
+
+    let [hour, minute] = time.split(':');
+    let hourInt = parseInt(hour, 10);
+
+    const ampm = hourInt >= 12 ? 'PM' : 'AM';
+    hourInt = hourInt % 12 || 12;
+
+    return `${hourInt}:${minute} ${ampm}`;
+  };
+
   return (
     <Wrapper>
       <ScrollView
         style={styles.container}
         contentContainerStyle={styles.scroll_content}
+        showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl
             refreshing={isLoading}
@@ -267,11 +285,10 @@ const AppointmentDetails = () => {
             <Text size={10} style={styles.price_type}>
               {priceType} Price
             </Text>
+            <Text size={12} color={colors.primary} style={styles.service_type}>{serviceType}</Text>
+
           </View>
         </View>
-
-        <Text style={styles.service_type}>{serviceType}</Text>
-
 
         {canChat && (
           <Touchable
@@ -328,16 +345,14 @@ const AppointmentDetails = () => {
             </Text>
           </View>
 
-          <View style={styles.detail_item}>
+
+          <View style={styles.detail_item_full}>
             <Text style={styles.detail_label}>Email Address:</Text>
             <Text style={styles.detail_value}>
-              {booking.contact_details?.email}
+              {booking.contact_details?.email ||
+                '-'}
             </Text>
           </View>
-
-
-
-
 
           <View style={styles.detail_item_full}>
             <Text style={styles.detail_label}>Address:</Text>
@@ -358,7 +373,7 @@ const AppointmentDetails = () => {
           <View style={styles.detail_item}>
             <Text style={styles.detail_label}>Service Time:</Text>
             <Text style={styles.detail_value}>
-              {booking.session_time || '12:30'}
+              {formatTime(booking.session_time) || '00:00 AM'}
             </Text>
           </View>
         </View>
@@ -393,13 +408,13 @@ const AppointmentDetails = () => {
                 <View style={styles.service_provider_item_full}>
                   <Text style={styles.detail_label}>Location:</Text>
                   <TouchableOpacity onPress={onViewLocation}>
-                    <Text style={styles.view_location_text}>View Location</Text>
+                    <Text style={styles.view_location_text}>Map Link</Text>
                   </TouchableOpacity>
                 </View>
               </View>
             </View>
             <View style={styles.service_provider_details_row}>
-              <View style={styles.service_provider_item_full}>
+              <View style={styles.service_provider_item_full_address}>
                 <Text style={styles.detail_label}>Address:</Text>
                 <Text style={styles.detail_value}>
                   {booking.provider_id.provider_address}
@@ -423,9 +438,17 @@ const AppointmentDetails = () => {
               <View style={styles.requested_detail_item}>
                 <Text style={styles.detail_label}>Service Time:</Text>
                 <Text style={styles.detail_value}>
-                  {booking.proposed_session_time || '12:30'}
+                  {formatTime(booking.proposed_session_time) || '00:00 AM'}
                 </Text>
               </View>
+
+
+            </View>
+            <View style={styles.requested_reason_item}>
+              <Text style={styles.detail_label}>Reason:</Text>
+              <Text style={styles.detail_value}>
+                {booking.reschedule_reason || '-'}
+              </Text>
             </View>
           </View>
         )}
@@ -667,14 +690,7 @@ const AppointmentDetails = () => {
             </TouchableOpacity>
 
             <View style={styles.modal_icon_container}>
-              <View
-                style={[
-                  styles.modal_icon_circle,
-                  { backgroundColor: '#FFEBEE' },
-                ]}
-              >
-                <Text style={{ fontSize: 32, color: '#F44336' }}>!</Text>
-              </View>
+              <Icon source={images.modal_cross} size={60} />
             </View>
 
             <Text style={styles.modal_title}>Approved</Text>

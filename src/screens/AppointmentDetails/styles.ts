@@ -11,11 +11,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   service_type: {
-    fontSize: 13,
+    // fontSize: 13,
     fontWeight: 'bold',
-    color: colors.black,
-    marginBottom: heightPixel(3),
-    alignSelf: 'flex-start',
+    // color: colors.black,
+    // marginBottom: heightPixel(3),
+    alignSelf: 'flex-end',
   },
   scroll_content: {
     // paddingHorizontal: GLOBAL_HORIZONTAL_PADDING,
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: heightPixel(20),
+    // marginBottom: heightPixel(20),
   },
   category_text: {
     fontSize: 14,
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: colors.black,
     marginBottom: heightPixel(10),
-    marginTop: heightPixel(10),
+    // marginTop: heightPixel(10),
   },
   details_grid: {
     flexDirection: 'row',
@@ -177,7 +177,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   view_location_text: {
-    fontSize: 14,
+    fontWeight: 'bold',
+    fontSize: 13,
     color: '#B69D74',
     // marginLeft: widthPixel(5),
     textDecorationLine: 'underline',
@@ -191,7 +192,7 @@ const styles = StyleSheet.create({
     borderColor: colors.light_gray,
   },
   requested_title: {
-    fontSize: 20,
+    fontSize: 19,
     fontWeight: 'bold',
     color: '#22282C',
     marginBottom: heightPixel(10),
@@ -203,7 +204,10 @@ const styles = StyleSheet.create({
   requested_detail_item: {
     flex: 1,
   },
-
+  requested_reason_item: {
+    width: '100%',
+    marginTop: heightPixel(10),
+  },
   service_provider_section: {
     padding: heightPixel(5),
     borderRadius: heightPixel(10),
@@ -232,6 +236,11 @@ const styles = StyleSheet.create({
     width: '50%',
     marginTop: heightPixel(10),
   },
+  service_provider_item_full_address: {
+    width: '100%',
+    marginTop: heightPixel(10),
+  },
+
   button_container: {
     position: 'absolute',
     bottom: 0,
