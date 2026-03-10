@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { View, FlatList, ActivityIndicator, RefreshControl, TextInput } from 'react-native';
 import Wrapper from '../../components/Wrapper';
 import Text from '../../components/Text';
@@ -10,8 +10,6 @@ import colors from '../../utils/colors';
 import useChatListController from './useChatListController';
 import Icon from '../../components/Icon';
 import images from '../../assets/images';
-import Touchable from '../../components/Touchable';
-import Button from '../../components/Button';
 
 const ChatList = () => {
   const {
@@ -31,27 +29,18 @@ const ChatList = () => {
     },
   } = useChatListController();
 
-  const renderChatItem = ({ item }: { item: ChatRoom }) => (
-    <ChatListItem chat={item} onPress={() => onChatPress(item)} />
+  const handleSearchChange = useCallback((text: string) => {
+    setSearchQuery(text);
+  }, [setSearchQuery]);
+
+  const renderChatItem = useCallback(
+    ({ item }: { item: ChatRoom }) => (
+      <ChatListItem chat={item} onPress={() => onChatPress(item)} />
+    ),
+    [onChatPress]
   );
 
-  const renderHeader = () => (
-    <View style={styles.header_container}>
-      {/* Search Bar */}
-      <View style={styles.search_container}>
-        <TextInput
-          style={styles.search_input}
-          placeholder="Search here..."
-          placeholderTextColor={colors.medium_gray}
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-        />
-        <Icon source={images.search} size={20} tint_color={colors.medium_gray} />
-      </View>
-    </View>
-  );
-
-  const renderEmpty = () => {
+  const renderEmpty = useCallback(() => {
     if (isLoading) {
       return (
         <View style={styles.loading_container}>
@@ -59,16 +48,38 @@ const ChatList = () => {
         </View>
       );
     }
+
     return <Empty label="No chats available" />;
-  };
+  }, [isLoading]);
 
   return (
     <Wrapper>
+
+      {/* Search Bar */}
+      <View style={styles.header_container}>
+        <View style={styles.search_container}>
+          <TextInput
+            style={styles.search_input}
+            placeholder="Search here..."
+            placeholderTextColor={colors.medium_gray}
+            value={searchQuery}
+            onChangeText={handleSearchChange}
+            blurOnSubmit={false}
+            returnKeyType="search"
+            autoCorrect={false}
+            autoCapitalize="none"
+            selectTextOnFocus={false}
+            clearTextOnFocus={false}
+          />
+          <Icon source={images.search} size={20} tint_color={colors.medium_gray} />
+        </View>
+      </View>
+
+      {/* Chat List */}
       <FlatList
         data={filteredChats}
         renderItem={renderChatItem}
         keyExtractor={item => item.id || item._id}
-        ListHeaderComponent={renderHeader}
         ListEmptyComponent={renderEmpty}
         refreshControl={
           <RefreshControl
@@ -78,10 +89,16 @@ const ChatList = () => {
           />
         }
         contentContainerStyle={filteredChats.length === 0 && styles.empty_list}
+        keyboardShouldPersistTaps="always"
+        keyboardDismissMode="none"
+        removeClippedSubviews={false}
+        windowSize={10}
+        initialNumToRender={10}
+        maxToRenderPerBatch={10}
       />
+
     </Wrapper>
   );
 };
 
 export default ChatList;
-

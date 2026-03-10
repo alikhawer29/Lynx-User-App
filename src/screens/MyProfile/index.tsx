@@ -61,7 +61,7 @@ const MyProfile = () => {
                                 Phone Number
                             </Text>
                             <Text color={colors.dark_gray}>
-                                (+{user?.dialing_code}) {user?.phone}
+                                ({user?.dialing_code}) {user?.phone}
                             </Text>
                         </View>
                     </Row>

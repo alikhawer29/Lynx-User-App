@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, TouchableOpacity, ActivityIndicator, Platform } from 'react-native';
+import { View, TextInput, TouchableOpacity, ActivityIndicator, Platform, Image } from 'react-native';
 import Text from '../Text';
 import Icon from '../Icon';
 import images from '../../assets/images';
@@ -63,11 +63,16 @@ const ChatInput: React.FC<ChatInputProps> = ({
         <View style={styles.files_preview}>
           {selectedFiles.map((file, index) => (
             <View key={index} style={styles.file_item}>
-              <Text size={12} numberOfLines={1} style={styles.file_name}>
-                {file.fileName || `File ${index + 1}`}
-              </Text>
-              <TouchableOpacity onPress={() => removeFile(index)}>
-                <Text size={14} color={colors.danger}>
+              <Image
+                source={{ uri: file.uri }}
+                style={styles.file_image}
+                resizeMode="cover"
+              />
+              <TouchableOpacity
+                style={styles.remove_button}
+                onPress={() => removeFile(index)}
+              >
+                <Text size={10} color={colors.white}>
                   ✕
                 </Text>
               </TouchableOpacity>
@@ -84,34 +89,26 @@ const ChatInput: React.FC<ChatInputProps> = ({
           onChangeText={setMessage}
           multiline
           maxLength={1000}
-          editable={!disabled && !isLoading}
+          editable={!disabled}
         />
-        {/* <TouchableOpacity
-          style={styles.attachment_button}
-          onPress={handleAttachment}
-          disabled={disabled || isLoading}
-        >
-          <Icon source={images.attachment} size={24} tint_color={colors.medium_gray} />
-        </TouchableOpacity> */}
         <TouchableOpacity
-          style={styles.camera_button}
+          style={styles.attachment_button}
           onPress={handleAttachment}
           disabled={disabled || isLoading}
         >
           <Icon source={images.camera} size={24} tint_color={colors.medium_gray} />
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.send_button, (disabled || isLoading) && styles.send_button_disabled]}
+          style={[styles.send_button, disabled && styles.send_button_disabled]}
           onPress={handleSend}
-          disabled={disabled || isLoading || (!message.trim() && selectedFiles.length === 0)}
+          disabled={disabled || (!message.trim() && selectedFiles.length === 0)}
         >
           {isLoading ? (
-            <ActivityIndicator size="small" color={colors.white} />
+            <ActivityIndicator size="small" color={colors.primary} />
           ) : (
-            <Icon source={images.send} size={20} />
+            <Icon source={images.send} size={24} tint_color={colors.primary} />
           )}
         </TouchableOpacity>
-
       </View>
     </View>
   );

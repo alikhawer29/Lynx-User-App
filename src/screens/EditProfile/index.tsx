@@ -83,7 +83,7 @@ const EditProfile = () => {
                             onChangeCountry={(c) => {
                                 if (!c) return;
                                 setFieldValue("country_code", c.cca2);
-                                setFieldValue("dialing_code", c.callingCode?.[0] || "");
+                                setFieldValue("dialing_code", `+${c.callingCode?.[0] || ""}`);
                             }}
                         />
                         <Dropdown

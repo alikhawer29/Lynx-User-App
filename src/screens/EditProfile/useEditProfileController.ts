@@ -18,13 +18,15 @@ const useEditProfileController = () => {
   const initial = {
     first_name: user?.first_name || '',
     last_name: user?.last_name || '',
-    dialing_code: user?.dialing_code || '+971',
+    dialing_code: user?.dialing_code?.startsWith('+')
+      ? user?.dialing_code
+      : `+${user?.dialing_code || '971'}`,
     country_code: user?.country_code || 'AE',
     phone: user?.phone || '',
     language: user?.language || '',
   };
 
-  const [submit, { isSuccess, isLoading }] = useEditProfileMutation();
+  const [submit, { isSuccess, isLoading, error }] = useEditProfileMutation();
 
   useEffect(() => {
     if (isSuccess) {
@@ -40,17 +42,62 @@ const useEditProfileController = () => {
     }
   }, [isSuccess]);
 
+  useEffect(() => {
+    if (error) {
+      console.error('Profile update error:', error);
+      const errorMessage =
+        'data' in error
+          ? (error as any).data?.message
+          : 'Failed to update profile. Please try again.';
+
+      showOkModal(
+        {
+          type: 'error',
+          title: 'Update Failed',
+          message: errorMessage,
+        },
+        undefined,
+        undefined,
+      );
+    }
+  }, [error]);
+
   const onSubmit = useCallback(
     (data: any) => {
+      console.log('=== FORM SUBMISSION START ===');
+      console.log('Form data submitted:', data);
+
       let payload = { ...data };
 
       if (image) {
         payload.image = image;
+        console.log('Image attached:', image);
       }
 
-      payload = formHandler(payload);
+      // Remove empty values and send as JSON instead of FormData
+      Object.keys(payload).forEach(key => {
+        if (
+          payload[key] === '' ||
+          payload[key] === null ||
+          payload[key] === undefined
+        ) {
+          delete payload[key];
+        }
+      });
 
-      submit(payload);
+      console.log('Final payload:', payload);
+      console.log('Calling submit API...');
+
+      submit(payload)
+        .unwrap()
+        .then((result: any) => {
+          console.log('Submit successful:', result);
+        })
+        .catch((error: any) => {
+          console.error('Submit failed:', error);
+        });
+
+      console.log('=== FORM SUBMISSION END ===');
     },
     [image],
   );

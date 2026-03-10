@@ -1,5 +1,7 @@
 import React from 'react';
 import { View, FlatList, ActivityIndicator, KeyboardAvoidingView, Platform } from 'react-native';
+import { useHeaderHeight } from '@react-navigation/elements';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Wrapper from '../../components/Wrapper';
 import Text from '../../components/Text';
 import MessageBubble from '../../components/MessageBubble';
@@ -10,8 +12,15 @@ import styles from './styles';
 import colors from '../../utils/colors';
 import useChatRoomController from './useChatRoomController';
 import dayjs from 'dayjs';
+import useKeyboard from '../../hooks/useKeyboard';
+import { heightPixel } from '../../utils/helper';
 
 const ChatRoom = () => {
+  const insets = useSafeAreaInsets();
+  const headerHeight = useHeaderHeight();
+  const keyboardHeight = useKeyboard();
+  const isKeyboardOpen = keyboardHeight > 0;
+
   const {
     values: {
       messages,
@@ -79,12 +88,12 @@ const ChatRoom = () => {
   };
 
   return (
-    <Wrapper>
-      <KeyboardAvoidingView
-        style={styles.container}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
-      >
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? headerHeight : 0}
+    >
+      <Wrapper>
         <FlatList
           ref={flatListRef}
           data={messages}
@@ -94,16 +103,27 @@ const ChatRoom = () => {
           ListFooterComponent={renderFooter}
           inverted
           contentContainerStyle={messages.length === 0 && styles.empty_list}
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode={Platform.OS === 'ios' ? 'interactive' : 'on-drag'}
+          showsVerticalScrollIndicator={false}
         />
         {canSendMessages && (
-          <ChatInput
-            onSend={onSendMessage}
-            isLoading={isSending}
-            disabled={!canSendMessages}
-          />
+          <View style={{
+            paddingVertical: heightPixel(10),
+            paddingBottom:
+              Platform.OS === 'ios'
+                ? null
+                : (isKeyboardOpen ? heightPixel(80) : heightPixel(0)) + insets.bottom,
+          }}>
+            <ChatInput
+              onSend={onSendMessage}
+              isLoading={isSending}
+              disabled={!canSendMessages}
+            />
+          </View>
         )}
-      </KeyboardAvoidingView>
-    </Wrapper>
+      </Wrapper>
+    </KeyboardAvoidingView>
   );
 };
 

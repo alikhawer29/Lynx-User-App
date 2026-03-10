@@ -100,6 +100,7 @@ const ROUTES_OPTIONS = [
     right: null,
     profile: false,
     title: 'Book Service',
+    auth: true,
   },
   {
     route_name: ROUTES.LOCATION_VIEW,
@@ -114,6 +115,7 @@ const ROUTES_OPTIONS = [
     right: null,
     profile: false,
     title: 'Book Service',
+    auth: true,
   },
   {
     route_name: ROUTES.PAYMENT_DETAILS,
@@ -121,6 +123,7 @@ const ROUTES_OPTIONS = [
     right: null,
     profile: false,
     title: 'Card Details',
+    auth: true,
   },
   {
     route_name: ROUTES.MY_APPOINTMENTS,
