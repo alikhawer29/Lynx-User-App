@@ -9,7 +9,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.appfnh.lynx.user</string>
+	<string>com.appfnh.lynx</string>
 	<key>PROJECT_ID</key>
 	<string>lynx-provider</string>
 	<key>STORAGE_BUCKET</key>

@@ -20,6 +20,7 @@ const styles = StyleSheet.create({
     marginLeft: widthPixel(8),
     fontSize: 14,
     color: '#333333',
+    height: heightPixel(42),
   },
   filter_container: {
     flexDirection: 'row',

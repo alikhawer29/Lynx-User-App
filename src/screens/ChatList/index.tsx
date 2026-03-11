@@ -61,7 +61,7 @@ const ChatList = () => {
           <TextInput
             style={styles.search_input}
             placeholder="Search here..."
-            placeholderTextColor={colors.medium_gray}
+            // placeholderTextColor={colors.medium_gray}
             value={searchQuery}
             onChangeText={handleSearchChange}
             blurOnSubmit={false}
