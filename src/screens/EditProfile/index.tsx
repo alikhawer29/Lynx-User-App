@@ -8,6 +8,7 @@ import Input from "../../components/Input"
 import Row from "../../components/Row"
 import Wrapper from "../../components/Wrapper"
 import colors from "../../utils/colors"
+import { clampNationalPhoneDigits } from "../../utils/phoneNationalDigits"
 import { heightPixel } from "../../utils/helper"
 import useEditProfileController from "./useEditProfileController"
 
@@ -36,6 +37,7 @@ const EditProfile = () => {
             <Formik
                 innerRef={formik_ref}
                 initialValues={initial}
+                enableReinitialize
                 validationSchema={schema}
                 onSubmit={onSubmit}
             >
@@ -59,7 +61,7 @@ const EditProfile = () => {
                                     onChangeText={handleChange("first_name")}
                                     error={touched?.first_name ? errors?.first_name : ""}
                                 />
-                            </View>*
+                            </View>
                             <View style={{ flex: 0.5 }}>
                                 <Input
                                     label="Last Name"
@@ -82,8 +84,13 @@ const EditProfile = () => {
                             country={data?.country_code}
                             onChangeCountry={(c) => {
                                 if (!c) return;
-                                setFieldValue("country_code", c.cca2);
+                                const nextCountry = (c.cca2 || "AE").toUpperCase();
+                                setFieldValue("country_code", nextCountry);
                                 setFieldValue("dialing_code", `+${c.callingCode?.[0] || ""}`);
+                                setFieldValue(
+                                    "phone",
+                                    clampNationalPhoneDigits(data?.phone || "", nextCountry)
+                                );
                             }}
                         />
                         <Dropdown

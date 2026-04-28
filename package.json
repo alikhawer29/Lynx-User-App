@@ -23,6 +23,7 @@
     "@reduxjs/toolkit": "^2.8.2",
     "@stripe/stripe-react-native": "^0.56.0",
     "formik": "^2.4.6",
+    "libphonenumber-js": "^1.12.42",
     "react": "19.1.0",
     "react-native": "0.80.2",
     "react-native-asset": "^2.1.1",

@@ -7,6 +7,7 @@ import images from '../../assets/images';
 import useToggle from '../../hooks/useToggle';
 import { IInput } from '../../interfaces';
 import colors from '../../utils/colors';
+import { clampNationalPhoneDigits, getMaxNationalDigitsForCountry } from '../../utils/phoneNationalDigits';
 import { createInsets, dateFormatter, font, heightPixel, timeFormatter, widthPixel } from '../../utils/helper';
 import Icon from '../Icon';
 import Text from '../Text';
@@ -43,7 +44,17 @@ const Input: FC<IInput> = props => {
 
     const [isPasswordVisible, setIsPasswordVisible] = useState(type === 'password');
     const [isFocused, setIsFocused] = useState(false);
+    const [phoneCountryCode, setPhoneCountryCode] = useState<string>(() => {
+        if (typeof country === 'string' && country.length === 2) return country.toUpperCase();
+        return 'AE';
+    });
     const phoneRef = useRef<PhoneInput>(null);
+
+    useEffect(() => {
+        if (type === 'phone' && typeof country === 'string' && country.length === 2) {
+            setPhoneCountryCode(country.toUpperCase());
+        }
+    }, [country, type]);
 
     const togglePasswordVisibility = () => {
         setIsPasswordVisible(!isPasswordVisible);
@@ -84,6 +95,9 @@ const Input: FC<IInput> = props => {
     const [toggleDate, dateOpen] = useToggle();
 
     const handleCountryChange = (countryData: CountryData): void => {
+        if (countryData?.cca2) {
+            setPhoneCountryCode(countryData.cca2.toUpperCase());
+        }
         if (countryData && onChangeCountry) {
             const countryInfo = {
                 cca2: countryData?.cca2 || country,
@@ -91,6 +105,20 @@ const Input: FC<IInput> = props => {
             };
             onChangeCountry(countryInfo);
         }
+    };
+
+    /** Ref matches PhoneInput's flag immediately; Formik `country` can update one tick later. */
+    const resolvePhoneCountryCode = (): string => {
+        const fromRef = (phoneRef.current as { getCountryCode?: () => string } | null)?.getCountryCode?.();
+        if (fromRef && typeof fromRef === 'string' && fromRef.length === 2) {
+            return fromRef.toUpperCase();
+        }
+        return phoneCountryCode.toUpperCase();
+    };
+
+    const handlePhoneChange = (text: string): void => {
+        const limited = clampNationalPhoneDigits(text || '', resolvePhoneCountryCode());
+        onChangeText?.(limited);
     };
 
     const getPhoneInputValue = (): string => {
@@ -108,7 +136,7 @@ const Input: FC<IInput> = props => {
 
     const getDefaultCountryCode = (): string => {
         if (country && typeof country === 'string' && country.length === 2) {
-            return country;
+            return country.toUpperCase();
         }
         return "AE";
     };
@@ -140,6 +168,7 @@ const Input: FC<IInput> = props => {
             {
                 type === "phone" ?
                     <PhoneInput
+                        key={`phone-${getDefaultCountryCode()}`}
                         ref={phoneRef}
                         layout='first'
                         disabled={disabled}
@@ -147,7 +176,7 @@ const Input: FC<IInput> = props => {
                         defaultValue={getPhoneInputValue()}
                         value={getPhoneInputValue()}
                         defaultCode={getDefaultCountryCode() as any}
-                        onChangeText={onChangeText}
+                        onChangeText={handlePhoneChange}
                         onChangeCountry={handleCountryChange}
                         containerStyle={[
                             {
@@ -192,7 +221,8 @@ const Input: FC<IInput> = props => {
                         textInputProps={{
                             cursorColor: colors.primary,
                             placeholderTextColor: colors.dark_gray,
-                            editable: !disabled
+                            editable: !disabled,
+                            maxLength: getMaxNationalDigitsForCountry(resolvePhoneCountryCode())
                         }}
                         countryPickerProps={{
                             renderFlagButton: false,

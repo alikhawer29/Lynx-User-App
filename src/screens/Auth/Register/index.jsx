@@ -9,6 +9,7 @@ import Text from "../../../components/Text"
 import Upload from "../../../components/Upload"
 import colors from "../../../utils/colors"
 import styles from "./styles"
+import { clampNationalPhoneDigits } from "../../../utils/phoneNationalDigits"
 import useRegisterController from "./useRegisterController"
 
 const Register = () => {
@@ -82,8 +83,13 @@ const Register = () => {
                             error={touched?.phone ? errors?.phone : ""}
                             country={data?.country_code}
                             onChangeCountry={e => {
-                                setFieldValue("country_code", e?.cca2)
+                                const nextCountry = e?.cca2 || "AE"
+                                setFieldValue("country_code", nextCountry)
                                 setFieldValue("dialing_code", e?.callingCode?.[0])
+                                setFieldValue(
+                                    "phone",
+                                    clampNationalPhoneDigits(data?.phone || "", nextCountry)
+                                )
                             }}
                         />
                         <Dropdown

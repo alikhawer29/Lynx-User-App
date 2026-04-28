@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { useModal } from '../../contexts/ModalContext';
 import useImage from '../../hooks/useImage';
@@ -7,6 +7,7 @@ import { selectUser } from '../../redux/Slices/AuthSlice';
 import { LANGUAGES } from '../../utils/data';
 import { formHandler } from '../../utils/helper';
 import { goBack } from '../../utils/navigation';
+import { clampNationalPhoneDigits } from '../../utils/phoneNationalDigits';
 import { EDIT_PROFILE_SCHEMA } from '../../utils/validators';
 
 const useEditProfileController = () => {
@@ -15,16 +16,19 @@ const useEditProfileController = () => {
   const { showOkModal } = useModal();
   const { image, openGallery } = useImage();
 
-  const initial = {
-    first_name: user?.first_name || '',
-    last_name: user?.last_name || '',
-    dialing_code: user?.dialing_code?.startsWith('+')
-      ? user?.dialing_code
-      : `+${user?.dialing_code || '971'}`,
-    country_code: user?.country_code || 'AE',
-    phone: user?.phone || '',
-    language: user?.language || '',
-  };
+  const initial = useMemo(() => {
+    const cc = (user?.country_code || 'AE').toUpperCase();
+    return {
+      first_name: user?.first_name || '',
+      last_name: user?.last_name || '',
+      dialing_code: user?.dialing_code?.startsWith('+')
+        ? user?.dialing_code
+        : `+${user?.dialing_code || '971'}`,
+      country_code: cc,
+      phone: clampNationalPhoneDigits(String(user?.phone || ''), cc),
+      language: user?.language || '',
+    };
+  }, [user]);
 
   const [submit, { isSuccess, isLoading, error }] = useEditProfileMutation();
 

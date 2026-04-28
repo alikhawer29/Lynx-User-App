@@ -1,3 +1,5 @@
+import type { CountryCode } from 'libphonenumber-js';
+import { isValidPhoneNumber } from 'libphonenumber-js';
 import * as Yup from 'yup';
 
 export const LOGIN_SCHEMA = Yup.object().shape({
@@ -42,12 +44,12 @@ export const SIGNUP_SCHEMA = Yup.object().shape({
     .matches(/^[A-Z]{2}$/, 'Invalid country code format'),
   phone: Yup.string()
     .required('Phone Number is required')
-    .matches(/^\d{7,15}$/, 'Phone Number must be between 7 and 15 digits')
-    .test('phone-format', 'Invalid phone number format', function (value) {
+    .test('phone-valid', 'Enter a valid phone number for this country', function (value) {
       if (!value) return false;
-      // Remove any non-digit characters for validation
+      const { country_code } = this.parent as { country_code?: string };
+      if (!country_code) return false;
       const digitsOnly = value.replace(/\D/g, '');
-      return digitsOnly.length >= 7 && digitsOnly.length <= 15;
+      return isValidPhoneNumber(digitsOnly, country_code.toUpperCase() as CountryCode);
     }),
   language: Yup.string()
     .required('Language is required')
@@ -125,12 +127,12 @@ export const EDIT_PROFILE_SCHEMA = Yup.object().shape({
     .matches(/^[A-Z]{2}$/, 'Invalid country code format'),
   phone: Yup.string()
     .required('Phone Number is required')
-    .matches(/^\d{7,15}$/, 'Phone Number must be between 7 and 15 digits')
-    .test('phone-format', 'Invalid phone number format', function (value) {
+    .test('phone-valid', 'Enter a valid phone number for this country', function (value) {
       if (!value) return false;
-      // Remove any non-digit characters for validation
+      const { country_code } = this.parent as { country_code?: string };
+      if (!country_code) return false;
       const digitsOnly = value.replace(/\D/g, '');
-      return digitsOnly.length >= 7 && digitsOnly.length <= 15;
+      return isValidPhoneNumber(digitsOnly, country_code.toUpperCase() as CountryCode);
     }),
   language: Yup.string()
     .required('Language is required')

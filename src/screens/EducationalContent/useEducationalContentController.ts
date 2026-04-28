@@ -32,8 +32,16 @@ const useEducationalContentController = () => {
     const { data, isFetching: isLoading, refetch, isSuccess } = useGetContentsQuery({ search: debouncedSearch, type: selected })
 
     useEffect(() => {
-        if (isSuccess) {
-            setContent(data?.data || [])
+        if (isSuccess && data?.data) {
+            const rows = data.data as ContentData[]
+            const visible = rows.filter((item) => {
+                const deleted =
+                    item.deleted === true || (item as { deleted?: string }).deleted === 'true'
+                const active =
+                    item.active === true || (item as { active?: string }).active === 'true'
+                return active && !deleted
+            })
+            setContent(visible)
         }
     }, [isSuccess, data, isLoading])
 

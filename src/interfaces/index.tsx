@@ -547,6 +547,10 @@ export interface ContentData {
     media_thumbnail_url?: string
     createdAt: Date
     type: "article" | "video"
+    /** When true, item is soft-deleted and must not be listed */
+    deleted?: boolean
+    /** Only items with active === true should appear in educational lists */
+    active?: boolean
 }
 
 export interface INotificationCard {
