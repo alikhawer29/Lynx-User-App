@@ -10,4 +10,10 @@
         <item name="android:background">@drawable/bootsplash</item>
     </style>
 
+<!-- new -->
+    <style name="Theme.BootSplash" parent="Theme.AppCompat.Light.NoActionBar">
+    <item name="android:windowBackground">@drawable/bootsplash</item>
+</style>
+
 </resources>
+
