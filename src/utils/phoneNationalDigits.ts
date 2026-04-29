@@ -1,13 +1,10 @@
 import type { CountryCode } from 'libphonenumber-js';
-import {
-  getCountryCallingCode,
-  Metadata,
-  parsePhoneNumberFromString,
-  validatePhoneNumberLength,
-} from 'libphonenumber-js';
+import { Metadata } from 'libphonenumber-js';
 
 /**
- * Max national number length for a region from libphonenumber metadata (one lookup, no per-country loops).
+ * Returns the maximum national significant number length for a country from
+ * libphonenumber metadata. This is the digit count EXCLUDING the country
+ * calling code and any trunk prefix (e.g. leading 0).
  */
 export function getMaxNationalDigitsForCountry(countryCode: string): number {
   const cc = (countryCode || 'AE').toUpperCase() as CountryCode;
@@ -23,39 +20,19 @@ export function getMaxNationalDigitsForCountry(countryCode: string): number {
 }
 
 /**
- * Strips non-digits, caps to metadata max length, then prevents entering an extra digit that
- * invalidates a previously valid national number (e.g. PK mobile 10 digits vs an 11th digit).
+ * Strips non-digit characters from `raw` and caps the result at the
+ * country's maximum national significant number length.
  *
- * Note: validatePhoneNumberLength() alone is too permissive when metadata lists multiple lengths
- * (e.g. PK [8–12]); parsing full E.164 with parsePhoneNumberFromString handles that correctly.
+ * Validation of whether the number is actually valid for the country is
+ * intentionally deferred to the Yup schema (submit-time), NOT done here.
+ * Doing validity checks inside an onChangeText handler causes the input to
+ * truncate partial numbers whenever an intermediate digit sequence happens
+ * to match a shorter valid format (e.g. a 7-digit landline while the user
+ * is typing a 10-digit mobile number), making the full number unreachable.
  */
 export function clampNationalPhoneDigits(raw: string, countryCode: string): string {
   const cc = (countryCode || 'AE').toUpperCase() as CountryCode;
-  const callingCode = getCountryCallingCode(cc);
-  let digits = raw.replace(/\D/g, '');
-  const hardCap = getMaxNationalDigitsForCountry(countryCode);
-  digits = digits.slice(0, hardCap);
-
-  while (digits.length > 0) {
-    const parsed = parsePhoneNumberFromString(`+${callingCode}${digits}`);
-    if (parsed?.isValid()) {
-      return digits;
-    }
-    if (digits.length <= 1) {
-      return digits;
-    }
-    const lenStatus = validatePhoneNumberLength(digits, cc);
-    if (lenStatus === 'TOO_LONG') {
-      digits = digits.slice(0, -1);
-      continue;
-    }
-    const shorter = digits.slice(0, -1);
-    const parsedShorter = parsePhoneNumberFromString(`+${callingCode}${shorter}`);
-    if (parsedShorter?.isValid()) {
-      digits = shorter;
-      continue;
-    }
-    break;
-  }
-  return digits;
+  const digits = raw.replace(/\D/g, '');
+  const hardCap = getMaxNationalDigitsForCountry(cc);
+  return digits.slice(0, hardCap);
 }

@@ -1,6 +1,7 @@
 import type { CountryCode } from 'libphonenumber-js';
 import { isValidPhoneNumber } from 'libphonenumber-js';
 import * as Yup from 'yup';
+import { getMaxNationalDigitsForCountry } from './phoneNationalDigits';
 
 export const LOGIN_SCHEMA = Yup.object().shape({
   email: Yup.string().email('Invalid email').required('Email is required'),
@@ -44,12 +45,24 @@ export const SIGNUP_SCHEMA = Yup.object().shape({
     .matches(/^[A-Z]{2}$/, 'Invalid country code format'),
   phone: Yup.string()
     .required('Phone Number is required')
-    .test('phone-valid', 'Enter a valid phone number for this country', function (value) {
+    .test('phone-valid', 'Invalid phone number', function (value) {
       if (!value) return false;
       const { country_code } = this.parent as { country_code?: string };
       if (!country_code) return false;
+      const cc = country_code.toUpperCase() as CountryCode;
       const digitsOnly = value.replace(/\D/g, '');
-      return isValidPhoneNumber(digitsOnly, country_code.toUpperCase() as CountryCode);
+      if (!digitsOnly) return this.createError({ message: 'Phone Number is required' });
+      const maxDigits = getMaxNationalDigitsForCountry(cc);
+      try {
+        if (!isValidPhoneNumber(digitsOnly, cc)) {
+          return this.createError({
+            message: `Enter a valid ${maxDigits}-digit phone number for the selected country`,
+          });
+        }
+        return true;
+      } catch {
+        return this.createError({ message: 'Enter a valid phone number for the selected country' });
+      }
     }),
   language: Yup.string()
     .required('Language is required')
@@ -127,12 +140,24 @@ export const EDIT_PROFILE_SCHEMA = Yup.object().shape({
     .matches(/^[A-Z]{2}$/, 'Invalid country code format'),
   phone: Yup.string()
     .required('Phone Number is required')
-    .test('phone-valid', 'Enter a valid phone number for this country', function (value) {
+    .test('phone-valid', 'Invalid phone number', function (value) {
       if (!value) return false;
       const { country_code } = this.parent as { country_code?: string };
       if (!country_code) return false;
+      const cc = country_code.toUpperCase() as CountryCode;
       const digitsOnly = value.replace(/\D/g, '');
-      return isValidPhoneNumber(digitsOnly, country_code.toUpperCase() as CountryCode);
+      if (!digitsOnly) return this.createError({ message: 'Phone Number is required' });
+      const maxDigits = getMaxNationalDigitsForCountry(cc);
+      try {
+        if (!isValidPhoneNumber(digitsOnly, cc)) {
+          return this.createError({
+            message: `Enter a valid ${maxDigits}-digit phone number for the selected country`,
+          });
+        }
+        return true;
+      } catch {
+        return this.createError({ message: 'Enter a valid phone number for the selected country' });
+      }
     }),
   language: Yup.string()
     .required('Language is required')

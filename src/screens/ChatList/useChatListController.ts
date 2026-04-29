@@ -3,6 +3,11 @@ import {
   useGetUserChatsQuery,
   useCreateSupportChatMutation,
 } from '../../redux/Apis/Chat';
+import { useAppDispatch } from '../../hooks';
+import {
+  setTotalUnreadCount,
+} from '../../redux/Slices/ChatSlice';
+import socketService from '../../services/socket';
 import { ChatRoom } from '../../types/chat';
 import { navigate } from '../../utils/navigation';
 import { ROUTES } from '../../utils/routes';
@@ -10,6 +15,7 @@ import { ROUTES } from '../../utils/routes';
 type FilterType = 'all' | 'support' | 'appointment';
 
 const useChatListController = () => {
+  const dispatch = useAppDispatch();
   const [searchQuery, setSearchQuery] = useState('');
   const [filter, setFilter] = useState<FilterType>('all');
   const [page, setPage] = useState(1);
@@ -90,10 +96,33 @@ const useChatListController = () => {
   useEffect(() => {
     const supportChats = supportChatsData?.data || [];
     if (supportChats.length === 0 && !isSupportLoading) {
-      // Auto-create support chat
       createSupportChat({});
     }
   }, [supportChatsData, isSupportLoading]);
+
+  // Sync accurate total unread count to Redux whenever chat data changes
+  useEffect(() => {
+    const total = chats.reduce(
+      (sum: number, chat: ChatRoom) => sum + (chat.my_unread_count || 0),
+      0,
+    );
+    dispatch(setTotalUnreadCount(total));
+  }, [chats, dispatch]);
+
+  // Socket: refetch chat list when a new message arrives in a room the user is NOT currently in
+  // The server emits new_message_notification on the user's personal socket for background rooms
+  useEffect(() => {
+    const handleNewMessageNotification = () => {
+      refetchSupport();
+      refetchAppointment();
+    };
+
+    socketService.on('new_message_notification', handleNewMessageNotification);
+
+    return () => {
+      socketService.off('new_message_notification', handleNewMessageNotification);
+    };
+  }, [refetchSupport, refetchAppointment]);
 
   return {
     values: {

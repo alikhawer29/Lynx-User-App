@@ -37,12 +37,15 @@ const ChatRoom = () => {
   } = useChatRoomController();
 
   console.log(canSendMessages, 'canSendMessages')
+  console.log("messages", messages)
 
   const renderMessage = ({ item, index }: { item: ChatMessage; index: number }) => {
-    const previousMessage = index > 0 ? messages[index - 1] : null;
+    // Data is newest-first; messages[index+1] is the older neighbour (rendered above).
+    // Show a separator when crossing a day boundary moving upward (older direction).
+    const olderMessage = index < messages.length - 1 ? messages[index + 1] : null;
     const showDateSeparator =
-      !previousMessage ||
-      !dayjs(item.createdAt).isSame(dayjs(previousMessage.createdAt), 'day');
+      !olderMessage ||
+      !dayjs(item.createdAt).isSame(dayjs(olderMessage.createdAt), 'day');
 
     return (
       <View>

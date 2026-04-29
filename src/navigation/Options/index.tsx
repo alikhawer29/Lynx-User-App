@@ -8,6 +8,9 @@ import ProfileViewer from '../../components/ProfileViewer';
 import Row from '../../components/Row';
 import Text from '../../components/Text';
 import Touchable from '../../components/Touchable';
+import { useGetNotificationsQuery } from '../../redux/Apis/Notifications';
+import { useAppSelector } from '../../hooks';
+import { selectTotalUnreadCount } from '../../redux/Slices/ChatSlice';
 import colors from '../../utils/colors';
 import { widthPixel } from '../../utils/helper';
 import {
@@ -16,6 +19,49 @@ import {
   navigateAndSimpleReset,
 } from '../../utils/navigation';
 import { NAVIGATORS, ROUTES, ROUTES_OPTIONS } from '../../utils/routes';
+
+interface NotificationBellButtonProps {
+  transparent?: boolean;
+}
+
+const NotificationBellButton: React.FC<NotificationBellButtonProps> = ({ transparent }) => {
+  const { data } = useGetNotificationsQuery('unread');
+  const unreadNotifications = data?.data?.length ?? 0;
+  const unreadMessages = useAppSelector(selectTotalUnreadCount);
+
+  // Show the dot for either unread general notifications OR unread chat messages
+  const showBadge = unreadNotifications > 0 || unreadMessages > 0;
+
+  return (
+    <Touchable
+      style={{ marginRight: widthPixel(20) }}
+      onPress={() => navigate(NAVIGATORS.NOTIFICATION_STACK)}
+    >
+      <View>
+        <Icon
+          source={images.notifications}
+          border={transparent ? colors.white : colors.medium_gray}
+          size={40}
+          rounded
+          less_rounded
+          less_padding
+          tint_color={transparent && colors.white}
+        />
+        {showBadge && (
+          <View style={{
+            position: 'absolute',
+            top: 2,
+            right: 2,
+            backgroundColor: colors.danger,
+            borderRadius: 5,
+            width: 10,
+            height: 10,
+          }} />
+        )}
+      </View>
+    </Touchable>
+  );
+};
 
 type OptionsProps = {
   route: { name: string };
@@ -88,13 +134,13 @@ const Options = (
       );
     }
 
+    if (currentRoute?.right === 'notifications') {
+      return <NotificationBellButton transparent={currentRoute?.transparent} />;
+    }
+
     const iconSource = currentRoute?.right ? images[currentRoute.right] : null;
 
-    const onPress = () => {
-      if (currentRoute?.right === 'notifications') {
-        navigate(NAVIGATORS.NOTIFICATION_STACK);
-      }
-    };
+    const onPress = () => { };
 
     if (!iconSource) return null;
 

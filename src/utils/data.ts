@@ -214,8 +214,8 @@ export const LANGUAGES = [
     label: 'English',
     value: 'english',
   },
-  {
-    label: 'French',
-    value: 'french',
-  },
+  // {
+  //   label: 'French',
+  //   value: 'french',
+  // },
 ];

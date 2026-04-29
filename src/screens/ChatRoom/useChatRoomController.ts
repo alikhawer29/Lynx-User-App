@@ -62,15 +62,16 @@ const useChatRoomController = () => {
 
   const messages = useMemo(() => {
     const msgs = messagesData?.data || [];
-    // Combine API messages with realtime messages
-    const allMessages = [...msgs, ...realtimeMessages];
-    // Remove duplicates based on _id or id
+    // Realtime messages are newest; merge then deduplicate
+    const allMessages = [...realtimeMessages, ...msgs];
     const uniqueMessages = allMessages.filter(
       (msg, index, self) =>
         index === self.findIndex(m => (m._id || m.id) === (msg._id || msg.id)),
     );
-    // Reverse to show latest at bottom (inverted FlatList will show them correctly)
-    return [...uniqueMessages].reverse();
+    // Sort newest-first so data[0] (newest) appears at the bottom of the inverted FlatList
+    return uniqueMessages.sort(
+      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    );
   }, [messagesData, realtimeMessages]);
 
   // Determine if user can send messages
@@ -154,15 +155,21 @@ const useChatRoomController = () => {
   useEffect(() => {
     const chatRoomId = chatRoom.id || chatRoom._id;
 
-    // Join chat room
-    if (socketService.isConnected()) {
-      socketService.joinChat(chatRoomId);
-    }
+    const joinRoom = () => {
+      if (socketService.isConnected()) {
+        socketService.joinChat(chatRoomId);
+      }
+    };
+
+    // Join immediately if already connected, otherwise wait for the connect event
+    joinRoom();
+    socketService.on('connect', joinRoom);
 
     // Listen for new messages
     const handleReceiveMessage = (message: ChatMessage) => {
       console.log('Received message via socket:', message);
-      setRealtimeMessages(prev => [...prev, message]);
+      // Prepend so newest stays at index 0 (bottom of inverted FlatList)
+      setRealtimeMessages(prev => [message, ...prev]);
 
       // Scroll to bottom
       setTimeout(() => {
@@ -220,6 +227,7 @@ const useChatRoomController = () => {
 
     // Cleanup
     return () => {
+      socketService.off('connect', joinRoom);
       socketService.off('receive_message', handleReceiveMessage);
       socketService.off('message_delivered_ack', handleMessageDelivered);
       socketService.off('message_read_ack', handleMessageRead);
