@@ -9,6 +9,7 @@ import Text from '../../components/Text';
 import Touchable from '../../components/Touchable';
 import Wrapper from '../../components/Wrapper';
 import colors from '../../utils/colors';
+import { clampNationalPhoneDigits } from '../../utils/phoneNationalDigits';
 import styles from './styles';
 import useBookServiceController from './useBookServiceController';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
@@ -68,10 +69,12 @@ const BookService = () => {
       setShowFloor,
       setShowTimeSlot,
       setShowContact,
+      onContinueContact,
       onEditContact,
       onEditService,
     },
   } = useBookServiceController();
+
 
   if (isLoading || !service) {
     return (
@@ -321,8 +324,11 @@ const BookService = () => {
                     handleTouch('phone');
                   }}
                   onChangeCountry={country => {
-                    setPhoneCountry(country.cca2);
-                    setPhoneDialingCode(`+${country.callingCode[0]}`);
+                    const nextCountry = (country.cca2 || 'AE').toUpperCase();
+                    setPhoneCountry(nextCountry);
+                    setPhoneDialingCode(`+${country.callingCode?.[0] || ''}`);
+                    // Clamp existing digits to the new country's max national length
+                    handleChange('phone')(clampNationalPhoneDigits(phone, nextCountry));
                   }}
                   error={touched.phone ? errors.phone : ''}
                   required
@@ -345,7 +351,7 @@ const BookService = () => {
               <Button
                 text={editMode ? 'Continue' : 'Continue'}
                 style={styles.continue_button}
-                onPress={editMode ? onContinue : () => setShowContact(true)}
+                onPress={editMode ? onContinue : onContinueContact}
               />
             )}
           </View>
@@ -495,6 +501,7 @@ const BookService = () => {
                 ) : slots.length > 0 ? (
                   <View style={styles.time_slots_container}>
                     {slots.map(slot => {
+                      console.log("slot", slot)
                       const isBooked = slot.is_booked;
                       const isSelected = selectedTimeSlot === slot.time_range;
 

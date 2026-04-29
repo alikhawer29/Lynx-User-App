@@ -13,7 +13,7 @@ import { persistor, store } from './src/redux/Store';
 import colors from './src/utils/colors';
 import { navigationRef } from './src/utils/navigation';
 import { StripeProvider } from '@stripe/stripe-react-native';
-import { useSocket } from './src/hooks';
+import { useSocket, useNetworkStatus } from './src/hooks';
 import { initializeNotifications } from './src/services/notification';
 
 // Replace with your actual Stripe publishable key
@@ -33,6 +33,12 @@ const NotificationInitializer = () => {
   return null;
 };
 
+// Monitors connectivity and shows a toast when the device goes offline
+const NetworkStatusMonitor = () => {
+  useNetworkStatus();
+  return null;
+};
+
 function App() {
   return (
     <Provider store={store}>
@@ -40,6 +46,7 @@ function App() {
         <StripeProvider publishableKey={STRIPE_PUBLISHABLE_KEY}>
           <SocketInitializer />
           <NotificationInitializer />
+          <NetworkStatusMonitor />
           <View style={styles.container}>
             <StatusBar
               barStyle={'dark-content'}

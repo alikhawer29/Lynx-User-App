@@ -2,8 +2,11 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
+import type { CountryCode } from 'libphonenumber-js';
+import { isValidPhoneNumber } from 'libphonenumber-js';
 import { ServiceStackParamList } from '../../interfaces';
 import { useLazyGetSlotsByDateQuery } from '../../redux/Apis/Slot';
+import { getMaxNationalDigitsForCountry } from '../../utils/phoneNationalDigits';
 import { ROUTES } from '../../utils/routes';
 
 type BookServiceRouteProp = RouteProp<ServiceStackParamList, 'BookService'>;
@@ -343,8 +346,17 @@ const useBookServiceController = () => {
 
     if (!phone.trim()) {
       newErrors.phone = 'Phone number is required';
-    } else if (phone.length < 8) {
-      newErrors.phone = 'Phone number must be at least 8 digits';
+    } else {
+      const cc = phoneCountry.toUpperCase() as CountryCode;
+      const digitsOnly = phone.replace(/\D/g, '');
+      try {
+        if (!isValidPhoneNumber(digitsOnly, cc)) {
+          const maxDigits = getMaxNationalDigitsForCountry(cc);
+          newErrors.phone = `Enter a valid ${maxDigits}-digit phone number for the selected country`;
+        }
+      } catch {
+        newErrors.phone = 'Enter a valid phone number for the selected country';
+      }
     }
 
     if (!email.trim()) {
@@ -362,7 +374,7 @@ const useBookServiceController = () => {
     });
 
     return Object.keys(newErrors).length === 0;
-  }, [isLocationRequired, address, firstName, lastName, phone, email]);
+  }, [isLocationRequired, address, firstName, lastName, phone, phoneCountry, email]);
 
   const onViewLocation = useCallback(() => {
     navigation.navigate(ROUTES.LOCATION_VIEW, {
@@ -496,6 +508,55 @@ const useBookServiceController = () => {
     navigation,
   ]);
 
+  // Validates only the contact fields and, if valid, advances to the contact summary step.
+  // Used by the non-edit Continue button in the contact section so the user cannot
+  // skip past an empty or invalid phone number.
+  const onContinueContact = useCallback(() => {
+    const newErrors: FormErrors = {};
+
+    if (!firstName.trim()) {
+      newErrors.firstName = 'First name is required';
+    }
+
+    if (!lastName.trim()) {
+      newErrors.lastName = 'Last name is required';
+    }
+
+    if (!phone.trim()) {
+      newErrors.phone = 'Phone number is required';
+    } else {
+      const cc = phoneCountry.toUpperCase() as CountryCode;
+      const digitsOnly = phone.replace(/\D/g, '');
+      try {
+        if (!isValidPhoneNumber(digitsOnly, cc)) {
+          const maxDigits = getMaxNationalDigitsForCountry(cc);
+          newErrors.phone = `Enter a valid ${maxDigits}-digit phone number for the selected country`;
+        }
+      } catch {
+        newErrors.phone = 'Enter a valid phone number for the selected country';
+      }
+    }
+
+    if (!email.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      newErrors.email = 'Invalid email format';
+    }
+
+    setErrors(prev => ({ ...prev, ...newErrors }));
+    setTouched(prev => ({
+      ...prev,
+      firstName: true,
+      lastName: true,
+      phone: true,
+      email: true,
+    }));
+
+    if (Object.keys(newErrors).length === 0) {
+      setShowContact(true);
+    }
+  }, [firstName, lastName, phone, phoneCountry, email]);
+
   const onEditContact = useCallback(() => {
     setShowContact(false);
   }, []);
@@ -554,6 +615,7 @@ const useBookServiceController = () => {
       setShowFloor,
       setShowTimeSlot,
       setShowContact,
+      onContinueContact,
       onEditContact,
       onEditService,
     },

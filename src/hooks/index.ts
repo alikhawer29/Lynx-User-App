@@ -5,3 +5,4 @@ export const useAppDispatch: () => AppDispatch = useDispatch;
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 export { useSocket } from './useSocket';
+export { useNetworkStatus } from './useNetworkStatus';

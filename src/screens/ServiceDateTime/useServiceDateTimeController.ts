@@ -67,7 +67,6 @@ const useServiceDateTimeController = () => {
   const [paymentId, setPaymentId] = useState<string>('');
   const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
-  const [paymentSheetReady, setPaymentSheetReady] = useState<boolean>(false);
 
   // State for address, contact, and other details
   const [address, setAddress] = useState<string>(params?.address || '');
@@ -327,24 +326,24 @@ const useServiceDateTimeController = () => {
 
       setPaymentId(paymentIntentResult.data.paymentId);
 
-      // Step 3: Initialize payment sheet
-      console.log('Initializing payment sheet with client secret...');
+      // Step 3: Initialize payment sheet.
+      // returnURL is required for 3DS / bank-redirect methods.
+      // The lynx:// scheme is registered in AndroidManifest.xml (singleTop + intent-filter).
       const { error: initError } = await initPaymentSheet({
         merchantDisplayName: 'Lynx Consultancy',
-        paymentIntentClientSecret: paymentIntentResult.data.clientSecret,
-        defaultBillingDetails: {
-          name: params?.service?.category?.name || 'Customer',
-        },
+        paymentIntentClientSecret: clientSecret,
         returnURL: 'lynx://payment-complete',
-        allowsDelayedPaymentMethods: true,
+        defaultBillingDetails: {
+          name: `${firstName} ${lastName}`.trim() || 'Customer',
+          email: email || undefined,
+        },
+        allowsDelayedPaymentMethods: false,
         appearance: {
           colors: {
             primary: '#007AFF',
           },
         },
       });
-
-      console.log('Init payment sheet result:', { error: initError });
 
       if (initError) {
         console.error('Error initializing payment sheet:', initError);
@@ -353,43 +352,46 @@ const useServiceDateTimeController = () => {
         return;
       }
 
-      console.log('Payment sheet initialized successfully');
-      
-      // Step 4: Wait before presenting (critical for Android)
-      console.log('Waiting 2 seconds before presenting payment sheet...');
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      setPaymentSheetReady(true);
-      
-      console.log('Presenting payment sheet now...');
-      
-      try {
-        const { error: presentError } = await presentPaymentSheet();
-        console.log('Present payment sheet result:', { error: presentError });
-        
-        if (presentError) {
-          throw presentError;
-        }
-      } catch (presentError: any) {
-        console.log('Caught present error:', presentError);
+      // Step 4: Wait for every pending React Native interaction (animations,
+      // navigation transitions, Modal dismiss) to finish before presenting the
+      // native payment sheet.  A fixed setTimeout is unreliable; InteractionManager
+      // resolves only once the JS-side queue is genuinely empty.
+      await new Promise<void>(resolve =>
+        InteractionManager.runAfterInteractions(() => resolve()),
+      );
 
+      const { error: presentError } = await presentPaymentSheet();
+
+      if (presentError) {
         setIsProcessing(false);
 
-        // Treat "Failed to retrieve PaymentSheetResult" as user cancellation (sheet closed/dismissed)
-        const isUserCancel =
-          presentError.code === 'Canceled' ||
-          (presentError.code === 'Failed' &&
-            presentError.message?.includes('PaymentSheetResult'));
+        // Log the raw shape so we can see the real code value
+        console.log(
+          'Present error raw:',
+          JSON.stringify(presentError, null, 2),
+        );
 
-        if (isUserCancel) {
-          console.log('Payment sheet closed by user');
+        const errorCode = presentError.code ?? '';
+        const isCanceled =
+          errorCode === 'Canceled' ||
+          errorCode === 'Cancelled' ||
+          errorCode === 'cancel' ||
+          errorCode === 'canceled' ||
+          errorCode === 'cancelled' ||
+          String(errorCode).toLowerCase().includes('cancel');
+
+        if (isCanceled) {
+          // User explicitly closed the sheet — no error toast needed
           return;
         }
 
-        console.error('Payment failed:', presentError);
+        // Any other code is a real failure — show feedback
+        console.error('Payment sheet error:', JSON.stringify(presentError));
         Alert.alert(
           'Payment Failed',
-          presentError.message || 'Something went wrong. Please try again.',
+          presentError.localizedMessage ||
+            presentError.message ||
+            'Something went wrong. Please try again.',
         );
         return;
       }
