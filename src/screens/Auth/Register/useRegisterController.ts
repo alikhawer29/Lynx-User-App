@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef } from "react";
 import { Platform } from "react-native";
 import { useModal } from "../../../contexts/ModalContext";
 import useImage from "../../../hooks/useImage";
+import { useFormOfflineGuard } from "../../../hooks";
 import { useSignupMutation } from "../../../redux/Apis/Auth";
 import { LANGUAGES } from "../../../utils/data";
 import { formHandler, getDeviceTimezone, getDeviceId } from "../../../utils/helper";
@@ -28,6 +29,8 @@ const useRegisterController = () => {
     const { image, openGallery } = useImage()
 
     const [submit, { isSuccess, isLoading }] = useSignupMutation()
+
+    useFormOfflineGuard('Register', () => !!(formik_ref.current as any)?.dirty)
 
     useEffect(() => {
         if (isSuccess) {

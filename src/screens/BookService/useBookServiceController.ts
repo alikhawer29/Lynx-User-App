@@ -5,6 +5,7 @@ import dayjs from 'dayjs';
 import type { CountryCode } from 'libphonenumber-js';
 import { isValidPhoneNumber } from 'libphonenumber-js';
 import { ServiceStackParamList } from '../../interfaces';
+import { useFormOfflineGuard } from '../../hooks';
 import { useLazyGetSlotsByDateQuery } from '../../redux/Apis/Slot';
 import { getMaxNationalDigitsForCountry } from '../../utils/phoneNationalDigits';
 import { ROUTES } from '../../utils/routes';
@@ -134,6 +135,14 @@ const useBookServiceController = () => {
     params?.phoneDialingCode || '+971',
   );
   const [email, setEmail] = useState<string>(params?.email || '');
+
+  // Warn the user when the network drops while they have unsaved contact data.
+  // The callback is re-evaluated on every render so it always reads the latest
+  // state values without needing extra deps in the hook.
+  useFormOfflineGuard(
+    'Book Service — Contact Details',
+    () => !!(firstName || lastName || phone || email),
+  );
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string>(
     params?.selectedTimeSlot || '',
   );

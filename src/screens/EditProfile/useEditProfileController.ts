@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { useModal } from '../../contexts/ModalContext';
 import useImage from '../../hooks/useImage';
+import { useFormOfflineGuard } from '../../hooks';
 import { useEditProfileMutation } from '../../redux/Apis/User';
 import { selectUser } from '../../redux/Slices/AuthSlice';
 import { LANGUAGES } from '../../utils/data';
@@ -15,6 +16,8 @@ const useEditProfileController = () => {
   const formik_ref = useRef(null);
   const { showOkModal } = useModal();
   const { image, openGallery } = useImage();
+
+  useFormOfflineGuard('Edit Profile', () => !!(formik_ref.current as any)?.dirty)
 
   const initial = useMemo(() => {
     const cc = (user?.country_code || 'AE').toUpperCase();
