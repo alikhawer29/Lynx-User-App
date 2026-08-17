@@ -2,7 +2,8 @@ import images from '../assets/images';
 
 const DEV_DEVICE_URL = 'http://109.1.1.32:5000/lynx/v1/api';
 const DEV_EMULATOR_URL = 'http://10.0.2.2:5000/lynx/v1/api';
-const PROD_URL = 'https://custom-dev.onlinetestingserver.com:15413/lynx/v1/api';
+// const PROD_URL = 'https://custom-dev.onlinetestingserver.com:15413/lynx/v1/api';
+const PROD_URL = 'https://dashboard.lynxhrconsultancy.com:8066/lynx/v1/api';
 
 // export const BASE_URL = __DEV__ ? DEV_DEVICE_URL : PROD_URL;
 export const BASE_URL = PROD_URL;
