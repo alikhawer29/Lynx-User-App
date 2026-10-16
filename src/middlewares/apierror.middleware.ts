@@ -5,11 +5,16 @@ const errorLogger: Middleware = () => next => action => {
   if (isRejectedWithValue(action)) {
     const payload = (action as any)?.payload;
 
-    // FETCH_ERROR means the device had no network when the request was made.
-    // The global NetworkStatusMonitor toast already tells the user they are
-    // offline, so we skip the toast here to avoid duplicate/spam messages.
+    // FETCH_ERROR = request never got a response (DNS/SSL/timeout/firewall).
+    // This is NOT always "device offline" — e.g. Wi‑Fi connected but API blocked.
     if (payload?.status === 'FETCH_ERROR') {
-      console.log('🔴 Network error (offline) — skipping duplicate toast');
+      console.log('🔴 Network/FETCH_ERROR:', payload?.error || payload);
+      Toast.show({
+        text1: 'Connection Error',
+        text2:
+          'Unable to reach the server. Check your internet connection or try mobile data.',
+        type: 'error',
+      });
       return next(action);
     }
 

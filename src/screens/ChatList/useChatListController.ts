@@ -9,6 +9,10 @@ import {
 } from '../../redux/Slices/ChatSlice';
 import socketService from '../../services/socket';
 import { ChatRoom } from '../../types/chat';
+import {
+  getChatBookingDisplayId,
+  getChatBookingStatus,
+} from '../../utils/chat';
 import { navigate } from '../../utils/navigation';
 import { ROUTES } from '../../utils/routes';
 
@@ -59,8 +63,9 @@ const useChatListController = () => {
       filtered = filtered.filter(chat => chat.chat_type === 'appointment');
     }
 
-    // Apply search
+    // Apply search (name, last message, or booking id) — keep inactive/past chats
     if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
       filtered = filtered.filter(chat => {
         const otherUser = chat.other_user || chat.other_user_id;
         const displayName =
@@ -69,12 +74,12 @@ const useChatListController = () => {
             : `${otherUser?.first_name || ''} ${
                 otherUser?.last_name || ''
               }`.trim();
+        const bookingId = getChatBookingDisplayId(chat)?.toLowerCase() || '';
 
         return (
-          displayName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          chat.last_message_text
-            ?.toLowerCase()
-            .includes(searchQuery.toLowerCase())
+          displayName.toLowerCase().includes(query) ||
+          chat.last_message_text?.toLowerCase().includes(query) ||
+          bookingId.includes(query)
         );
       });
     }
@@ -89,7 +94,12 @@ const useChatListController = () => {
   };
 
   const onChatPress = (chat: ChatRoom) => {
-    navigate(ROUTES.CHAT_ROOM, { chatRoom: chat });
+    const bookingStatus = getChatBookingStatus(chat);
+    navigate(ROUTES.CHAT_ROOM, {
+      chatRoom: chat,
+      bookingId: getChatBookingDisplayId(chat) || undefined,
+      bookingStatus: bookingStatus || undefined,
+    });
   };
 
   // Create support chat if it doesn't exist

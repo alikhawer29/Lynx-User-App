@@ -63,7 +63,16 @@ export interface ChatRoom {
   id: string;
   my_unread_count?: number;
   other_user?: ChatUser;
-  booking_id?: string;
+  /** Booking Mongo id or human booking code, depending on API populate */
+  booking_id?: string | { _id?: string; booking_id?: string; id?: string };
+  booking?: {
+    _id?: string;
+    id?: string;
+    booking_id?: string;
+    booking_status?: string;
+    status?: string;
+  };
+  booking_status?: string;
 }
 
 export interface ChatListResponse {

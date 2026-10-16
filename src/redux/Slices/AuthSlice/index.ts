@@ -42,7 +42,20 @@ export const auth = createSlice({
         builder.addMatcher(
             userApi.endpoints.editProfile.matchFulfilled,
             (state, action: PayloadAction<LoginResponse>) => {
-                state.user = action?.payload?.data
+                const next = action?.payload?.data
+                if (!next) {
+                    return
+                }
+                // Merge so we don't drop fields; normalize common image keys to image_url
+                state.user = {
+                    ...state.user,
+                    ...next,
+                    image_url:
+                        next.image_url ??
+                        next.picture ??
+                        next.image ??
+                        state.user?.image_url,
+                }
             },
         )
     }

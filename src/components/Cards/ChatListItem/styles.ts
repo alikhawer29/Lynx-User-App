@@ -40,6 +40,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: heightPixel(4),
   },
+  name: {
+    flex: 1,
+    marginRight: widthPixel(8),
+  },
+  booking_id: {
+    marginBottom: heightPixel(4),
+  },
   message_row: {
     flexDirection: 'row',
     alignItems: 'center',

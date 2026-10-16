@@ -7,23 +7,29 @@ import {
   useSendMessageMutation,
   useMarkMessagesAsReadMutation,
 } from '../../redux/Apis/Chat';
+import { useGetBookingDetailsQuery } from '../../redux/Apis/Booking';
 import { ChatRoom, ChatMessage } from '../../types/chat';
 import socketService from '../../services/socket';
 import { useAppSelector } from '../../hooks';
+import {
+  canSendAppointmentChatMessages,
+  getChatBookingDisplayId,
+  getChatBookingMongoId,
+} from '../../utils/chat';
 
 type ChatRoomRouteParams = {
   ChatRoom: {
     chatRoom: ChatRoom;
     bookingId?: string;
+    bookingStatus?: string;
   };
 };
 
 const useChatRoomController = () => {
   const route = useRoute<RouteProp<ChatRoomRouteParams, 'ChatRoom'>>();
   const navigation = useNavigation();
-  const { chatRoom, bookingId } = route.params;
+  const { chatRoom, bookingId, bookingStatus } = route.params;
 
-  console.log(chatRoom, 'chatRoomchatRoom');
   const currentUserId = useAppSelector(
     state => state.auth.user?._id || state.auth.user?.id,
   );
@@ -32,19 +38,48 @@ const useChatRoomController = () => {
   const [page, setPage] = useState(1);
   const [realtimeMessages, setRealtimeMessages] = useState<ChatMessage[]>([]);
 
-  // Set dynamic title based on chat type
+  const bookingMongoId = useMemo(
+    () => getChatBookingMongoId(chatRoom),
+    [chatRoom],
+  );
+
+  // Live booking status — chat list is_chat_active can be stale after slot ends
+  const {
+    data: bookingDetailsData,
+    isFetching: isBookingStatusFetching,
+    isError: isBookingStatusError,
+  } = useGetBookingDetailsQuery(bookingMongoId as string, {
+    skip: chatRoom?.chat_type !== 'appointment' || !bookingMongoId,
+  });
+
+  const resolvedBookingStatus = useMemo(() => {
+    const live =
+      bookingDetailsData?.data?.booking_status ||
+      bookingDetailsData?.booking_status;
+    return live || bookingStatus || null;
+  }, [bookingDetailsData, bookingStatus]);
+
+  // Set dynamic title based on chat type (include Booking ID for appointment chats)
   useEffect(() => {
     if (chatRoom) {
-      const title =
-        chatRoom.chat_type === 'support'
-          ? 'Customer Support'
-          : `${chatRoom.other_user_id?.first_name || ''} ${
-              chatRoom.other_user_id?.last_name || ''
-            }`.trim() || 'Chat';
+      if (chatRoom.chat_type === 'support') {
+        navigation.setOptions({ title: 'Customer Support' });
+        return;
+      }
 
-      navigation.setOptions({ title });
+      const name =
+        `${chatRoom.other_user?.first_name || chatRoom.other_user_id?.first_name || ''} ${
+          chatRoom.other_user?.last_name || chatRoom.other_user_id?.last_name || ''
+        }`.trim() || 'Chat';
+      const bookingDisplayId =
+        getChatBookingDisplayId(chatRoom) ||
+        (bookingId ? String(bookingId).slice(-8) : null);
+
+      navigation.setOptions({
+        title: bookingDisplayId ? `${name} · #${bookingDisplayId}` : name,
+      });
     }
-  }, [chatRoom, navigation]);
+  }, [chatRoom, bookingId, navigation]);
 
   // Fetch messages
   const {
@@ -74,33 +109,46 @@ const useChatRoomController = () => {
     );
   }, [messagesData, realtimeMessages]);
 
-  // Determine if user can send messages
+  // Appointment chat: history always viewable; type box only while booking is in-progress
   const canSendMessages = useMemo(() => {
-    if (chatRoom.chat_type === 'support') {
-      return true; // Support chat is always available
+    if (chatRoom?.chat_type === 'support') {
+      return true;
     }
 
-    console.log(chatRoom, 'chatRoomchatRoom');
-    console.log('is_chat_active value:', chatRoom?.is_chat_active);
-    console.log('is_chat_active type:', typeof chatRoom?.is_chat_active);
+    // Hide input until live status is known (prevents past bookings flashing the type box)
+    if (
+      bookingMongoId &&
+      !resolvedBookingStatus &&
+      isBookingStatusFetching &&
+      !isBookingStatusError
+    ) {
+      return false;
+    }
 
-    // For appointment chat, check if booking exists and is completed
-    // If is_chat_active is undefined, default to true (allow chat)
-    return chatRoom?.is_chat_active !== undefined
-      ? chatRoom.is_chat_active
-      : true;
-  }, [chatRoom]);
+    return canSendAppointmentChatMessages(chatRoom, resolvedBookingStatus);
+  }, [
+    chatRoom,
+    resolvedBookingStatus,
+    bookingMongoId,
+    isBookingStatusFetching,
+    isBookingStatusError,
+  ]);
 
   const disabledMessage = useMemo(() => {
     if (canSendMessages) return null;
 
     if (chatRoom.chat_type === 'appointment') {
-      return "You don't have any upcoming or in-progress booking with this service provider to chat. You must have an upcoming or in-progress booking to chat";
+      return 'The appointment chat is only available when booking is in-progress.';
     }
     return null;
   }, [canSendMessages, chatRoom]);
 
   const onSendMessage = async (messageText: string, files?: Asset[]) => {
+    // Hard-block sends when booking is not in-progress
+    if (!canSendAppointmentChatMessages(chatRoom, resolvedBookingStatus)) {
+      return;
+    }
+
     try {
       const chatRoomId = chatRoom.id || chatRoom._id;
 

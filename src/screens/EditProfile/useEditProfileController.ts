@@ -71,17 +71,13 @@ const useEditProfileController = () => {
 
   const onSubmit = useCallback(
     (data: any) => {
-      console.log('=== FORM SUBMISSION START ===');
-      console.log('Form data submitted:', data);
-
-      let payload = { ...data };
+      let payload: Record<string, any> = { ...data };
 
       if (image) {
         payload.image = image;
-        console.log('Image attached:', image);
       }
 
-      // Remove empty values and send as JSON instead of FormData
+      // Drop empty fields so we don't overwrite with blanks
       Object.keys(payload).forEach(key => {
         if (
           payload[key] === '' ||
@@ -92,21 +88,10 @@ const useEditProfileController = () => {
         }
       });
 
-      console.log('Final payload:', payload);
-      console.log('Calling submit API...');
-
-      submit(payload)
-        .unwrap()
-        .then((result: any) => {
-          console.log('Submit successful:', result);
-        })
-        .catch((error: any) => {
-          console.error('Submit failed:', error);
-        });
-
-      console.log('=== FORM SUBMISSION END ===');
+      // Multipart FormData (same pattern as Register) so the profile image uploads
+      submit(formHandler(payload));
     },
-    [image],
+    [image, submit],
   );
 
   const onPressUpload = useCallback(() => {

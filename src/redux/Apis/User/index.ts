@@ -29,9 +29,7 @@ export const userApi = createApi({
       query: body => ({
         url: `update`,
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        // Do not force Content-Type — FormData needs multipart boundary from fetch
         body,
       }),
     }),

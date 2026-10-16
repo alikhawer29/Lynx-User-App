@@ -159,9 +159,13 @@ const AppointmentDetails = () => {
   // 3. Reschedule approve/reject buttons - show when status is "requested"
   const hasRescheduleRequest = booking.status?.toLowerCase() === 'requested';
 
+  // In-progress: active chat. Past: still openable so message history remains available.
+  const bookingStatus = booking.booking_status?.toLowerCase() || '';
   const canChat =
     booking.status?.toLowerCase() === 'approved' &&
-    booking.booking_status?.toLowerCase() === 'in_progress';
+    (bookingStatus === 'in_progress' || bookingStatus === 'past');
+  const chatButtonLabel =
+    bookingStatus === 'past' ? 'View Chat' : 'Start Chat';
 
   const serviceType = booking.visit_type === 'provider_visits_user' ? 'Provider Visits You' : 'You Visit Provider';
 
@@ -308,7 +312,7 @@ const AppointmentDetails = () => {
               size={18}
               style={[styles.chat_text, !canChat && styles.chat_text_disabled]}
             >
-              Start Chat
+              {chatButtonLabel}
             </Text>
           </Touchable>
         )}

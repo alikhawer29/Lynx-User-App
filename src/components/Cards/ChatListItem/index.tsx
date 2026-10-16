@@ -7,6 +7,7 @@ import styles from './styles';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import colors from '../../../utils/colors';
+import { getChatBookingDisplayId } from '../../../utils/chat';
 
 dayjs.extend(relativeTime);
 
@@ -27,6 +28,7 @@ const ChatListItem: React.FC<ChatListItemProps> = ({ chat, onPress }) => {
   const lastMessageTime = chat.last_message_time
     ? dayjs(chat.last_message_time).fromNow()
     : '';
+  const bookingDisplayId = !isSupport ? getChatBookingDisplayId(chat) : null;
 
   const unreadCount = chat.my_unread_count || 0;
   const hasUnread = unreadCount > 0;
@@ -48,7 +50,7 @@ const ChatListItem: React.FC<ChatListItemProps> = ({ chat, onPress }) => {
       )}
       <View style={styles.content}>
         <View style={styles.header}>
-          <Text size={16} weight="semibold" color='#333333' numberOfLines={1}>
+          <Text size={16} weight="semibold" color='#333333' numberOfLines={1} style={styles.name}>
             {displayName}
           </Text>
           {lastMessageTime && (
@@ -57,6 +59,11 @@ const ChatListItem: React.FC<ChatListItemProps> = ({ chat, onPress }) => {
             </Text>
           )}
         </View>
+        {bookingDisplayId ? (
+          <Text size={12} color={colors.primary} numberOfLines={1} style={styles.booking_id}>
+            Booking ID: #{bookingDisplayId}
+          </Text>
+        ) : null}
         <View style={styles.message_row}>
           <Text
             size={14}

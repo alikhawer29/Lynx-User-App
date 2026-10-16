@@ -36,9 +36,6 @@ const ChatRoom = () => {
     },
   } = useChatRoomController();
 
-  console.log(canSendMessages, 'canSendMessages')
-  console.log("messages", messages)
-
   const renderMessage = ({ item, index }: { item: ChatMessage; index: number }) => {
     // Data is newest-first; messages[index+1] is the older neighbour (rendered above).
     // Show a separator when crossing a day boundary moving upward (older direction).
@@ -77,19 +74,6 @@ const ChatRoom = () => {
     );
   };
 
-  const renderFooter = () => {
-    if (!canSendMessages && disabledMessage) {
-      return (
-        <View style={styles.disabled_container}>
-          <Text size={14} color={colors.dark_gray} position="center">
-            {disabledMessage}
-          </Text>
-        </View>
-      );
-    }
-    return null;
-  };
-
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -103,14 +87,13 @@ const ChatRoom = () => {
           renderItem={renderMessage}
           keyExtractor={item => item.id || item._id}
           ListEmptyComponent={renderEmpty}
-          ListFooterComponent={renderFooter}
           inverted
           contentContainerStyle={messages.length === 0 && styles.empty_list}
           keyboardShouldPersistTaps="handled"
           keyboardDismissMode={Platform.OS === 'ios' ? 'interactive' : 'on-drag'}
           showsVerticalScrollIndicator={false}
         />
-        {canSendMessages && (
+        {canSendMessages ? (
           <View style={{
             paddingVertical: heightPixel(10),
             paddingBottom:
@@ -124,7 +107,13 @@ const ChatRoom = () => {
               disabled={!canSendMessages}
             />
           </View>
-        )}
+        ) : disabledMessage ? (
+          <View style={[styles.disabled_container, { paddingBottom: insets.bottom || heightPixel(12) }]}>
+            <Text size={14} color={colors.dark_gray} position="center">
+              {disabledMessage}
+            </Text>
+          </View>
+        ) : null}
       </Wrapper>
     </KeyboardAvoidingView>
   );

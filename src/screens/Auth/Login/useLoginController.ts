@@ -38,7 +38,7 @@ const useLoginController = () => {
 
     const [remember, setRemember] = useState(false)
 
-    const [submit, { isSuccess, isLoading }] = useLoginMutation()
+    const [submit, { isSuccess, isLoading, isError, error }] = useLoginMutation()
 
     useEffect(() => {
         if (isSuccess) {
@@ -50,8 +50,16 @@ const useLoginController = () => {
             } else {
                 clearCredentials()
             }
+            // Leave auth stack once session is stored in Redux
+            navigateAndSimpleReset(NAVIGATORS.DRAWER)
         }
     }, [isSuccess, formik_ref, remember])
+
+    useEffect(() => {
+        if (isError) {
+            console.log('🔴 Login failed:', JSON.stringify(error, null, 2))
+        }
+    }, [isError, error])
 
     useEffect(() => {
         if (credentials) {

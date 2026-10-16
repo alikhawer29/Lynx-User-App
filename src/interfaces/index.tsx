@@ -99,6 +99,7 @@ export type ChatStackParamList = {
     ChatRoom: {
         chatRoom: any;
         bookingId?: string;
+        bookingStatus?: string;
     };
 }
 
@@ -217,6 +218,7 @@ export type MyAppointmentsStackParamList = {
     ChatRoom: {
         chatRoom: any;
         bookingId?: string;
+        bookingStatus?: string;
     };
 }
 

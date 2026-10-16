@@ -278,22 +278,39 @@ const useAppointmentDetailsController = () => {
     onRefreshDetails();
   }, [onRefreshDetails]);
 
-  // Chat function
+  // Open appointment chat (works for in-progress and past — history remains available)
   const onPressChat = useCallback(async () => {
     if (!booking?._id) return;
+
+    const bookingStatus = String(booking.booking_status || '').toLowerCase();
+    const isInProgress = bookingStatus === 'in_progress';
 
     try {
       const response = await createAppointmentChat({
         booking_id: booking._id,
       }).unwrap();
       if (response?.data) {
-        // Navigate to ChatRoom screen (now registered in MyAppointmentsStackNavigator)
+        const chatRoom = {
+          ...response.data,
+          // Compose only while in-progress — don't trust stale is_chat_active from API
+          is_chat_active: isInProgress,
+          booking_status: bookingStatus || response.data.booking_status,
+          booking: {
+            ...(response.data.booking || {}),
+            _id: booking._id,
+            booking_id: booking.booking_id,
+            booking_status: bookingStatus,
+          },
+          booking_id: response.data.booking_id || booking._id,
+        };
         navigation.navigate(ROUTES.CHAT_ROOM, {
-          chatRoom: response.data,
+          chatRoom,
+          bookingId: booking.booking_id || booking._id,
+          bookingStatus,
         });
       }
     } catch (error) {
-      console.error('Failed to create chat:', error);
+      console.error('Failed to create/open chat:', error);
     }
   }, [booking, createAppointmentChat, navigation]);
 
